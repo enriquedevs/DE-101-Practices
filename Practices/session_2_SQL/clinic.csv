@@ -1,0 +1,46 @@
+patient_name,patient_last_name,patient_address,appointment_date,appointment_time,doctor_name,doctor_last_name,doctor_clinical_specialization
+John,Doe,123 Main St,2022-01-01,10:00 AM,Jane,Smith,Pediatrics
+Jane,Smith,456 Park Ave,2022-01-02,11:00 AM,Michael,Johnson,Family Medicine
+Michael,Johnson,789 Elm St,2022-01-03,12:00 PM,Emily,Williams,Cardiology
+Emily,Williams,321 Oak St,2022-01-04,1:00 PM,Matthew,Brown,Cardiology
+Matthew,Brown,654 Pine St,2022-01-05,2:00 PM,Abigail,Jones,Dermatology
+Abigail,Jones,987 Cedar St,2022-01-06,3:00 PM,Daniel,Miller,Orthopedics
+Daniel,Miller,246 Birch St,2022-01-07,4:00 PM,Elizabeth,Davis,Neurology
+Elizabeth,Davis,369 Maple St,2022-01-08,5:00 PM,William,Garcia,Gastroenterology
+William,Garcia,159 Oak St,2022-01-09,6:00 PM,David,Rodriguez,Neurology
+David,Rodriguez,753 Pine St,2022-01-10,7:00 PM,Joseph,Martinez,Endocrinology
+Joseph,Martinez,951 Cedar St,2022-01-11,8:00 PM,Joshua,Anderson,Rheumatology
+Joshua,Anderson,147 Birch St,2022-01-12,9:00 PM,Andrew,Taylor,Ophthalmology
+Andrew,Taylor,369 Maple St,2022-01-13,10:00 PM,James,Thomas,Urology
+Michael,Johnson,789 Elm St,2022-01-05,12:00 PM,Emily,Williams,Cardiology
+James,Thomas,753 Pine St,2022-01-14,11:00 PM,Christopher,Moore,Physical Medicine
+Christopher,Moore,951 Cedar St,2022-01-15,12:00 PM,Daniel,Jackson,Neurosurgery
+Jane,Smith,456 Park Ave,2022-01-04,11:00 AM,Michael,Johnson,Family Medicine
+Daniel,Jackson,147 Birch St,2022-01-16,1:00 PM,Matthew,Perez,Gastroenterology
+Matthew,Perez,369 Maple St,2022-01-17,2:00 PM,Jacob,Turner,Neurology
+Jacob,Turner,753 Pine St,2022-01-18,3:00 PM,Nicholas,Phillips,Anesthesiology
+Nicholas,Phillips,951 Cedar St,2022-01-19,4:00 PM,Ryan,Campbell,Pathology
+Ryan,Campbell,147 Birch St,2022-01-20,5:00 PM,Stephen,Parker,Rheumatology
+Stephen,Parker,369 Maple St,2022-01-21,6:00 PM,Jonathan,Evans,Pulmonology
+Jonathan,Evans,753 Pine St,2022-01-22,7:00 PM,Adam,Edwards,Rheumatology
+Adam,Edwards,951 Cedar St,2022-01-23,8:00 PM,Benjamin,Stewart,Cardiology
+William,Garcia,159 Oak St,2022-01-12,6:00 PM,David,Rodriguez,Neurology
+Andrew,Taylor,369 Maple St,2022-01-15,10:00 PM,James,Thomas,Urology
+Jane,Smith,456 Park Ave,2022-01-05,11:00 AM,Michael,Johnson,Family Medicine
+Matthew,Brown,654 Pine St,2022-01-15,2:00 PM,Abigail,Jones,Dermatology
+Michael,Johnson,789 Elm St,2022-01-07,12:00 PM,Emily,Williams,Cardiology
+Elizabeth,Davis,369 Maple St,2022-01-18,5:00 PM,William,Garcia,Gastroenterology
+Matthew,Brown,654 Pine St,2022-01-25,2:00 PM,Abigail,Jones,Dermatology
+Michael,Johnson,789 Elm St,2022-01-17,12:00 PM,Emily,Williams,Cardiology
+Daniel,Jackson,147 Birch St,2022-01-19,3:00 PM,Nicholas,Phillips,Anesthesiology
+John,Doe,123 Main St,2022-01-02,10:00 AM,Michael,Johnson,Family Medicine
+
+
+
+
+
+
+
+
+
+
