@@ -28,8 +28,6 @@ The clinic only provides you a CSV file with the historical data of the appointm
 
 ### Requirements
 - Develop and setup a docker container of a Relational Database by using the provided [CSV](clinic.csv) file's data
-- Normalize on Third Normal Form (3NF) the Database
-- Execute requested queries from the database
 
 # Let's do it!
 
