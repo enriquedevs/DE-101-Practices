@@ -70,7 +70,7 @@ docker images
 ### Docker Image
 **A Docker image is a pre-built package that contains all the necessary files and dependencies to run an application or service. You can think of an image as a snapshot of an application or service that can be used to create new containers.**
 
-You can find and download images from the [Docker Hub](https://hub.docker.com), which is a public registry of Docker images. You can also create your own images by writing a Dockerfile, which is a script that contains instructions for building an image.
+You can find and download images from the [Docker Hub](https://hub.docker.com/search), which is a public registry of Docker images. You can also create your own images by writing a Dockerfile, which is a script that contains instructions for building an image.
 
 Now let's create a container with the following command:
 
@@ -88,6 +88,28 @@ This command will create a docker container named as **´clinic-container´** fr
 
 ![clinic](documentation_images/docker-registry.png)
 
+### Docker commands
+
+List of common docker commands:
+* **docker run** : Runs a new container from an image
+* **docker ps** : Lists all running containers
+* **docker stop** : Stops a running container
+* **docker start** : Starts a stopped container
+* **docker logs** : Shows the log output of a container
+* **docker build** : Builds an image from a Dockerfile
+* **docker pull** : Pulls an image or a repository from the registry
+* **docker rm** : Remove one or more containers
+* **docker image rm**: Remove one or more images
+
+### Docker VS Virtual Machine
+
+Docker containers are lightweight, portable, and self-sufficient environments that allow you to run applications in isolation from the host system. Containers are built on top of the host operating system and share the host's kernel. They are lightweight because they don't include an operating system, but instead rely on the host's kernel to provide the necessary services.
+
+Virtual machines (VMs) are software-based systems that mimic the hardware of a physical computer. They run on top of a hypervisor, which is a software layer that sits between the VM and the host operating system. VMs are typically used to run multiple operating systems on the same host, each in its own isolated environment.
+
+![clinic](documentation_images/container-vs-virtual-machine.png)
+
+
 ## Step 2
 
 Now let's create a sample **´clinic_db´** within the mysql database.
@@ -100,13 +122,25 @@ docker exec -it clinic-container bash
 
 This command will connect to **´clinic_container´** on a bash console.
 
+Now within docker container, with following command will connect to mysql instance:
 
-![clinic](documentation_images/docker-registry.png)
+```
+mysql -u root -p
+```
 
+This command will ask you for a password and type: **mypassword**
+
+Now let's create **´clinic_db´** on mysql with the following command:
+
+```
+create database clinic_db;
+```
+
+This command will create the database **´clinic_db´**
 
 ## Step 3
 
-Following up, let's connect to the database by using a Database client, on this case with DBeaver
+Following up, let's connect to the database by using a Database client, on this case with DBeaver.
 
 
 
