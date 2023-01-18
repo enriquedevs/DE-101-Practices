@@ -4,20 +4,22 @@ In this practice we will manipulate data on a Relational Database within a Docke
 
 ![img](documentation_images/docker-mysql.png)
 
-### Prerequisites
-* [Install docker](https://docs.docker.com/engine/install/) 
-* Install a db client (i.e. [DBeaver](https://dbeaver.io/download/)) 
+## Prerequisites
 
-### What You Will Learn
-- How to use a docker container of a relational database
-- Docker commands
-- Operative System commands and Overview
-- How to connect to a Docker Container
-- How to connect to a Database by using a DB client
-- SQL Overview
-- Transactions Overview
+* [Install docker](https://docs.docker.com/engine/install/)
+* Install a db client (i.e. [DBeaver](https://dbeaver.io/download/))
 
-# Practice
+## What You Will Learn
+
+* How to use a docker container of a relational database
+* Docker commands
+* Operative System commands and Overview
+* How to connect to a Docker Container
+* How to connect to a Database by using a DB client
+* SQL Overview
+* Transactions Overview
+
+## Practice
 
 You're working on a clinic, and the clinic needs a database to have records of the appointments that were made between the patient and the doctor.
 
@@ -25,21 +27,19 @@ The clinic only provides you a CSV file with the historical data of the appointm
 
 ![img](documentation_images/clinic.jpeg)
 
+## Requirements
 
-### Requirements
-- Develop and setup a docker container of a Relational Database by using the provided [CSV](clinic.csv) file's data
+* Develop and setup a docker container of a Relational Database by using the provided [CSV](clinic.csv) file's data
 
-# Let's do it!
+## Let's do it
 
-
-
-## Step 1
+### Step 1
 
 First, we are going to create a docker container with a MySQL image to create a clinic Database
 
 Create within this folder a dockerfile with the following content:
 
-```
+```Dockerfile
 FROM mysql
 ENV MYSQL_ROOT_PASSWORD=mypassword
 ENV MYSQL_DATABASE=mydatabase
@@ -48,12 +48,13 @@ ENV MYSQL_PASSWORD=mypassword
 EXPOSE 3306
 ```
 
-### Dockerfile
-**A Dockerfile is a script that contains instructions for building a Docker image. A Dockerfile is used to create an image, which can then be used to create new containers. A Dockerfile typically includes instructions for setting environment variables, copying files, and running commands.**
+#### Dockerfile
+
+> A Dockerfile is a script that contains instructions for building a Docker image. A Dockerfile is used to create an image, which can then be used to create new containers. A Dockerfile typically includes instructions for setting environment variables, copying files, and running commands.
 
 Now build a docker image with the following command:
 
-```
+```bash
 docker build -t clinic .
 ```
 
@@ -61,34 +62,38 @@ This command builds a docker image with name as **´clinic´** by using the **´
 
 Now you can see the images on your docker with following command:
 
-```
+```bash
 docker images
 ```
 
-### Docker Image
+#### Docker Image
+
 **A Docker image is a pre-built package that contains all the necessary files and dependencies to run an application or service. You can think of an image as a snapshot of an application or service that can be used to create new containers.**
 
 You can find and download images from the [Docker Hub](https://hub.docker.com/search), which is a public registry of Docker images. You can also create your own images by writing a Dockerfile, which is a script that contains instructions for building an image.
 
 Now let's create a container with the following command:
 
-```
+```bash
 docker run --rm -d -p 6603:3306 --name clinic-container clinic
 ```
 
 This command will create a docker container named as **´clinic-container´** from **´clinic´** image.
+
 * The **´-d´** option runs the container in detached mode, which allows it to run in the background.
-* The **-p** flag helps to publish Publish container's port(s) to the host, in this case <host-port>:<container-port>
+* The **-p** flag helps to publish Publish container's port(s) to the host, in this case `<host-port>:<container-port>`
 * The **--rm** flag instructs Docker to also remove the anonymous volumes associated with the container if the container is removed
 
-### Docker Container
+#### Docker Container
+
 **A Docker container is a running instance of a Docker image. When you start a container, Docker creates a new, isolated environment for the application or service to run in. Containers are lightweight and efficient, and you can run multiple containers on the same host.**
 
 ![img](documentation_images/docker-registry.png)
 
-### Docker commands
+#### Docker commands
 
 List of common docker commands:
+
 * **docker run** : Runs a new container from an image
 * **docker ps** : Lists all running containers
 * **docker stop** : Stops a running container
@@ -107,14 +112,13 @@ Virtual machines (VMs) are software-based systems that mimic the hardware of a p
 
 ![img](documentation_images/container-vs-virtual-machine.png)
 
-
-## Step 2
+### Step 2
 
 Now let's create a sample **´clinic_db´** within the mysql database.
 
 First, let's connect to the docker container with the following command:
 
-```
+```bash
 docker exec -it clinic-container bash
 ```
 
@@ -122,7 +126,7 @@ This command will connect to **´clinic_container´** on a bash console.
 
 Now within docker container, with following command will connect to mysql instance:
 
-```
+```bash
 mysql -u root -p
 ```
 
@@ -130,14 +134,13 @@ This command will ask you for a password and type: **mypassword**
 
 Now let's create **´clinic_db´** on mysql with the following command:
 
-```
+```bash
 create database clinic_db;
 ```
 
 This command will create the database **´clinic_db´**
 
-
-## Step 3
+### Step 3
 
 Following up, let's connect to the database by using a Database client, on this case with DBeaver.
 
@@ -150,11 +153,12 @@ Then a pop up window will open and here selects **´MySQL´** option and click o
 ![img](documentation_images/dbeaver-2.png)
 
 Then on connection parameters use the following:
-+ Server Host: **localhost**
-+ Port: **6603**
-+ Database: **clinic_db**
-+ Username: **root**
-+ Password: **mypassword**
+
+* Server Host: **localhost**
+* Port: **6603**
+* Database: **clinic_db**
+* Username: **root**
+* Password: **mypassword**
 
 ![img](documentation_images/dbeaver-3.png)
 
@@ -166,14 +170,13 @@ Now click on Test connection and should appear as **´Connected´**
 
 ![img](documentation_images/dbeaver-5.png)
 
-
-## Step 4
+### Step 4
 
 Now let's check the CSV file data and create an initial definition of the database
 
 In this case the provided [CSV](clinic.csv) file contains the following data:
 
-```
+```CSV
 patient_name,patient_last_name,patient_address,appointment_date,appointment_time,doctor_name,doctor_last_name,doctor_clinical_specialization
 John,Doe,123 Main St,2022-01-01,10:00 AM,Jane,Smith,Pediatrics
 Jane,Smith,456 Park Ave,2022-01-02,11:00 AM,Michael,Johnson,Family Medicine
@@ -186,12 +189,12 @@ Abigail,Jones,987 Cedar St,2022-01-06,3:00 PM,Daniel,Miller,Orthopedics
 On this case there are the following columns:
 
 patient_name | patient_last_name | patient_address | appointment_date | appointment_time | doctor_name | doctor_last_name | doctor_clinical_specialization
---- |-------------------| --- | --- |--- |--- |--- |--- 
-String | String            | String | Date | Time | String | String | String 
+--- |-------------------| --- | --- |--- |--- |--- |---
+String | String            | String | Date | Time | String | String | String
 
 Now let's create a database table definition for this data:
 
-```
+```SQL
 create table clinic_raw (
     patient_name varchar(100),
     patient_last_name varchar(100),
@@ -203,17 +206,18 @@ create table clinic_raw (
     doctor_clinical_specialization varchar(100)
 );
 ```
+
 To execute it on database, you can open dbeaver and execute it on a SQL Script tab:
 
 ![img](documentation_images/dbeaver-6.png)
 
-## Step 5
+### Step 5
 
 Now let's load CSV data into the raw table.
 
 First copy csv file from local to the container with the following command:
 
-```
+```bash
 docker cp clinic.csv clinic-container:/tmp/clinic.csv
 ```
 
@@ -221,28 +225,28 @@ This command will copy local host **´clinic.csv´** file to clinic-container's 
 
 Now let's connect to clinic_db with the command:
 
-```
+```bash
 docker exec -it clinic-container mysql --local-infile=1 -u root -p
 ```
 
 This command will connect to mysql db from the docker's **´clinic-container´** that we ran before.
-* The mysql command option **´--local-infile=1´** will allow to import local files while executing SQL statements
+> The mysql command option **´--local-infile=1´** will allow to import local files while executing SQL statements
 
 Once on mysql prompt, let's set a global variable that will allow us to use local files from SQL statements by using the following command:
 
-```
+```SQL
 SET GLOBAL local_infile=1;
 ```
 
 Then switch to **´clinic_db´** with the following command:
 
-```
+```SQL
 USE clinic_db;
 ```
 
 Once there, we can import CSV data to **´clinic_raw´** table with the following command:
 
-```
+```SQL
 LOAD DATA LOCAL INFILE "/tmp/clinic.csv"
 INTO TABLE clinic_raw
 COLUMNS TERMINATED BY ','
@@ -254,11 +258,11 @@ IGNORE 1 LINES;
 
 Now let's verify all csv data is present by using the following SQL statements:
 
-```
+```SQL
 select * from clinic_raw;
 ```
 
-# Conclusion
+## Conclusion
 
 Docker is a powerful tool that makes it easy to run and manage databases like MySQL. By following this practice, you should now have a solid understanding of how to use Docker to run and manage a MySQL container. Remember that Docker is just one of many tools you can use to manage your databases, and that you should always choose the right tool for the job.
 
