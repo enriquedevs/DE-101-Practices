@@ -191,4 +191,65 @@ patient_name | patient_last_name | patient_address | appointment_date | appointm
 --- |-------------------| --- | --- |--- |--- |--- |--- 
 String | String            | String | Date | Time | String | String | String 
 
+Now let's create a database table definition for this data:
 
+```
+create table clinic_raw (
+    patient_name varchar(100),
+    patient_last_name varchar(100),
+    patient_address varchar(200),
+    appointment_date varchar(50),
+    appointment_time varchar(50),
+    doctor_name varchar(100),
+    doctor_last_name varchar(100), 
+    doctor_clinical_specialization varchar(100)
+);
+```
+To execute it on database, you can open dbeaver and execute it on a SQL Script tab:
+
+![img](documentation_images/dbeaver-6.png)
+
+## Step 5
+
+Now let's load CSV data into the raw table.
+
+First copy csv file from local to the container with the following command:
+
+```
+docker cp clinic.csv clinic-container:/tmp/clinic.csv
+```
+
+This command will copy local host **´clinic.csv´** file to clinic-container's **´/tmp/clinic.csv´**
+
+Now let's connect to clinic_db with the command:
+
+```
+docker exec -it clinic-container mysql --local-infile=1 -u root -p
+```
+
+This command will connect to mysql db from the docker's **´clinic-container´** that we ran before.
+* The mysql command option **´--local-infile=1´** will allow to import local files while executing SQL statements
+
+Once on mysql prompt, let's set a global variable that will allow us to use local files from SQL statements by using the following command:
+
+```
+SET GLOBAL local_infile=1;
+```
+
+Then switch to **´clinic_db´** with the following command:
+
+```
+USE clinic_db;
+```
+
+Once there, we can import CSV data to **´clinic_raw´** table with the following command:
+
+```
+LOAD DATA LOCAL INFILE "/tmp/clinic.csv"
+INTO TABLE clinic_raw
+COLUMNS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+ESCAPED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+```
