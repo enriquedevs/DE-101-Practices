@@ -253,3 +253,15 @@ ESCAPED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 ```
+
+Now let's verify all csv data is present by using the following SQL statements:
+
+```
+select * from clinic_raw;
+```
+
+# Conclusion
+
+Docker is a powerful tool that makes it easy to run and manage databases like MySQL. By following this practice, you should now have a solid understanding of how to use Docker to run and manage a MySQL container. Remember that Docker is just one of many tools you can use to manage your databases, and that you should always choose the right tool for the job.
+
+I hope this guide was helpful in your understanding of using Docker with MySQL. You are now equipped with the knowledge to deploy and manage your MySQL databases using Docker. Happy coding!
