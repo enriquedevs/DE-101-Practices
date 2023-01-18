@@ -2,7 +2,7 @@
 
 In this practice we will manipulate data on a Relational Database within a Docker container
 
-![Docker-Mysql](documentation_images/docker-mysql.png)
+![img](documentation_images/docker-mysql.png)
 
 ### Prerequisites
 * [Install docker](https://docs.docker.com/engine/install/) 
@@ -23,7 +23,7 @@ You're working on a clinic, and the clinic needs a database to have records of t
 
 The clinic only provides you a CSV file with the historical data of the appointments and they ask you to create the database from it.
 
-![clinic](documentation_images/clinic.jpeg)
+![img](documentation_images/clinic.jpeg)
 
 
 ### Requirements
@@ -86,7 +86,7 @@ This command will create a docker container named as **´clinic-container´** fr
 ### Docker Container
 **A Docker container is a running instance of a Docker image. When you start a container, Docker creates a new, isolated environment for the application or service to run in. Containers are lightweight and efficient, and you can run multiple containers on the same host.**
 
-![clinic](documentation_images/docker-registry.png)
+![img](documentation_images/docker-registry.png)
 
 ### Docker commands
 
@@ -107,7 +107,7 @@ Docker containers are lightweight, portable, and self-sufficient environments th
 
 Virtual machines (VMs) are software-based systems that mimic the hardware of a physical computer. They run on top of a hypervisor, which is a software layer that sits between the VM and the host operating system. VMs are typically used to run multiple operating systems on the same host, each in its own isolated environment.
 
-![clinic](documentation_images/container-vs-virtual-machine.png)
+![img](documentation_images/container-vs-virtual-machine.png)
 
 
 ## Step 2
@@ -138,11 +138,35 @@ create database clinic_db;
 
 This command will create the database **´clinic_db´**
 
+
 ## Step 3
 
 Following up, let's connect to the database by using a Database client, on this case with DBeaver.
 
+First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on the upper left of the IDE:
 
+![img](documentation_images/dbeaver-1.png)
+
+Then a pop up window will open and here selects **´MySQL´** option and click on **Next**
+
+![img](documentation_images/dbeaver-2.png)
+
+Then on connection parameters use the following:
++ Server Host: **localhost**
++ Port: **6603**
++ Database: **clinic_db**
++ Username: **root**
++ Password: **mypassword**
+
+![img](documentation_images/dbeaver-3.png)
+
+Then on Driver Properties tab on **´allowPublicKeyRetrieval´** set is as **´true´**
+
+![img](documentation_images/dbeaver-4.png)
+
+Now click on Test connection and should appear as **´Connected´**
+
+![img](documentation_images/dbeaver-5.png)
 
 
 ## Step 4
