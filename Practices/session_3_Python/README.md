@@ -30,11 +30,9 @@ Once classification is done, store them into a database.
 ### Requirements
 * Develop and setup a docker compose to use python on a container
 * Develop classes for the following animal classification:
-  * **Mammals:** lions, elephants, monkeys, bears, giraffes
-  * **Birds:** parrots, eagles, flamingos, penguins, owls
-  * **Reptiles:** snakes, lizards, crocodiles, turtles, iguanas
+  * **Mammal:** lions, elephants, monkeys, bears, giraffes
+  * **Bird:** parrots, eagles, flamingos, penguins, owls
   * **Fish:** sharks, rays, piranhas, clownfish, salmon
-  * **Amphibians:** frogs, toads, newts, salamanders, axolotls
 * Use Python's data to deposit on a PostgreSQL Database
 
 # Let's do it!
@@ -192,3 +190,144 @@ python main.py
 
 And there you go! You should see HELLO WORLD!! message on the command prompt
 
+
+## Step 3
+
+Now lets create our first python classes, in this case let's create the following classes:
+
+![img](documentation_images/animal-diagram.png)
+
+To do so, lets create a directory to have all the classes on it.
+
+First create a directory called 'animals' and move to it:
+
+```
+$ mkdir animals
+$ cd animals
+```
+
+Once on animals directory let's create and edit animal.py classes
+
+```
+vi animals.py
+```
+
+On it let's add the following classes definitions:
+
+```
+from typing import Type
+
+class Animal:
+    def __init__(self, name: str, most_liked_food: str) -> None:
+        self.name = name
+        self.most_liked_food = most_liked_food
+
+    def __str__(self) -> str:
+        return f'{self.name} likes {self.most_liked_food}'
+
+    def make_sound(self) -> None:
+        pass
+
+class Mammal(Animal):
+    def __init__(self, name: str, most_liked_food: str, number_of_paws: int) -> None:
+        super().__init__(name, most_liked_food)
+        self.number_of_paws = number_of_paws
+
+    def walk(self) -> None:
+        print(f'{self.name} walks with {self.number_of_paws} paws')
+
+    def make_sound(self) -> None:
+        print("Mammal's sound depends the animal")
+
+class Fish(Animal):
+    def __init__(self, name: str, most_liked_food: str, number_of_fins: int) -> None:
+        super().__init__(name, most_liked_food)
+        self.number_of_fins = number_of_fins
+
+    def swim(self) -> None:
+        print(f"{self.name} swims and has {self.number_of_paws} fins")
+ 
+    def make_sound(self) -> None:
+        print("Glu Glu")
+
+class Bird(Animal):
+    def __init__(self, name: str, most_liked_food: str, number_of_wings: int) -> None:
+        super().__init__(name, most_liked_food)
+        self.number_of_wings = number_of_wings
+
+    def fly(self) -> None:
+        print(f"{self.name} flies and has {self.number_of_wings} wings")
+ 
+    def make_sound(self) -> None:
+        print("Chirp chirp")
+```
+
+now, to be easily imported, let's do a __init__.py file to import the classes, to do, let's edit with following command:
+
+```
+vi __init__.py
+```
+
+and add the following imports:
+
+```
+from .animals import Animal
+from .animals import Mammal
+from .animals import Fish
+from .animals import Bird
+```
+
+These imports will facilitate the access of the classes by referring only the parent directory name, in this case "animals"
+
+
+## Step 4
+
+Now let's use the created classes on main.py
+
+Let's go to our /app directory with:
+
+```
+cd /app
+```
+
+Now let's edit main.py with following command:
+
+```
+vi main.py
+```
+
+And on it, let's use following code:
+
+```
+from animals import Animal, Mammal, Fish, Bird
+
+print("let's create a Mammal")
+dog = Mammal('dog','bones',4)
+print(dog)
+dog.walk()
+dog.make_sound()
+
+print("let's create a Fish")
+fish = Fish('dolphin','fish',1)
+print(fish)
+fish.swim()
+fish.make_sound()
+
+print("let's create a bird")
+bird = Bird('parrot','seeds',2)
+print(bird)
+bird.fly()
+bird.make_sound()
+```
+
+On this code, you are able to instantiate a mammal (dog), a fish (dolphin), and a bird (parrot).
+
+Now let's exit from editor and run following command to run the application:
+
+```
+python main.py
+```
+
+# Conclusion
+
+By following this tutorial, you should now have a development environment set up using Docker Compose with Python and PostgreSQL containers. Your Python application should be able to connect to the PostgreSQL container and perform operations on the data stored in it. You can continue to develop your application and use the docker-compose commands to manage your containers.
