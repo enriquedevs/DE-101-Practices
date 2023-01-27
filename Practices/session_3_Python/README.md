@@ -122,6 +122,9 @@ COPY requirements.txt .
 # Install the necessary dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Update OS libraries and install VI editor
+RUN apt-get update && apt-get install -y vim
+
 # Default command that is triggered when container starts
 CMD ["tail", "-f", "/dev/null"]
 ```
@@ -156,4 +159,36 @@ docker-compose ps
 ```
 
 ## Step 2
+
+Now let's create an initial python script to run a "hello world" program.
+
+First let's connect to python_app service container:
+
+```
+docker-compose exec python_app bash
+```
+
+This command will start a bash session on the container of the python_app service.
+
+Now let's create a hello world python application.
+
+To do so, first, let's do following command to edit a python file:
+
+```
+vi main.py
+```
+
+Within **vi**, let's add following code:
+
+```
+print('HELLO WORLD!!')
+```
+
+Now let's exit from **vi** and run following command with:
+
+```
+python main.py
+```
+
+And there you go! You should see HELLO WORLD!! message on the command prompt
 
