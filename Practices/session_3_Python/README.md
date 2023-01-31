@@ -64,7 +64,7 @@ services:
   python_app:
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     depends_on:
       - postgres_db
     networks:
@@ -92,7 +92,7 @@ It has an environment variable block, which sets the values for the POSTGRES_PAS
 
 * The **volumes** block creates a mount point to the host's **./postgres** directory and maps it to **/docker-entrypoint-initdb.d** directory in the container. This allows any files in the **./postgres** directory on the host to be accessible inside the container.
 
-* The **python_app** service is configured to build the container using the "dockerfile" in the current directory and the context is set to the current directory (.)
+* The **python_app** service is configured to build the container using the "Dockerfile" in the current directory and the context is set to the current directory (.)
 
 * **depends_on** block is used to specify that the **python_app** container should be started after the **postgres_db** container.
 
@@ -105,7 +105,7 @@ It has an environment variable block, which sets the values for the POSTGRES_PAS
 **Overall, this file creates two services, postgres_db and python_app. postgres_db service runs postgres:11.1 image and python_app service runs an image built from a Dockerfile in the current directory. These services are connected to the same network and python_app is dependent on postgres_db service.**
 
 
-Now let's create a dockerfile for our python_app container:
+Now let's create a Dockerfile for our python_app container:
 
 ```
 # Use the official Python 3.10 image as the base image
@@ -245,7 +245,7 @@ class Fish(Animal):
         self.number_of_fins = number_of_fins
 
     def swim(self) -> None:
-        print(f"{self.name} swims and has {self.number_of_paws} fins")
+        print(f"{self.name} swims and has {self.number_of_fins} fins")
  
     def make_sound(self) -> None:
         print("Glu Glu")
