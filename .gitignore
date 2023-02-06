@@ -3,3 +3,6 @@
 
 # Virtual Env file
 venv
+
+# MACOS files
+.DS_Store
