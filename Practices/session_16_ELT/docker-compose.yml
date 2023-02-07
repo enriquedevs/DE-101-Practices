@@ -1,0 +1,15 @@
+version: "3"
+services:
+    sqlserver:
+        container_name: azure_sqlserver_db
+        image: mcr.microsoft.com/azure-sql-edge:latest
+        platform: linux/arm64
+        ports:
+            - "1433:1433"
+        environment:
+            MSSQL_SA_PASSWORD: strong123PassWord!
+            ACCEPT_EULA: Y
+        volumes:
+            - ./mssql_data:/var/opt/mssql/data
+        user: 0:0
+        
