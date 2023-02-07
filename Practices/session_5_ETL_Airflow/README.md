@@ -1,131 +1,57 @@
-# Python for Data Engineering
+# ETL Introduction and Airflow
 
-In this practice we will develop and use a Python script to process data by using Data Engineering libraries such as Numpy and Pandas
+In this practice we will develop a simple ETL pipeline on Airflow to understand each part of the ETL process
 
-![Docker-Python](documentation_images/numpy-pandas.png)
+![Docker-Python](documentation_images/etl.png)
 
 ### Prerequisites
-* [Install Python on local machine](https://www.python.org/downloads/) 
-
+* [Install docker](https://docs.docker.com/engine/install/)
 ### What You Will Learn
-- Process data on a Python Script
-- Usage of Numpy Library
-- Usage of Pandas Library
+- ETL Concepts
+- Airflow Components
+- Airflow DAGs
 
 # Practice
 
-You are working on a Census Company, and they asking you to provide insights of the census data made on the population.
+You are working on a Tech Company that process high volume of data from historical weather telemetry, and they requested you to create a ETL pipeline to process the information
 
-The company provides you a census data on csv file and they requested you to gather statistics and information from it
-
-![img](documentation_images/census.png)
+![img](documentation_images/airflow-docker.jpeg)
 
 
 ### Requirements
-* Create a Python Script to process the csv file which contains following census data from people:
-  * **age:** continuous.
-  * **workclass:** Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked.
-  * **fnlwgt:** continuous.
-  * **education:** Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9th, 7th-8th, 12th, Masters, 1st-4th, 10th, Doctorate, 5th-6th, Preschool.
-  * **education-num:** continuous.
-  * **marital-status:** Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse.
-  * **occupation:** Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces.
-  * **relationship:** Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried.
-  * **race:** White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
-  * **sex:** Female, Male.
-  * **capital-gain:** continuous.
-  * **capital-loss:** continuous.
-  * **hours-per-week:** continuous.
-  * **native-country:** United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
-  * **salary:** >50K,<=50K
-* Obtain requested information of the steps when processing the file
+* Use Airflow to create the ETL pipeline
 
 # Let's do it!
 
 
 ## Step 1
 
-### Python Virtual Environment
-**A virtual environment is a self-contained Python environment that allows you to install and run packages separately from your main Python installation. This is especially useful for projects that have different package requirements.**
-
-First, we are going to set up a virtual environment in Python, you will need to use the following commands:
-
+Run the docker-compose yml that start docker containers for Airflow:
 ```
-python -m venv myenv
-source myenv/bin/activate
+docker-compose up -d
 ```
 
-* **'python -m venv myenv'** - This command creates a virtual environment with the name "myenv" using the venv module in Python. A virtual environment allows you to isolate the dependencies for your project from the rest of your system, making it easier to manage different versions of libraries for different projects.
+### Understanding the Docker Compose file
+The provided Docker Compose file is a YAML file that describes the services required for Apache Airflow to run. The file consists of several services, each of which is defined as a container:
 
-* **'source myenv/bin/activate'** - This command activates the virtual environment "myenv". When a virtual environment is activated, any packages you install using pip will be installed in that environment, rather than in your system Python installation. This helps ensure that your project has access to the correct version of libraries, without affecting other projects that may have different requirements.
+* Postgres: A relational database that stores metadata for Apache Airflow.
+* Redis: An in-memory data structure store used for Apache Airflow's Celery Executor.
+* Airflow Web Server: The web server for Apache Airflow's web interface.
+* Airflow Scheduler: The scheduler for Apache Airflow that runs DAGs and monitors task execution.
+* Airflow Worker: The worker that executes tasks assigned by the scheduler.
 
-## Step 2
+The version field defines the version of Docker Compose that this file uses. The x-airflow-common section is an anchor that is reused by other services to specify common configurations. The environment section defines the environment variables used by Apache Airflow, such as the database connection string and Celery configurations. The volumes section maps the local directories to directories within the containers, and the user field specifies the user and group that run the container.
 
-Now let's install numpy and pandas libraries with following command:
+### Creating DAGs
+DAGs (Directed Acyclic Graphs) are a collection of tasks that define a workflow in Apache Airflow. Each DAG defines a series of tasks and their dependencies, which the scheduler uses to determine the order of execution. The DAGs for Apache Airflow are stored in the ./dags directory, which is mapped to the /opt/airflow/dags directory in the Airflow Web Server and Airflow Scheduler containers.
 
-```
-pip install numpy pandas
-```
+To create a new DAG, create a new Python script in the ./dags directory. In the script, you can use the Python API provided by Apache Airflow to define your workflow.
 
-### Numpy
-**NumPy is a library for the Python programming language that provides support for arrays and matrices. It is a fundamental library for scientific computing with Python, including support for a wide variety of mathematical and statistical operations. The main feature of NumPy is its N-dimensional array object, which allows you to perform operations on arrays of any size and shape, including element-wise operations, matrix multiplication, and basic linear algebra.**
+## ETL in Apache Airflow
+ETL (Extract, Transform, Load) is a process that involves extracting data from various sources, transforming the data into a desired format, and loading the transformed data into a destination database. Apache Airflow provides a flexible platform to build ETL workflows by allowing you to define tasks, dependencies, and execution order.
 
-### Pandas
-**pandas is a library for the Python programming language that provides data structures and functions needed for data analysis and data manipulation. It is particularly well-suited for working with labeled, tabular data in a way that is intuitive and easy to understand. The main data structure in pandas is the DataFrame, which is a two-dimensional table with labeled rows and columns. With pandas, you can perform operations on the data, such as filtering, grouping, aggregating, and transforming, with ease. Additionally, pandas provides built-in support for working with data from a variety of sources, including CSV, Excel, SQL databases, and more.**
-
-
-## Step 3
-### Numpy Arrays
-Numpy arrays are a powerful data structure in Numpy that allows you to perform mathematical operations on large datasets efficiently. The basic syntax for creating a Numpy array is as follows:
-
-```
-import numpy as np
-a = np.array([1, 2, 3, 4])
-```
-
-## Step 4
-### Reading Data
-We will use the CSV data source. To read in this data, we will use the pandas library. The code to read in the data and store it in a Pandas dataframe:
-
-```
-import pandas as pd
-
-df = pd.read_csv('data.csv')
-```
-
-## Step 5
-### Pandas Dataframes
-
-Pandas dataframes are a two-dimensional data structure that allows you to store and manipulate tabular data. A dataframe can be created from a Numpy array using the following code:
-
-```
-df = pd.DataFrame({'A': a})
-```
-
-## Step 6
-### Performing Transformations
-Once you have your data stored in a Numpy array or Pandas dataframe, you can perform various transformations on that data. For example, you can apply mathematical operations to Numpy arrays, or perform group-by operations on Pandas dataframes.
-
-One important method to note is the apply() method in Pandas, which allows you to apply a function to each element in a dataframe. For example:
-
-```
-df['B'] = df['A'].apply(lambda x: x * 2)
-```
-This code will create a new column B in the dataframe, which is equal to A multiplied by 2.
-
-## Step 7
-### Running script
-Run the census python script that process census information with following command:
-```
-python census.py
-```
-This script assumes that the CSV file is named data.csv and is in the same directory as the script. The script performs the following transformations on the data:
-
-Loads the data from the CSV file into a pandas dataframe.
-Calculates the average age, occupation count, and average hours per week.
-Determines the maximum salary.
-Groups the data by occupation and salary and finds the occupation with the highest and lowest salary.
+For example, to create an ETL workflow to extract data from a source database, transform the data, and load it into a destination database, you can define tasks for each of these steps using the Apache Airflow API and then specify the dependencies between the tasks.
 
 # Conclusion
 
-This course has covered the basics of Numpy and Pandas, including setting up a virtual environment, reading in data, and performing transformations on that data. With these tools and techniques, you can begin working with large datasets and performing data analysis in Python.
+In this practice, you learned how to configure Apache Airflow using Docker Compose and how to create DAGs and ETL workflows in Apache Airflow. By using Apache Airflow and Docker Compose, you can build robust and scalable ETL workflows that can be easily monitored and maintained.

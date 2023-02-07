@@ -1,4 +1,4 @@
-# Python for Data Engineering
+# Airflow and CICD
 
 In this practice we will develop and use a Python script to process data by using Data Engineering libraries such as Numpy and Pandas
 
