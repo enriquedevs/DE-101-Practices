@@ -5,20 +5,20 @@ In this practice we will setup the environment, tools and resources necesary for
 
 ### Prerequisites
 * Azure Free Account ([Instructions](Create_Azure_Free_Account.pdf))
-* Azure Data Studio or SQL Server Management Studio ([Data Studio](), [SSMS]())
-* SQL Server for macos with Docker ([docker-compose.yml](docker-compose.yml))
+* Azure Data Studio or SQL Server Management Studio ([Data Studio](https://learn.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver16&tabs=redhat-install%2Credhat-uninstall), [SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16))
+* SQL Server for macos with Docker (optional) ([docker-compose.yml](docker-compose.yml))
 * Nasdaq Free Account ([Create Nasdaq Account](https://data.nasdaq.com/account/profile))
-* Nasdaq api key file (API under Account Settings):
+* Nasdaq api key file ([API under Account Settings](https://data.nasdaq.com/account/profile)):
 ```
     touch .nasdaqapikey
 ```
-Open it with a text editor and add your api key. Save it in this directory in your repo, or anywhere else.
+Open it with a text editor and paste your api key. Save it to your documents or anywhere else.
 
 &nbsp; 
 
 ### What you will learn
 * How to create resources on Azure Portal
-* How to connect to a Database in Azure
+* How to connect to a Database in Azure with Data Studio or SSMS
 * ADF linked services (Http, Database, Datalake, Synapse DW and notebook)
 * (Advanced / optional) How to create a Data Warehouse in Azure Synapse (runs sql dw (olap) and spark with "massively parallel programming" under the hood)
 * (Advanced / optional) How to get data with a python script in Synapse
@@ -36,6 +36,7 @@ You are a data engineer working for a credit rating agency. You need to get Stoc
 &nbsp; 
 
 # STEP 1
+
 
 **Resource Group**
 
@@ -68,11 +69,11 @@ Go to blob account and create container and data folder. Upload csv file
 
 **Data Lake Storage**
 
-+ Redo steps from **Blob Storage**
-* After choosing Redundancy, go to **Advanced** tab and in the **Data Lake Storage Gen 2** section, check the box **Enable hierarchical namespace**
-* Leave the rest with the defaults and **Create**
-* * Go to **All Resources** in your Azure portal and select this storage account
-* Create two containers, one "raw" and the other "processed"
++ Redo steps from **Blob Storage**  
++ After choosing Redundancy, go to **Advanced** tab and in the **Data Lake Storage Gen 2** section, check the box **Enable hierarchical namespace**  
++ Leave the rest with the defaults and **Create**  
++ Go to **All Resources** in your Azure portal and select this storage account 
++ Create three containers, "raw", "processed", "data101_synapse"
 
 &nbsp; 
 
@@ -94,24 +95,6 @@ Go to blob account and create container and data folder. Upload csv file
 * Select **+ Create** and follow the instructions
 * Set a database name. Suggested similar to "data101-db"
 * Compute + storage : **Basic 5 DTUs**
-* Redundancy: **Locally redundant**
-* Networking: Add current IP address set to **YES**
-* Leave the rest with the defaults and **Create**
-* Type in and select **SQL databases** and select this database
-* On the left panel, select **Overview** and then on the upper right side copy the Server name
-* Go to SSMS or Azure Data Studio, create a new connection
-* Server: paste the Server name you copied
-* Use the username and password you created while creating the SQL server above
-* Leave the defaults and connect
-
-&nbsp; 
-
-**SQL Database (WideWorldImporters-Standard)**
-
-* Type in and select "SQL databases"
-* Select **+ Create** and follow the instructions
-* Set any database name, except "WideWorldImporters"
-* Compute + storage : **Standard 10 DTUs**
 * Redundancy: **Locally redundant**
 * Networking: Add current IP address set to **YES**
 * Leave the rest with the defaults and **Create**
@@ -192,13 +175,59 @@ Go to blob account and create container and data folder. Upload csv file
   * Then select Database name: "AdventureWorksDW"
   * Enter the username and password of your Azure SQL server, test connection and create
 
-
-
-
 &nbsp; 
 
 &nbsp; 
 
 # STEP 3 (Advanced / optional) 
-- Synapse Workspace
-- Python notebook
+
+* **Snowflake linked service**
+  * On your ADF workspace, on the left panel select **Manage**, click on **Linked services** and create a new one
+  * On the search bar, type in and select **Snowflake**
+  * Name: "snowflake_ls"
+  * Enter your snowflake account ("accountname.southcentral-us.azure")
+  * Fill in the values for user, pssw, db, dw and role
+  * Test your connection and create
+  ![img](documentation_images/ADF_snowflake_ls.png)
+
+&nbsp; 
+
+## Azure Synapse Analytics
+
+The following resources are meant to build a pipeline in ADF that executes a python script from an Azure Synapse notebook running a spark job. The script intends to get data as a dataframe from an API. Then a Copy activity in ADF takes that data and copies it into a database or data warehouse. 
+
+Azure Synapse has a higher cost, and since you are working on a free account with 200USD, it is recommended that you create the following resources and build your pipeline on the third session of this module. Once you finished and executed your pipeline, delete the synapse resource (including the SQL and Spark pools), so you keep the cost at the minimum.
+
+* Synapse Workspace
+* Synapse Access Control
+* Synapse Spark pool
+* Python notebook
+* ADF Synapse linked service (artifact)
+* ADF pipeline python to DB
+
+To mantain the structure of the sessions, here you will find the instructions to setup the resources and configurations necessary for the copy activity. You can find the **Copy** activity at the bottom of practice #17. But remember, once again, that it is recommended to follow this steps after the session #18 and in the same day, to keep cost at the minimum.
+
+**Azure Synapse(Workspace)**
+
+* Type in and select **Azure Synapse Analytics**
+* Select **+ Create**
+* Select **Resource group** and **Region** the same as all the above (Leave **Managed resource group** blank)
+* Set any name. Suggested similar to "data101-synapse-abc"
+* Account name: select the datalake resource created above
+* File system name: select "data101_synapse"
+* Under security tab, set a new SQL admin user and password (this is a different logical server than the created above)
+* Leave the defaults and **Create**
+* Go to **All Resources**, select this synapse resource and click on **Launch Studio**
+* It will open a new page similar to ADF workspace
+* Note: Synapse Studio does not load on Safari
+
+**Synapse Access Control / Role for ADF**
+
+* First of all we need to asign ADF a proper role to interact with Synapse. As a general rule, each service that wants to interact with other services should be asigned a role for that purpose. 
+* On your Synapse workspace, go to **Manage** on the left panel
+* Select **Access control** and click **+ Add**
+  ![img](documentation_images/Synapse_access_control_ADF.png)
+* Select the role **Synapse Contributor**
+* User: type and select the resource name of your ADF workspace ("data101-abc-df")
+
+&nbsp; 
