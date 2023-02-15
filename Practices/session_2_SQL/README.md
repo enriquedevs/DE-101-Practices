@@ -260,6 +260,16 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 ```
 
+This command did the following:
+* **LOAD DATA LOCAL INFILE**: This specifies that the data to be loaded is in a file, and it should be loaded locally from the client machine, rather than from the server.
+* **"/tmp/clinic.csv"**: This specifies the path to the CSV file that contains the data to be loaded.
+* **INTO TABLE clinic_raw**: This specifies the name of the table in the database where the data should be loaded.
+* **COLUMNS TERMINATED BY ','**: This specifies that the fields in the CSV file are separated by commas.
+* **OPTIONALLY ENCLOSED BY '"'**: This specifies that each field in the CSV file may be enclosed in double quotes.
+* **ESCAPED BY '"'**: This specifies that a double quote character within a field can be escaped by a double quote character.
+* **LINES TERMINATED BY '\n'**: This specifies that each line in the CSV file is terminated by a newline character.
+* **IGNORE 1 LINES**: This specifies that the first line of the CSV file should be ignored, as it typically contains headers or column names and is not part of the actual data to be loaded.
+
 Now let's verify all csv data is present by using the following SQL statements:
 
 ```
