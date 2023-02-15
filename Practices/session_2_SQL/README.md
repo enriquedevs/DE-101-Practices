@@ -37,7 +37,7 @@ The clinic only provides you a CSV file with the historical data of the appointm
 
 First, we are going to create a docker container with a MySQL image to create a clinic Database
 
-Create within this folder a dockerfile with the following content:
+Create within this folder a Dockerfile with the following content:
 
 ```
 FROM mysql
@@ -50,6 +50,8 @@ EXPOSE 3306
 
 ### Dockerfile
 **A Dockerfile is a script that contains instructions for building a Docker image. A Dockerfile is used to create an image, which can then be used to create new containers. A Dockerfile typically includes instructions for setting environment variables, copying files, and running commands.**
+
+![img](documentation_images/dockerfile.png)
 
 Now build a docker image with the following command:
 
@@ -67,6 +69,8 @@ docker images
 
 ### Docker Image
 **A Docker image is a pre-built package that contains all the necessary files and dependencies to run an application or service. You can think of an image as a snapshot of an application or service that can be used to create new containers.**
+
+![img](documentation_images/docker-image-docker-container.jpg)
 
 You can find and download images from the [Docker Hub](https://hub.docker.com/search), which is a public registry of Docker images. You can also create your own images by writing a Dockerfile, which is a script that contains instructions for building an image.
 
@@ -95,9 +99,13 @@ List of common docker commands:
 * **docker start** : Starts a stopped container
 * **docker logs** : Shows the log output of a container
 * **docker build** : Builds an image from a Dockerfile
+* **docker push**: Upload an image to a registry
 * **docker pull** : Pulls an image or a repository from the registry
 * **docker rm** : Remove one or more containers
 * **docker image rm**: Remove one or more images
+* **docker commit**: Create a new image based on changes made to a running container
+
+![img](documentation_images/docker-image.png)
 
 ### Docker VS Virtual Machine
 
