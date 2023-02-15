@@ -9,9 +9,9 @@ Data Engineering 101 Practices
 
 ## Module 2: Python for Data Engineering and ETL Principles
 
-* [Practice Session 4: Python for Data Engineering](Practices/session_2_SQL/)
-* [Practice Session 5: ETL Architecture and Introduction to Airflow](Practices/session_3_Python/)
-* [Practice Session 6: Ingesting Data from sources and CI/CD on Airflow](Practices/session_2_SQL/)
+* [Practice Session 4: Python for Data Engineering](Practices/session_4_Python_DE/)
+* [Practice Session 5: ETL Architecture and Introduction to Airflow](Practices/session_5_ETL_Airflow/)
+* [Practice Session 6: Ingesting Data from sources and CI/CD on Airflow](Practices/session_6_Airflow_CICD/)
 
 ## Module 7: Data Processing Architectures and Troubleshooting
 
