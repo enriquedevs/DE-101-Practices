@@ -244,7 +244,7 @@ Now, we need to create the connection (`slack_conn`) that we have specified in t
 
 - Conn Id: `slack_conn`
 - Conn Type: `HTTP`
-- Host: `<https://hooks.slack.com/services/>
+- Host: <https://hooks.slack.com/services/>
 - Password: `T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX` (the part of the webhook URL that contains the token)
 
 In order test the task, please run the following command in the Airflow container:
