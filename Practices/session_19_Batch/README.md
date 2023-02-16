@@ -236,7 +236,7 @@ Now that we have created the channel to send the notifications to, we need to cr
 
 Notice that the webhook URL looks like this:
 
-```http
+```bash
 https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
