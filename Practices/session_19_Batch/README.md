@@ -1,4 +1,4 @@
-# Practice: batch data pipeline with Airflow, HDFS, Postgres and Spark
+# Practice: batch data pipeline with Airflow, HDFS, Hive and Spark
 
 In this practice you will implement a data pipeline using a batch architecture. Notice that the arquitecture used here is not a lambda architecture, because we will leave the streaming part for another –more advanced– course.
 
@@ -7,7 +7,7 @@ In this practice you will implement a data pipeline using a batch architecture. 
 - Use HDFS as a data lake
 - Use Hive to query data in HDFS
 - Issue processing jobs in Spark
-- Use Postgres as a data warehouse
+- Use Hive as a data warehouse
 - Configure connections to external services in Airflow
 - Use Airflow to orchestrate the data pipeline
 
