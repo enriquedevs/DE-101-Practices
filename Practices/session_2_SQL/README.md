@@ -82,7 +82,7 @@ docker run --rm -d -p 6603:3306 --name clinic-container clinic
 
 This command will create a docker container named as **´clinic-container´** from **´clinic´** image.
 * The **´-d´** option runs the container in detached mode, which allows it to run in the background.
-* The **-p** flag helps to publish Publish container's port(s) to the host, in this case <host-port>:<container-port>
+* The **-p** flag helps to publish Publish container's port(s) to the host, in this case `<host-port>:<container-port>`
 * The **--rm** flag instructs Docker to also remove the anonymous volumes associated with the container if the container is removed
 
 ### Docker Container

@@ -43,6 +43,8 @@ Once classification is done, store them into a database.
 ### Docker compose
 **Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to configure your application's services, networks, and volumes in a single docker-compose.yml file, and then start and stop them using a single command.**
 
+![img](documentation_images/docker-compose.png)
+
 First, we are going to create a docker-compose.yml file with the configuration for a python and postgreSQL container
 
 ```
@@ -77,6 +79,8 @@ networks:
     driver: bridge
 ```
 
+
+
 This is a docker-compose.yml file that is used to define and run multi-container applications using Docker Compose.
 
 * The first line specifies the version of the Docker Compose file format.
@@ -92,6 +96,8 @@ It has an environment variable block, which sets the values for the POSTGRES_PAS
 
 * The **volumes** block creates a mount point to the host's **./postgres** directory and maps it to **/docker-entrypoint-initdb.d** directory in the container. This allows any files in the **./postgres** directory on the host to be accessible inside the container.
 
+![img](documentation_images/docker-volume.png)
+
 * The **python_app** service is configured to build the container using the "Dockerfile" in the current directory and the context is set to the current directory (.)
 
 * **depends_on** block is used to specify that the **python_app** container should be started after the **postgres_db** container.
@@ -101,6 +107,8 @@ It has an environment variable block, which sets the values for the POSTGRES_PAS
 * **command** block is used to specify a command that should be run when the container starts. Here is it runs **tail -f /dev/null** command.
 
 * Under **networks**, the app-tier network is defined using the bridge driver. This network allows containers to communicate with each other using their hostnames.
+
+![img](documentation_images/docker-network.png)
 
 **Overall, this file creates two services, postgres_db and python_app. postgres_db service runs postgres:11.1 image and python_app service runs an image built from a Dockerfile in the current directory. These services are connected to the same network and python_app is dependent on postgres_db service.**
 
@@ -133,6 +141,8 @@ Above Dockerfile is having the following:
 * **COPY** is used to copy files and directories from the host machine to the container. In this case, the requirements.txt file is copied to the /app directory.
 * **RUN** is used to execute commands in the container. In this case, pip install is run to install the dependencies listed in requirements.txt
 * **CMD** is used to specify the command that should be run when the container starts. In this case, the tail command is used to display the last lines of a file and the -f option is used to keep the command running and display new lines as they are added to the file. By using tail -f /dev/null you are not looking at any file but it keeps running
+
+![img](documentation_images/docker-lifecycle.jpeg)
 
 Now let's create the requirements.txt with following content:
 
