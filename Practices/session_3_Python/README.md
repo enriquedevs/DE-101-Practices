@@ -445,7 +445,7 @@ For Homework, let's do the following:
 
 **UPDATE main.py to grab the connection parameter values from ENV VARIABLES, let's say you are setting on the python_app container the following ENV VARIABLES:**
 
-+ POSTGRE_HOST: **postgre_db**
++ POSTGRE_HOST: **postgres_db**
 + POSTGRE_PORT: **5432**
 + POSTGRE_DB: **animaldb**
 + POSTGRE_USER: **myuser**
