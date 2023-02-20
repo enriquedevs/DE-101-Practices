@@ -53,9 +53,9 @@ services:
   postgres_db:
     image: postgres:11.1
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: bookstore
-      POSTGRES_USER: root
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: animaldb
+      POSTGRES_USER: myuser
     ports:
       - 5433:5432
     networks:
@@ -312,10 +312,10 @@ And on it, let's use following code:
 from animals import Animal, Mammal, Fish, Bird
 
 print("let's create a Mammal")
-dog = Mammal('dog','bones',4)
-print(dog)
-dog.walk()
-dog.make_sound()
+monkey = Mammal('monkey','banana',2)
+print(monkey)
+monkey.walk()
+monkey.make_sound()
 
 print("let's create a Fish")
 fish = Fish('dolphin','fish',1)
@@ -330,13 +330,25 @@ bird.fly()
 bird.make_sound()
 ```
 
-On this code, you are able to instantiate a mammal (dog), a fish (dolphin), and a bird (parrot).
+On this code, you are able to instantiate a mammal (monkey), a fish (dolphin), and a bird (parrot).
 
 Now let's exit from editor and run following command to run the application:
 
 ```
 python main.py
 ```
+
+## Step 5
+
+Connect to PostgreSQL using DBeaver to create Animal table
+
+## Step 6
+
+Re-edit the file to insert animal data into database
+
+## Step 7
+
+Check Animal table on DB
 
 # Conclusion
 
