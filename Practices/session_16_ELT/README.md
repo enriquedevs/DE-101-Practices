@@ -188,7 +188,7 @@ Go to blob account and create container and data folder. Upload csv file
   * Enter your snowflake account ("accountname.southcentral-us.azure")
   * Fill in the values for user, pssw, db, dw and role
   * Test your connection and create
-  ![img](documentation_images/ADF_snowflake_ls.png)
+    ![img](documentation_images/ADF_snowflake_ls.png)
 
 &nbsp; 
 

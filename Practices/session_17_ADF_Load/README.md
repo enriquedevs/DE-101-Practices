@@ -5,10 +5,10 @@ In this practice we will create different pipelines to load (Copy) data from dif
 &nbsp; 
 
 ### Prerrequisites
-* Create 2 tables in your azure database, FRED_GDP and AAPL
-* Go to SMSS or Azure Data Studio, select the database you created before ("data101-db"), open a new query and run:
+* Create 4 tables in your azure database: AAPL_landing, AAPL, FRED_GDP_landing, FRED_GDP
+* Go to SSMS or Azure Data Studio, select the database you created before ("data101-db"), open a new query and run:
 
-        CREATE TABLE AAPL (
+        CREATE TABLE AAPL_landing (
             "Date" varchar(200),
             Low varchar(200),
             "Open" varchar(200),
@@ -18,21 +18,27 @@ In this practice we will create different pipelines to load (Copy) data from dif
             "Adjusted Close" varchar(200)
         );
 
-         CREATE TABLE AAPL_synapse (
-            "Date" varchar(200),
-            Low varchar(200),
-            "Open" varchar(200),
-            Volume varchar(200),
-            High varchar(200),
-            "Close" varchar(200),
-            "Adjusted Close" varchar(200)
-        );
-
-        CREATE TABLE FRED_GDP (
+        CREATE TABLE FRED_GDP_landing (
             "Date" varchar(200),
             "Value" varchar(200)
         );
-* Create the "AAPL" table also in your data warehouse
+
+        CREATE TABLE AAPL (
+            "Date" date,
+            Low float,
+            "Open" float,
+            Volume float,
+            High float,
+            "Close" float,
+            "Adjusted Close" float
+        );
+
+        CREATE TABLE FRED_GDP (
+            "Date" date,
+            "Value" float
+        );
+
+* Create the "AAPL_landing" table also in your data warehouse ("AdventureWorksDW")
   
 &nbsp; 
 
@@ -81,14 +87,13 @@ On your azure portal, go to **All Resources**, select the data factory you creat
 * Click **OK**
 * On the activity configurations, go to **Sink** and create a new dataset
 * Search for **Azure SQL Database**
-* Set a name for your dataset ("AzureSQLTable_AAPL_ds"), select the linked service for the azure db you created in the past session
-* Select "dbo.AAPL" table
+* Set a name for your dataset ("AzureSQLTable_AAPL_landing_ds"), select the linked service for the azure db you created in the past session
+* Select "dbo.AAPL_landing" table
 * You can import the schema or import it later
-* Under your activit configurations go to **Mapping**
+* Under your activit configurations go to **Mapping** and **Import schemas** (so you can view mapping/transformation options)
   ![img](documentation_images/ADF_mapping_schemas.png)
-  
-For fixed or known schemas it is usefull to import the schemas and review or modify your mappings. Here you can also preview the data (not all sources allow data preview).
-
+* For fixed or known schemas it is usefull to import the schemas and review or modify your mappings. Here you can also preview the data (not all sources allow data preview).
+* In this case, **Clear** the schema (at this moment we will not make any transformation since we are building ELT pipelines)
 * If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
 
 &nbsp; 
@@ -99,8 +104,8 @@ For fixed or known schemas it is usefull to import the schemas and review or mod
 * Drag a new **Copy data** activity
 * Go to Source in the activity configurations and create a new source dataset
 * Search for **HTTP**, then select **DelimitedText**
-* Select a name for your dataset, could be "AAPL_csv_ds" (you can also rename datasets later)
-* Select the **Linked service** for Blob Storage created in the past session, similar to "blobdata101_ls"
+* Select a name for your dataset, could be "http_fredGDP_csv_ds" (you can also rename datasets later)
+* Select the **Linked service** for http created in the past session, similar to "nasdaq_http_ls"
 * Enter the following relative url:
   
         api/v3/datasets/FRED/GDP.csv?collapse=annual&order=asc&column_index=1
@@ -111,8 +116,8 @@ For fixed or known schemas it is usefull to import the schemas and review or mod
 * Click **OK**
 * On the activity configurations, go to **Sink** and create a new dataset
 * Search for **Azure SQL Database**
-* Set a name for your dataset ("AzureSQLTable_AAPL_ds"), select the linked service for the azure db you created in the past session
-* Select "dbo.AAPL" table
+* Set a name for your dataset ("AzureSQLTable_FREDGDP_landing_ds"), select the linked service for the azure db you created in the past session
+* Select "dbo.FRED_GDP_landing" table
 * You can import the schema or import it later
 * Under your activit configurations go to **Mapping**
 * If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
@@ -123,28 +128,22 @@ For fixed or known schemas it is usefull to import the schemas and review or mod
 
 * Create a new pipeline, set a propper name
 * Drag a new **Copy data** activity
-* Go to Source in the activity configurations and create a new source dataset
-* Search for **Azure SQL Database**
-* Set a name for your dataset ("AzureSQLTable_AAPL_source_ds"), select the linked service for the azure db you created in the past session
-* Select "dbo.AAPL" table
-* You can import the schema or import it later
-* On **Import schema** you can import from connection/store or select none (later you can import the schema)
-* Click **OK**
-* On the activity configurations, go to **Sink** and create a new dataset
+* Go to Source in the activity configurations and select the dataset you created as sink for Azure DB ("AzureSQLTable_AAPL_landing_ds") in the previews steps
+* Leave the defaults
+* Go to **Sink** tab and create a new dataset
 * Search for **Azure Synapse Analytics**
 * Set a name for your dataset, could be "AAPL_dw_ds" (you can also rename datasets later)
 * Select the linked service for the DW you created in the past session ("adventureworks_dw_ls")
-* Select "AAPL" table
-* You can import the schema or import it later
-* Under your activit configurations go to **Mapping** and import schemas
-* If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
+* Select "AAPL_landing" table
+* Do not import schema and click **OK**
+* Click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
 * Go to Data Studio or SMSS, create a new query for your "AdventureWorksDW" and run:
 
 &nbsp; 
 
-        SELECT TOP 100 * FROM dbo.AAPL;
+        SELECT TOP 100 * FROM dbo.AAPL_landing;
 
-* Once you can view the data in your DW, on your Azure portal, go to **All resources** select and delete "AdventureWorksDW" resource to keep the cost at the minimum.
+* DELETE: Once you can view the data in your DW, on your Azure portal, go to **All resources** select and delete "AdventureWorksDW" resource to keep the cost at the minimum.
 
 &nbsp; 
 
