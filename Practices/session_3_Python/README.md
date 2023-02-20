@@ -312,13 +312,13 @@ And on it, let's use following code:
 from animals import Animal, Mammal, Fish, Bird
 
 print("let's create a Mammal")
-monkey = Mammal('monkey','banana',2)
-print(monkey)
-monkey.walk()
-monkey.make_sound()
+mammal = Mammal('monkey','banana',2)
+print(mammal)
+mammal.walk()
+mammal.make_sound()
 
 print("let's create a Fish")
-fish = Fish('dolphin','fish',1)
+fish = Fish('shark','fish',1)
 print(fish)
 fish.swim()
 fish.make_sound()
@@ -340,15 +340,118 @@ python main.py
 
 ## Step 5
 
-Connect to PostgreSQL using DBeaver to create Animal table
+Now let's connect to PostgreSQL using DBeaver to create animal table
+
+First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on the upper left of the IDE:
+
+![img](documentation_images/dbeaver-1.png)
+
+Then a pop up window will open and here selects **´PostgreSQL´** option and click on **Next**
+
+![img](documentation_images/dbeaver-2.png)
+
+Then on connection parameters use the following:
++ Server Host: **localhost**
++ Port: **5433**
++ Database: **animaldb**
++ Username: **myuser**
++ Password: **mypassword**
+
+![img](documentation_images/dbeaver-3.png)
+
+Now click on Test connection and should appear as **´Connected´**
+
+![img](documentation_images/dbeaver-4.png)
+
+Once done, now let's open a sql script by using this connection by clicking **´SQL´** button that is on the upper left part of the menu
+
+![img](documentation_images/dbeaver-5.png)
+
+Now, let's create the animal table by writing and executing the following create table on the SQL script editor:
+
+```
+create table animal(
+	id serial primary key,
+	name varchar(50),
+	most_liked_food varchar(50),
+	animal_classification varchar(50)
+);
+```
+
+![img](documentation_images/dbeaver-6.png)
 
 ## Step 6
 
-Re-edit the file to insert animal data into database
+Now we are going to Re-edit the file to insert animal data into database.
+
+To do so, let's re-edit main.py file with following content:
+
+```
+import psycopg2
+from typing import Type
+from animals import Animal, Mammal, Fish, Bird
+
+# Define the connection parameters
+conn_params = {
+    "host": "postgres_db",
+    "port": 5432,
+    "database": "animaldb",
+    "user": "myuser",
+    "password": "mypassword"
+}
+
+# Connect to the database
+conn = psycopg2.connect(**conn_params)
+cur = conn.cursor()
+
+# Define the SQL insert statement
+sql = "INSERT INTO animal (name, most_liked_food, animal_classification) VALUES (%s, %s, %s)"
+
+# Define a list of animals to insert
+animals = [Mammal('monkey', 'banana', 4),
+           Fish('shark', 'fish', 2),
+           Bird('parrot', 'seeds', 2)]
+
+# Loop through the animals and insert them into the database
+for animal in animals:
+    # Get the animal's classification based on its type
+    classification = animal.__class__.__name__
+    # Execute the SQL insert statement
+    cur.execute(sql, (animal.name, animal.most_liked_food, classification))
+
+# Commit the changes and close the connection
+conn.commit()
+cur.close()
+conn.close()
+
+print("Animals were inserted into Database")
+```
 
 ## Step 7
 
-Check Animal table on DB
+Check Animal table on DB on dbeaver by running following query:
+
+```
+select * from animal;
+```
+
+![img](documentation_images/dbeaver-7.png)
+
+## HOMEWORK TIME !!!
+
+**On past main.py script we declared on conn_params variable the postgredb connection parameters on the code. But this is a BAD PRACTICE.**
+
+For Homework, let's do the following:
+
+**UPDATE main.py to grab the connection parameter values from ENV VARIABLES, let's say you are setting on the python_app container the following ENV VARIABLES:**
+
++ POSTGRE_HOST: **postgre_db**
++ POSTGRE_PORT: **5432**
++ POSTGRE_DB: **animaldb**
++ POSTGRE_USER: **myuser**
++ POSTGRE_PASSWORD: **mypassword**
+
+**Assume you set above ENV VARIABLES, and UPDATE main.py to use them while connecting to DB rather than the hard coded values that are on conn_params**
 
 # Conclusion
 
