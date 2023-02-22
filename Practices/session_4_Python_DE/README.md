@@ -78,21 +78,113 @@ pip install numpy pandas
 
 ## Step 3
 ### Numpy Arrays
-Numpy arrays are a powerful data structure in Numpy that allows you to perform mathematical operations on large datasets efficiently. The basic syntax for creating a Numpy array is as follows:
+First let's create a python script to start using numpy data.
+
+To do so, create a python file as **'numpy_example.py'** and add the following content
 
 ```
 import numpy as np
-a = np.array([1, 2, 3, 4])
+
+# create a single-dimensional NumPy array
+arr1 = np.array([1, 2, 3, 4, 5, 6, 6, 4, 3, 4, 2, 4])
+
+# create a two-dimensional NumPy array
+arr2 = np.array([[5, 2, 3], [4, 5, 5], [8, 9, 1]])
+
+# calculate the average value of arr1
+avg1 = np.mean(arr1)
+print("Average value of arr1:", avg1)
+
+# calculate the minimum value of arr2
+min2 = np.min(arr2)
+print("Minimum value of arr2:", min2)
+
+# calculate the maximum value of arr2
+max2 = np.max(arr2)
+print("Maximum value of arr2:", max2)
+
+# calculate the sum of the values in arr2
+sum2 = np.sum(arr2)
+print("Sum of values in arr2:", sum2)
+```
+
+The code creates following numpy arrays:
+* arr1: It's a single dimension array
+* arr2: It's a bi-dimensional array
+
+And with the functions (sum, max, min, mean) will be obtained statistics data from the arrays.
+
+Here are some most commons functions on numpy:
++ **np.array()**: Creates a NumPy array from a Python list or other iterable.
++ **np.arange()**: Creates a NumPy array with evenly spaced values between a start and end point.
++ **np.zeros()**: Creates a NumPy array of all zeros with a given shape.
++ **np.ones()**: Creates a NumPy array of all ones with a given shape.
++ **np.linspace()**: Creates a NumPy array with a specified number of evenly spaced values between a start and end point.
++ **np.reshape()**: Reshapes a NumPy array to a specified shape.
++ **np.concatenate()**: Concatenates two or more NumPy arrays along a specified axis.
++ **np.mean()**: Calculates the mean of a NumPy array.
++ **np.median()**: Calculates the median of a NumPy array.
++ **np.var()**: Calculates the variance of a NumPy array.
++ **np.std()**: Calculates the standard deviation of a NumPy array.
++ **np.min()**: Finds the minimum value of a NumPy array.
++ **np.max()**: Finds the maximum value of a NumPy array.
++ **np.argmin()**: Finds the index of the minimum value in a NumPy array.
++ **np.argmax()**: Finds the index of the maximum value in a NumPy array.
++ **np.sort()**: Sorts the values in a NumPy array.
++ **np.unique()**: Finds the unique values in a NumPy array.
++ **np.dot()**: Computes the dot product of two NumPy arrays.
++ **np.transpose()**: Transposes a NumPy array.
++ **np.random()**: Generates random numbers or arrays in a NumPy array.
+
+Now let's run this file on the terminal with:
+```
+python numpy_example.py
 ```
 
 ## Step 4
-### Reading Data
-We will use the CSV data source. To read in this data, we will use the pandas library. The code to read in the data and store it in a Pandas dataframe:
+### Reading Data with Numpy
+
+Now we will use the CSV data source to read the data from it by using numpy.
+
+Let's create now **'numpy_census.py'** python file with following content:
 
 ```
-import pandas as pd
+import numpy as np
+import csv
 
-df = pd.read_csv('data.csv')
+# Load the CSV file into a NumPy array
+with open('./resources/census_data.csv') as csvfile:
+    data = np.genfromtxt(csvfile, delimiter=',', skip_header=1)
+
+# Extract the hours-per-week and age columns
+hours = data[:, 12] # extracts hours_per_week values on an array
+age = data[:, 0] # extracs age values on an array
+
+# Calculate the average hours-per-week
+avg_hours = np.mean(hours)
+
+# Find the maximum and minimum age
+max_age = np.max(age)
+min_age = np.min(age)
+avg_age = np.mean(age)
+
+# Print the results
+print("Average hours-per-week:", avg_hours)
+print("Maximum age:", max_age)
+print("Minimum age:", min_age)
+print("Average age:", avg_age)
+```
+
+In this example, we use the NumPy **genfromtxt()** function to load the given CSV file into a NumPy array. We then extract the hours-per-week, and age columns from the array and use various NumPy functions to perform calculations on these columns, such as calculating the average hours-per-week, and finding the maximum, minimum and average age.
+
+As note:
+
++ In **data[:, 12]**, the colon **:** before the comma specifies that we want to select all rows of the data array. The number **12** after the comma specifies that we want to select the 12th column of the data array. So **data[:, 12]** selects all rows and the 12th column of the data array, which corresponds to the **"hours-per-week"** column in the given CSV file.
+
+To run this file, do the following command:
+
+```
+python census_numpy.py
 ```
 
 ## Step 5
