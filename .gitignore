@@ -1,8 +1,9 @@
 # IDE files
 .idea
 
-# Virtual Env file
+# Virtual Env files and directories
 venv
+myenv
 
 # MACOS files
 .DS_Store

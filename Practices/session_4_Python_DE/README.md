@@ -16,26 +16,22 @@ In this practice we will develop and use a Python script to process data by usin
 
 You are working on a Census Company, and they asking you to provide insights of the census data made on the population.
 
-The company provides you a census data on csv file and they requested you to gather statistics and information from it
+The company provides you a census data on csv file and they requested you to gather statistics and information from it.
 
 ![img](documentation_images/census.png)
 
 
 ### Requirements
 * Create a Python Script to process the csv file which contains following census data from people:
-  * **age:** continuous.
+  * **age:** Age of the person.
   * **workclass:** Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked.
-  * **fnlwgt:** continuous.
   * **education:** Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9th, 7th-8th, 12th, Masters, 1st-4th, 10th, Doctorate, 5th-6th, Preschool.
-  * **education-num:** continuous.
   * **marital-status:** Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse.
   * **occupation:** Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces.
   * **relationship:** Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried.
   * **race:** White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
   * **sex:** Female, Male.
-  * **capital-gain:** continuous.
-  * **capital-loss:** continuous.
-  * **hours-per-week:** continuous.
+  * **hours-per-week:** Weekly working hours.
   * **native-country:** United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
   * **salary:** >50K,<=50K
 * Obtain requested information of the steps when processing the file
@@ -47,6 +43,8 @@ The company provides you a census data on csv file and they requested you to gat
 
 ### Python Virtual Environment
 **A virtual environment is a self-contained Python environment that allows you to install and run packages separately from your main Python installation. This is especially useful for projects that have different package requirements.**
+
+![img](documentation_images/pyenv.png)
 
 First, we are going to set up a virtual environment in Python, you will need to use the following commands:
 
@@ -70,8 +68,12 @@ pip install numpy pandas
 ### Numpy
 **NumPy is a library for the Python programming language that provides support for arrays and matrices. It is a fundamental library for scientific computing with Python, including support for a wide variety of mathematical and statistical operations. The main feature of NumPy is its N-dimensional array object, which allows you to perform operations on arrays of any size and shape, including element-wise operations, matrix multiplication, and basic linear algebra.**
 
+![img](documentation_images/numpy.png)
+
 ### Pandas
 **pandas is a library for the Python programming language that provides data structures and functions needed for data analysis and data manipulation. It is particularly well-suited for working with labeled, tabular data in a way that is intuitive and easy to understand. The main data structure in pandas is the DataFrame, which is a two-dimensional table with labeled rows and columns. With pandas, you can perform operations on the data, such as filtering, grouping, aggregating, and transforming, with ease. Additionally, pandas provides built-in support for working with data from a variety of sources, including CSV, Excel, SQL databases, and more.**
+
+![img](documentation_images/dataframe.png)
 
 
 ## Step 3
