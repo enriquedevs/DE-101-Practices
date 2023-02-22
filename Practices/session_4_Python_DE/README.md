@@ -78,7 +78,7 @@ pip install numpy pandas
 
 ## Step 3
 ### Numpy Arrays
-First let's create a python script to start using numpy data.
+First let's create a python script to start using numpy arrays.
 
 To do so, create a python file as **'numpy_example.py'** and add the following content
 
@@ -184,20 +184,73 @@ As note:
 To run this file, do the following command:
 
 ```
-python census_numpy.py
+python numpy_census.py
 ```
 
 ## Step 5
-### Pandas Dataframes
+### Using Pandas Dataframes
 
-Pandas dataframes are a two-dimensional data structure that allows you to store and manipulate tabular data. A dataframe can be created from a Numpy array using the following code:
+Pandas dataframes are a two-dimensional data structure that allows you to store and manipulate tabular data. It's like a "table" data structure on Python.
+
+Now let's create a **'pandas_example.py'** file with following content:
 
 ```
-df = pd.DataFrame({'A': a})
+import pandas as pd
+
+# Create a sample DataFrame
+data = {'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eva'],
+        'Age': [25, 30, 35, 40, 45],
+        'Salary': [50000, 60000, 70000, 80000, 90000],
+        'Experience': [3, 5, 7, 9, 11]}
+
+df = pd.DataFrame(data)
+
+# Calculate the average salary
+avg_salary = df['Salary'].mean()
+
+# Find the maximum and minimum age
+max_age = df['Age'].max()
+min_age = df['Age'].min()
+
+# Use apply() to create a new columns ('Salary plus Experience' and 'Name with Age')
+df['Salary plus Experience'] = df.apply(lambda row: row['Salary'] + row['Experience'], axis=1)
+df['Name with Age'] = df.apply(lambda row: f"{row['Name']} is having {row['Age']} years old", axis=1)
+
+# Print the results
+print("Average salary:", avg_salary)
+print("Maximum age:", max_age)
+print("Minimum age:", min_age)
+print(df)
+```
+
+In this example, we create a sample DataFrame using a Python dictionary and the Pandas DataFrame() constructor. We then perform some simple operations on the DataFrame, such as calculating the average salary, finding the maximum and minimum age, and using the **apply()** method to create a new column that has the sum of two existing columns.
+
+The **apply()** method takes a function as an argument and applies that function to each row or column of the DataFrame. In this example, we use a lambda function to add the "Salary" and "Experience" columns together and create a new column called "Salary plus Experience".
+
+Here are some most commons functions on Pandas Dataframes:
++ **pd.DataFrame()**: Creates a new Pandas DataFrame from a Python dictionary, list, or other data structure.
++ **df.head()**: Returns the first n rows of a DataFrame, where n is the argument passed to the function (defaults to 5).
++ **df.tail()**: Returns the last n rows of a DataFrame, where n is the argument passed to the function (defaults to 5).
++ **df.shape**: Returns a tuple with the number of rows and columns in a DataFrame.
++ **df.columns**: Returns a list of column names in a DataFrame.
++ **df.dtypes**: Returns a Series with the data type of each column in a DataFrame.
++ **df.describe()**: Generates a summary of descriptive statistics for the columns of a DataFrame, such as count, mean, standard deviation, minimum, maximum, and quartiles.
++ **df.info()**: Provides a concise summary of a DataFrame, including the number of non-null values, data types, and memory usage.
++ **df.isnull()**: Returns a DataFrame with the same shape as the original, where each element is a Boolean value indicating whether it is a null value (i.e., NaN).
++ **df.dropna()**: Returns a new DataFrame with all rows that contain null values removed.
++ **df.fillna()**: Returns a new DataFrame with all null values filled with a specified value or method.
++ **df.sort_values()**: Sorts a DataFrame by one or more columns, either in ascending or descending order.
++ **df.groupby()**: Groups a DataFrame by one or more columns and returns a DataFrameGroupBy object that can be used to perform further operations.
++ **df.apply()**: Applies a function to each row or column of a DataFrame.
++ **df.merge()**: Combines two or more DataFrames into a single DataFrame based on a common key or index.
+
+Now let's run this file on the terminal with:
+```
+python pandas_example.py
 ```
 
 ## Step 6
-### Performing Transformations
+### Reading Data with Pandas Dataframes
 Once you have your data stored in a Numpy array or Pandas dataframe, you can perform various transformations on that data. For example, you can apply mathematical operations to Numpy arrays, or perform group-by operations on Pandas dataframes.
 
 One important method to note is the apply() method in Pandas, which allows you to apply a function to each element in a dataframe. For example:
