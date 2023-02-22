@@ -250,28 +250,57 @@ python pandas_example.py
 ```
 
 ## Step 6
-### Reading Data with Pandas Dataframes
-Once you have your data stored in a Numpy array or Pandas dataframe, you can perform various transformations on that data. For example, you can apply mathematical operations to Numpy arrays, or perform group-by operations on Pandas dataframes.
+### Reading and Writing Data with Pandas Dataframes
+Now we will use the CSV data source to read the data from it by using pandas dataframes.
 
-One important method to note is the apply() method in Pandas, which allows you to apply a function to each element in a dataframe. For example:
+Let's create now **'pandas_census.py'** python file with following content:
 
 ```
-df['B'] = df['A'].apply(lambda x: x * 2)
-```
-This code will create a new column B in the dataframe, which is equal to A multiplied by 2.
+import pandas as pd
 
-## Step 7
-### Running script
-Run the census python script that process census information with following command:
-```
-python census.py
-```
-This script assumes that the CSV file is named data.csv and is in the same directory as the script. The script performs the following transformations on the data:
+# read the CSV file into a pandas DataFrame
+df = pd.read_csv('resources/census_data.csv')
 
-Loads the data from the CSV file into a pandas dataframe.
-Calculates the average age, occupation count, and average hours per week.
-Determines the maximum salary.
-Groups the data by occupation and salary and finds the occupation with the highest and lowest salary.
+# calculate the average hours-per-week
+avg_hours = df['hours-per-week'].mean()
+print('Average hours-per-week:', avg_hours)
+
+# calculate the minimum and maximum age
+min_age = df['age'].min()
+max_age = df['age'].max()
+print('Minimum age:', min_age)
+print('Maximum age:', max_age)
+
+# create a new DataFrame with the specified columns
+new_df = df[['age', 'education', 'native-country', 'salary']]
+
+# save the new DataFrame to a CSV file
+new_df.to_csv('census_demographics.csv', index=False)
+print('DataFrame saved to census_demographics.csv')
+```
+
+In this script, we first read the **census_data.csv** file into a Pandas DataFrame using the **read_csv()** function. We then calculate the average hours-per-week, minimum and maximum age, and most common occupation using various DataFrame functions.
+
+Then the script creates a new DataFrame with only the columns we are interested in (age, education, native-country, and salary) and save it to a new CSV file using the **to_csv()** function
+
+Now let's run this file with the following command:
+
+```
+python pandas_census.py
+```
+
+And a new **'census_demographics.csv'** file will be created on current directory.
+
+## HOMEWORK TIME !!!
+
+**By using same pandas_census.py, modify the code to store on csv file the following:**
+
++ **age**: age
++ **education**: education
++ **native-country**: native-country
++ **salary**: salary
++ **age-is-above-21**: this column will contain 'true' in case the age is above 21, if not, then will have 'false'
++ **education-salary**: this column will have 'A person with {education} is having {salary}', where {education} refers to row's education, and {salary} refers to row's salary.
 
 # Conclusion
 
