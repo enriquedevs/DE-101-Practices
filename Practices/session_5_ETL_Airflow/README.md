@@ -129,12 +129,78 @@ Now you will see the Airflow UI console with some example default DAGs:
 
 ## Step 3
 
-### Creating DAGs
-DAGs (Directed Acyclic Graphs) are a collection of tasks that define a workflow in Apache Airflow. Each DAG defines a series of tasks and their dependencies, which the scheduler uses to determine the order of execution. The DAGs for Apache Airflow are stored in the ./dags directory, which is mapped to the /opt/airflow/dags directory in the Airflow Web Server and Airflow Scheduler containers.
+### Creating Your First DAG
+DAGs (Directed Acyclic Graphs) are a collection of tasks that define a workflow in Apache Airflow. Each DAG defines a series of tasks and their dependencies, which the scheduler uses to determine the order of execution. 
 
-To create a new DAG, create a new Python script in the ./dags directory. In the script, you can use the Python API provided by Apache Airflow to define your workflow.
+![img](documentation_images/dag-2.png)
 
+For this docker compose environment, the DAGs for Apache Airflow are stored in the **./dags** directory, which is mapped to the /opt/airflow/dags directory in the Airflow Web Server and Airflow Scheduler containers.
 
+![img](documentation_images/dag-3.png)
+
+Now to create a new DAG, create a new Python script named as **'dag.py'** (as note, you can also name the python file with any name to create a dag) in the **./dags** directory. And add the following code to dag.py:
+
+```
+import pandas as pd
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2022, 3, 1),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
+}
+
+dag = DAG('etl_dag', default_args=default_args, schedule_interval=timedelta(days=1))
+
+def extract_data():
+    # Read CSV data into Pandas dataframe
+    df = pd.read_csv('/usr/local/airflow/data/input.csv')
+    return df
+
+def transform_data(df):
+    # Transform data
+    df['date'] = pd.to_datetime(df['date'])
+    df['year'] = df['date'].dt.year
+    df['month'] = df['date'].dt.month
+    df['day'] = df['date'].dt.day
+    transformed_df = df[['year', 'month', 'day', 'value']]
+    return transformed_df
+
+def load_data(transformed_df):
+    # Write transformed data to Parquet file
+    transformed_df.to_parquet('/usr/local/airflow/data/output.parquet')
+
+t1 = PythonOperator(
+    task_id='extract_data',
+    python_callable=extract_data,
+    dag=dag
+)
+
+t2 = PythonOperator(
+    task_id='transform_data',
+    python_callable=transform_data,
+    op_kwargs={'df': "{{ task_instance.xcom_pull(task_ids='extract_data') }}"},
+    dag=dag
+)
+
+t3 = PythonOperator(
+    task_id='load_data',
+    python_callable=load_data,
+    op_kwargs={'transformed_df': "{{ task_instance.xcom_pull(task_ids='transform_data') }}"},
+    dag=dag
+)
+
+t1 >> t2 >> t3
+```
+
+## Step 4
+### Check Your New DAG on Airflow UI
+
+Now let's go back to Airflow UI
 
 # Conclusion
 
