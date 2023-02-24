@@ -69,6 +69,7 @@ Here are some important concepts to understand about Airflow:
 + **Executor**: The Executor is responsible for actually executing the tasks that have been scheduled by the scheduler. There are several types of executors available in Airflow, including the **LocalExecutor, CeleryExecutor, and KubernetesExecutor**.
 + **Metastore/Metadata Database**: The Metastore Database is a component of Airflow that stores metadata about DAGs, tasks, task instances, and other Airflow components. By default, Airflow uses an SQLite database for the Metastore, but it can be configured to use other databases such as MySQL, Postgres, or Oracle.
 + **Web Server**: The Airflow Web Server is a component that provides a **web-based interface for interacting with Airflow**.
++ **XCom**: (short for "cross-communication") is a feature that enables tasks to exchange messages, data, or metadata between them.
 
 ### Airflow's Executor Modes
 
@@ -142,9 +143,11 @@ Now to create a new DAG, create a new Python script named as **'dag.py'** (as no
 
 ```
 import pandas as pd
+import json
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
+from airflow.models import TaskInstance
 
 default_args = {
     'owner': 'airflow',
@@ -154,25 +157,44 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-dag = DAG('etl_dag', default_args=default_args, schedule_interval=timedelta(days=1))
+dag = DAG('etl_dag', default_args=default_args, schedule_interval=None)
 
 def extract_data():
-    # Read CSV data into Pandas dataframe
-    df = pd.read_csv('/usr/local/airflow/data/input.csv')
+    # Read JSON data into Pandas dataframe
+    print("Opening JSON file on extract_data()")
+    with open('/opt/airflow/dags/input.json') as f:
+        data = json.load(f)
+    print("JSON File was read")
+    df = pd.DataFrame(data)
+    print("JSON File loaded as a Pandas Dataframe")
     return df
 
-def transform_data(df):
+def transform_data(**context):
+    # Get the output of extract_data task
+    ti = TaskInstance(task_id="extract_data", dag=dag, execution_date=context['execution_date'])
+    df = ti.xcom_pull(key='return_value')
+
     # Transform data
-    df['date'] = pd.to_datetime(df['date'])
+    print("Starting Transformations on transform_data()")
+    print(df)
+    print(df['date'].dtype)
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
     df['year'] = df['date'].dt.year
     df['month'] = df['date'].dt.month
     df['day'] = df['date'].dt.day
-    transformed_df = df[['year', 'month', 'day', 'value']]
+    transformed_df = df[['year', 'month', 'day', 'user_id', 'x_coordinate', 'y_coordinate']]
+    print("Transformations made!")
     return transformed_df
 
-def load_data(transformed_df):
-    # Write transformed data to Parquet file
-    transformed_df.to_parquet('/usr/local/airflow/data/output.parquet')
+def load_data(**context):
+    # Get the output of transform_data task
+    ti = TaskInstance(task_id="transform_data", dag=dag, execution_date=context['execution_date'])
+    transformed_df = ti.xcom_pull(key='return_value')
+
+    # Write transformed data to CSV file
+    print("Loading data into CSV file on load_data()")
+    transformed_df.to_csv('/opt/airflow/dags/output.csv', index=False)
+    print("Data Loaded into CSV File")
 
 t1 = PythonOperator(
     task_id='extract_data',
@@ -183,14 +205,14 @@ t1 = PythonOperator(
 t2 = PythonOperator(
     task_id='transform_data',
     python_callable=transform_data,
-    op_kwargs={'df': "{{ task_instance.xcom_pull(task_ids='extract_data') }}"},
+    provide_context=True,
     dag=dag
 )
 
 t3 = PythonOperator(
     task_id='load_data',
     python_callable=load_data,
-    op_kwargs={'transformed_df': "{{ task_instance.xcom_pull(task_ids='transform_data') }}"},
+    provide_context=True,
     dag=dag
 )
 
@@ -200,7 +222,11 @@ t1 >> t2 >> t3
 ## Step 4
 ### Check Your New DAG on Airflow UI
 
-Now let's go back to Airflow UI
+Now let's go back to Airflow UI and trigger your DAG to run it
+
+## HOMEWORK TIME !!!
+
+By using same **dag.py**, now let's add a new task that transform the output of load_data into a JSON file
 
 # Conclusion
 
