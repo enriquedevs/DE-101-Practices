@@ -5,5 +5,8 @@
 venv
 myenv
 
+# Logs directory of Airflow
+logs
+
 # MACOS files
 .DS_Store
