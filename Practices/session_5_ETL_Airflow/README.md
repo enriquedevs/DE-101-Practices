@@ -59,15 +59,15 @@ Here are some important concepts to understand about Airflow:
 
 ![img](documentation_images/dag.png)
 
-+ **Operator**: An Operator is a specific type of task in Airflow, and represents an atomic unit of work. It can be a BashOperator that runs a shell command, a PythonOperator that runs a Python function, or any other type of operator.
-+ **Task**: A Task is an instance of an operator with a specific set of parameters. Tasks are created as nodes in the DAG and can be thought of as the building blocks of a workflow.
++ **Operator**: An Operator is a specific type of job in Airflow, and represents an atomic unit of work. It can be a BashOperator that runs a shell command, a PythonOperator that runs a Python function, or any other type of operator.
++ **Task**: A Task is class that has one or more operators with a specific set of parameters. Tasks are created as nodes in the DAG and can be thought of as the building blocks of a workflow.
 
 ![img](documentation_images/task.png)
 
 + **Task Instance**: A Task Instance is a specific execution of a task in a DAG. Each time a task is scheduled and run, a new task instance is created.
 + **Scheduler**: The Scheduler is a core component of Airflow that is responsible for scheduling and executing tasks based on the dependencies specified in the DAG.
 + **Executor**: The Executor is responsible for actually executing the tasks that have been scheduled by the scheduler. There are several types of executors available in Airflow, including the **LocalExecutor, CeleryExecutor, and KubernetesExecutor**.
-+ **Metastore Database**: The Metastore Database is a component of Airflow that stores metadata about DAGs, tasks, task instances, and other Airflow components. By default, Airflow uses an SQLite database for the Metastore, but it can be configured to use other databases such as MySQL, Postgres, or Oracle.
++ **Metastore/Metadata Database**: The Metastore Database is a component of Airflow that stores metadata about DAGs, tasks, task instances, and other Airflow components. By default, Airflow uses an SQLite database for the Metastore, but it can be configured to use other databases such as MySQL, Postgres, or Oracle.
 + **Web Server**: The Airflow Web Server is a component that provides a **web-based interface for interacting with Airflow**.
 
 ### Airflow's Executor Modes
@@ -113,15 +113,19 @@ Now let's start exploring Airflow Web UI.
 
 Once docker-compose runs all the Airflow Celery component containers, now let's open a web browser and open following URL to access to Airflow Web UI:
 
-(ui)
+http://localhost:8080
+
+Once opened you will see following screen:
+
+![img](documentation_images/airflow-2.png)
 
 Once there, the UI will ask username and password, and type **airflow** for both of them:
 
-(ui)
+![img](documentation_images/airflow-3.png)
 
-Now you will see the Airflow UI console with some example default DAGs.
+Now you will see the Airflow UI console with some example default DAGs:
 
-(ui)
+![img](documentation_images/airflow-4.png)
 
 ## Step 3
 
