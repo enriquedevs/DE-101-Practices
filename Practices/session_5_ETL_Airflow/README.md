@@ -147,7 +147,6 @@ import json
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.models import TaskInstance
 
 default_args = {
     'owner': 'airflow',
@@ -160,40 +159,33 @@ default_args = {
 dag = DAG('etl_dag', default_args=default_args, schedule_interval=None)
 
 def extract_data():
-    # Read JSON data into Pandas dataframe
-    print("Opening JSON file on extract_data()")
+    # Reads JSON data
+    print("Extracting JSON File Data")
+    
     with open('/opt/airflow/dags/input.json') as f:
-        data = json.load(f)
-    print("JSON File was read")
-    df = pd.DataFrame(data)
-    print("JSON File loaded as a Pandas Dataframe")
-    return df
+        json_data = json.load(f)
+    
+    return json.dumps(json_data)
 
-def transform_data(**context):
-    # Get the output of extract_data task
-    ti = TaskInstance(task_id="extract_data", dag=dag, execution_date=context['execution_date'])
-    df = ti.xcom_pull(key='return_value')
+def transform_data(extracted_data):
+    # Transform the extracted_data by using dataframes
+    print("Starting Transformations")
 
-    # Transform data
-    print("Starting Transformations on transform_data()")
-    print(df)
-    print(df['date'].dtype)
+    df = pd.DataFrame(json.loads(extracted_data))
     df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
     df['year'] = df['date'].dt.year
     df['month'] = df['date'].dt.month
     df['day'] = df['date'].dt.day
     transformed_df = df[['year', 'month', 'day', 'user_id', 'x_coordinate', 'y_coordinate']]
+
     print("Transformations made!")
-    return transformed_df
+    return transformed_df.to_csv(index=False)
 
-def load_data(**context):
-    # Get the output of transform_data task
-    ti = TaskInstance(task_id="transform_data", dag=dag, execution_date=context['execution_date'])
-    transformed_df = ti.xcom_pull(key='return_value')
-
+def load_data(transformed_data):
     # Write transformed data to CSV file
-    print("Loading data into CSV file on load_data()")
-    transformed_df.to_csv('/opt/airflow/dags/output.csv', index=False)
+    print("Writing transformed data into CSV file")
+    with open("/opt/airflow/dags/output.csv", "w") as csv:
+        csv.write(transformed_data)
     print("Data Loaded into CSV File")
 
 t1 = PythonOperator(
@@ -205,28 +197,40 @@ t1 = PythonOperator(
 t2 = PythonOperator(
     task_id='transform_data',
     python_callable=transform_data,
-    provide_context=True,
+    op_kwargs={'extracted_data': "{{ task_instance.xcom_pull(task_ids='extract_data', key='return_value') }}"},
     dag=dag
 )
 
 t3 = PythonOperator(
     task_id='load_data',
     python_callable=load_data,
-    provide_context=True,
+    op_kwargs={'transformed_data': "{{ task_instance.xcom_pull(task_ids='transform_data', key='return_value') }}"},
     dag=dag
 )
 
 t1 >> t2 >> t3
 ```
 
+The DAG reads data from a JSON file located at /opt/airflow/dags/input.json (that is mapped with your ./dags directory) and writes the transformed data into a CSV file located at /opt/airflow/dags/output.csv (that will be seen on ./dags directory as well).
+
 ## Step 4
 ### Check Your New DAG on Airflow UI
 
-Now let's go back to Airflow UI and trigger your DAG to run it
+Now let's go back to Airflow UI and trigger your DAG to run it.
 
-## HOMEWORK TIME !!!
+To do so, on the Airflow UI, enable your **etl_dag** on the left part by clicking the button, and on the right side click the Play button and select 'Trigger DAG' to run it:
 
-By using same **dag.py**, now let's add a new task that transform the output of load_data into a JSON file
+![img](documentation_images/dag-4.png)
+
+Then your DAG will be start running, so in this case a Task Instance will be start executing, and to see the execution, click on **etl_dag** label and you will see the following screen:
+
+![img](documentation_images/dag-5.png)
+
+Now to see the Graph of the latest execution, you can click on the **'Graph'** section and you will see the state of the execution of each task
+
+![img](documentation_images/dag-6.png)
+
+In this case all the tasks are green, so that means the Tasks were executed succefully.
 
 # Conclusion
 
