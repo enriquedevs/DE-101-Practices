@@ -13,9 +13,9 @@ In this practice we will develop a simple ETL pipeline on Airflow to understand 
 
 # Practice
 
-Suppose you are working on an Ad Company that process data from the users to then know what is the best suitable ad to give them when they are navigating on the internet
+Suppose you are working on an Ad Company that process data from the users to then know what is the best suitable ad to give them when they are navigating on the internet.
 
-The company is receiving JSON files from the user events, and they want you to transform them to CSV format because later they want to load it into a Database
+The company is receiving JSON files from the user events, and they want you to transform them to CSV format because later they want to load it into a Database.
 
 ![img](documentation_images/ias.png)
 

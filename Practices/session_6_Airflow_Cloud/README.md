@@ -1,28 +1,29 @@
-# Airflow and CICD
+# Airflow and Cloud Introduction
 
-In this practice we will develop a simple ETL pipeline on Airflow and apply CICD pipeline on it.
+In this practice we will develop a simple ETL pipeline on Airflow and start using cloud services on them.
 
-![Docker-Python](documentation_images/cicd.png)
+![Docker-Python](documentation_images/cloud.png)
 
 ### Prerequisites
 * [Install docker](https://docs.docker.com/engine/install/)
 
 ### What You Will Learn
-- CICD Concepts
 - Airflow Components
 - Airflow DAGs
-- Github Actions
+- Cloud Concepts
+- AWS Introduction
 
 # Practice
 
-You are working on a Tech Company that process high volume of data from historical weather telemetry, and they requested you to create a ETL pipeline to process the information
+Suppose you are working on an Ad Company that process data from the users to then know what is the best suitable ad to give them when they are navigating on the internet.
 
-![img](documentation_images/cicd-airflow.png)
+The company is receiving JSON files from the user events and those are stored on S3, and they want you to transform them to CSV format at S3 because later they want to load it into a Database.
+
+![img](documentation_images/ias.png)
 
 
 ### Requirements
-* Use Airflow to create the ETL pipeline
-* Use Github Actions for CICD process on Airflow DAGs
+* Use Airflow to create an ETL pipeline to process JSON file into a CSV file at S3
 
 # Let's do it!
 
