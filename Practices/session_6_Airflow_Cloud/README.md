@@ -27,8 +27,38 @@ The company is receiving JSON files from the user events and those are stored on
 
 # Let's do it!
 
-
 ## Step 1
+
+### Cloud Computing
+Cloud computing is the delivery of on-demand computing resources, such as servers, storage, databases, software, and analytics, over the internet. Rather than owning and maintaining physical servers and infrastructure, users can access these resources from cloud service providers like Amazon Web Services (AWS), Microsoft Azure, or Google Cloud Platform.
+
+Cloud service providers offer several benefits, including **scalability, flexibility, cost-effectiveness, and enhanced security**, making cloud computing an attractive option for businesses of all sizes.
+
+![img](documentation_images/cloud-2.png)
+
+### Software as a Service (SaaS)
+
+SaaS is a software delivery model where the software application is hosted by the service provider and made available to the users over the internet. Users can access the software through a web browser or app, and the provider handles all the maintenance and updates.
+
+AWS offers several SaaS solutions, including Amazon Chime, a communication and collaboration service, and Amazon WorkDocs, a secure content creation, storage, and collaboration service.
+
+![img](documentation_images/cloud-3.jpeg)
+
+### Platform as a Service (PaaS)
+
+PaaS is a cloud computing model that provides developers with a platform to build, deploy, and manage applications without having to worry about infrastructure. The provider handles the underlying infrastructure, including servers, storage, and network, while the developer can focus on building and deploying their application.
+
+AWS offers several PaaS solutions, including AWS Elastic Beanstalk, a service that makes it easy to deploy and run applications, and AWS Lambda, a serverless computing service.
+
+![img](documentation_images/cloud-4.png)
+
+### Infrastructure as a Service (IaaS)
+
+IaaS is a cloud computing model that provides users with access to virtualized computing resources over the internet. The provider offers virtualized servers, storage, and network infrastructure that users can provision and manage.
+
+AWS offers several IaaS solutions, including Amazon Elastic Compute Cloud (EC2), a service that provides resizable compute capacity in the cloud, and Amazon Simple Storage Service (S3), a scalable object storage service.
+
+![img](documentation_images/cloud-3.png)
 
 Run the docker-compose yml that start docker containers for Airflow:
 ```
