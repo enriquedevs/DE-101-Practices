@@ -148,10 +148,11 @@ import csv
 
 # Define the DAG parameters
 default_args = {
-    'owner': 'your-name',
+    'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2022, 3, 1),
-    'retries': 0,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)
 }
 
 # Define the function to read the JSON file from S3, convert it to CSV, and write it back to S3
@@ -160,13 +161,14 @@ def json_to_csv(s3_bucket_name, s3_key_name, aws_conn_id):
     hook = S3Hook(aws_conn_id=aws_conn_id)
 
     # Read the JSON file from S3
-    json_obj = hook.get_key(s3_key_name, s3_bucket_name).get_contents_as_string()
+    json_obj = hook.get_key(s3_key_name, s3_bucket_name)#.get_contents_as_string()
+    print(json_obj)
     data = json.loads(json_obj)
 
     # Convert the JSON data to CSV format
     csv_data = []
     for row in data:
-        csv_data.append([row["col1"], row["col2"], row["col3"]])
+        csv_data.append([row["user_id"], row["x_coordinate"], row["y_coordinate"], row["date"]])
     csv_string = ""
     csv_writer = csv.writer(csv_string)
     for row in csv_data:
@@ -187,9 +189,9 @@ with DAG('aws_dag', default_args=default_args, schedule_interval=timedelta(days=
         task_id='json_to_csv',
         python_callable=json_to_csv,
         op_kwargs={
-            's3_bucket_name': 'your-s3-bucket-name',
-            's3_key_name': 'your-s3-key-name.json',
-            'aws_conn_id': 'your-aws-connection-id'
+            's3_bucket_name': 's3-enroute-public-bucket',
+            's3_key_name': 'input.json',
+            'aws_conn_id': 'aws_conn'
         }
     )
 
