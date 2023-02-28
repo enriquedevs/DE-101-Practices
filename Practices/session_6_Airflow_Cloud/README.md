@@ -94,6 +94,8 @@ Other AWS important concepts are:
 
 ![img](documentation_images/cloud-8.png)
 
+First we are going to start Airflow dockerized Environment.
+
 Run the docker-compose yml that start docker containers for Airflow:
 ```
 docker-compose up -d
@@ -102,24 +104,106 @@ docker-compose up -d
 ### Understanding the Docker Compose file
 The provided Docker Compose file is a YAML file that describes the services required for Apache Airflow to run. The file consists of several services, each of which is defined as a container:
 
-* Postgres: A relational database that stores metadata for Apache Airflow.
-* Redis: An in-memory data structure store used for Apache Airflow's Celery Executor.
-* Airflow Web Server: The web server for Apache Airflow's web interface.
-* Airflow Scheduler: The scheduler for Apache Airflow that runs DAGs and monitors task execution.
-* Airflow Worker: The worker that executes tasks assigned by the scheduler.
+* **Postgres**: A relational database that stores metadata for Apache Airflow (It's the Metastore Database).
+* **Redis**: An in-memory data structure store used for Apache Airflow's Celery Executor.
+* **Airflow Web Server**: The web server for Apache Airflow's web interface.  It can be accessed at **http://localhost:8080**
+* **Airflow Scheduler**: The scheduler for Apache Airflow that runs DAGs and monitors task execution.
+* **Airflow Worker**: The worker that executes tasks assigned by the scheduler.
+* **Airflow Triggerer**: Component that is responsible for triggering the scheduling of DAG runs.
+* **Airflow CLI**: Component that provides an interface for interacting with the Airflow command-line interface (CLI).
+* **Airflow Flower UI**: Component that provides a web-based monitoring tool for Celery workers. It can be accessed at **http://localhost:5555**
+* **Airflow Init**: This Service sets up initial configuration parameters when the containers are started. It also runs database migrations and creates the administrator account.
 
-The version field defines the version of Docker Compose that this file uses. The x-airflow-common section is an anchor that is reused by other services to specify common configurations. The environment section defines the environment variables used by Apache Airflow, such as the database connection string and Celery configurations. The volumes section maps the local directories to directories within the containers, and the user field specifies the user and group that run the container.
+## Step 2
 
-### Creating DAGs
-DAGs (Directed Acyclic Graphs) are a collection of tasks that define a workflow in Apache Airflow. Each DAG defines a series of tasks and their dependencies, which the scheduler uses to determine the order of execution. The DAGs for Apache Airflow are stored in the ./dags directory, which is mapped to the /opt/airflow/dags directory in the Airflow Web Server and Airflow Scheduler containers.
+Now let's create an S3 Public Bucket on AWS.
 
-To create a new DAG, create a new Python script in the ./dags directory. In the script, you can use the Python API provided by Apache Airflow to define your workflow.
+Creating a Public S3 Bucket with Public Access:
 
-### ETL in Apache Airflow
-ETL (Extract, Transform, Load) is a process that involves extracting data from various sources, transforming the data into a desired format, and loading the transformed data into a destination database. Apache Airflow provides a flexible platform to build ETL workflows by allowing you to define tasks, dependencies, and execution order.
+1. Log in to the AWS Management Console and navigate to the S3 service.
+2. Click on "Create Bucket" and follow the prompts to create a new S3 bucket.
+3. During the creation process, choose "Public" for the bucket access control.
+4. After the bucket is created, go to the Permissions tab and select "Bucket Policy".
+5. Enter a policy that grants public read access to the bucket.
 
-For example, to create an ETL workflow to extract data from a source database, transform the data, and load it into a destination database, you can define tasks for each of these steps using the Apache Airflow API and then specify the dependencies between the tasks.
+Note: Be aware of the security implications of creating a public S3 bucket, as anyone on the internet will be able to access the files in the bucket.
+
+## Step 3
+
+### Airflow Hooks
+
+An Airflow Hook is an interface to external systems or databases that allows Airflow tasks to interact with those systems. Hooks abstract away the details of the system's API or protocol and provide a consistent interface for tasks to use.
+
+Now let's create an AirflowDAG
+
+Now to create a new DAG, create a new Python script named as **'aws_dag.py'** (as note, you can also name the python file with any name to create a dag) in the **./dags** directory. And add the following code to dag.py:
+
+```
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
+from datetime import datetime, timedelta
+import json
+import csv
+
+# Define the DAG parameters
+default_args = {
+    'owner': 'your-name',
+    'depends_on_past': False,
+    'start_date': datetime(2022, 3, 1),
+    'retries': 0,
+}
+
+# Define the function to read the JSON file from S3, convert it to CSV, and write it back to S3
+def json_to_csv(s3_bucket_name, s3_key_name, aws_conn_id):
+    # Instantiate the S3Hook with your AWS credentials
+    hook = S3Hook(aws_conn_id=aws_conn_id)
+
+    # Read the JSON file from S3
+    json_obj = hook.get_key(s3_key_name, s3_bucket_name).get_contents_as_string()
+    data = json.loads(json_obj)
+
+    # Convert the JSON data to CSV format
+    csv_data = []
+    for row in data:
+        csv_data.append([row["col1"], row["col2"], row["col3"]])
+    csv_string = ""
+    csv_writer = csv.writer(csv_string)
+    for row in csv_data:
+        csv_writer.writerow(row)
+
+    # Write the CSV data back to S3
+    hook.load_string(
+        csv_string,
+        key=s3_key_name[:-5] + ".csv",
+        bucket_name=s3_bucket_name,
+        replace=True
+    )
+
+# Define the DAG
+with DAG('aws_dag', default_args=default_args, schedule_interval=timedelta(days=1)) as dag:
+    # Define the task that calls the json_to_csv function
+    json_to_csv_task = PythonOperator(
+        task_id='json_to_csv',
+        python_callable=json_to_csv,
+        op_kwargs={
+            's3_bucket_name': 'your-s3-bucket-name',
+            's3_key_name': 'your-s3-key-name.json',
+            'aws_conn_id': 'your-aws-connection-id'
+        }
+    )
+
+# Set the task dependencies
+json_to_csv_task
+```
+
+## Step 4
+### Check Your New DAG on Airflow UI
+
+Now let's go back to Airflow UI and trigger your DAG to run it.
+
+To do so, on the Airflow UI, enable your **aws_dag** on the left part by clicking the button, and on the right side click the Play button and select 'Trigger DAG' to run it:
 
 # Conclusion
 
-In this practice, you learned how to configure Apache Airflow using Docker Compose and how to create DAGs and ETL workflows in Apache Airflow. By using Apache Airflow and Docker Compose, you can build robust and scalable ETL workflows that can be easily monitored and maintained.urse has covered the basics of Numpy and Pandas, including setting up a virtual environment, reading in data, and performing transformations on that data. With these tools and techniques, you can begin working with large datasets and performing data analysis in Python.
+In conclusion, using AWS and Airflow together with S3 Hooks can provide a highly scalable and flexible platform for automating data workflows in the cloud. With AWS, you have access to a wide range of powerful services and tools, such as S3, EC2, and RDS, that can help you store, process, and analyze data. Airflow provides a flexible and easy-to-use platform for defining, scheduling, and monitoring workflows, while S3 Hooks allow you to seamlessly integrate S3 with your workflows.
