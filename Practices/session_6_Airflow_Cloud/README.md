@@ -165,9 +165,9 @@ def json_to_csv(s3_bucket_name, s3_key_name, aws_conn_id):
     # Read the JSON file from S3
     input_json = hook.read_key(s3_key_name, s3_bucket_name)
     print(input_json)
-    data = json.loads(input_json)
-
+    
     # Convert the JSON data to CSV format
+    data = json.loads(input_json)
     csv_string = 'user_id, x_coordinate, y_coordinate, date\n'
     for row in data:
         csv_string += f'{row["user_id"]}, {row["x_coordinate"]}, {row["y_coordinate"]}, {row["date"]}\n'
@@ -206,6 +206,22 @@ json_to_csv_task
 Now let's go back to Airflow UI and trigger your DAG to run it.
 
 To do so, on the Airflow UI, enable your **aws_dag** on the left part by clicking the button, and on the right side click the Play button and select 'Trigger DAG' to run it:
+
+![img](documentation_images/cloud-9.png)
+
+Now let's review the S3 Bucket and check that output.csv is on the bucket:
+
+![img](documentation_images/cloud-10.png)
+
+## Homework Time!!
+
+Now modify **aws_dag.py** code, to have 3 tasks instead of 1 task, the tasks will be the following:
+
++ **extract_data**: Task that has as a parameters (**s3_bucket_name, s3_key_name, aws_conn_id**) and this task reads from the JSON data file from S3Hook and the output is the **input_json** string
++ **transform_data**: Task that has as a paramater the **input_json** string and it transforms the JSON string into CSV string similar as **csv_string** and the output is **csv_string**
++ **load_data**: Task that has as a paramaters (**aws_conn_id, s3_bucket_name, csv_string**) and this task put the CSV file into the bucket, also the CSV file should be named as '**your_name_lastnamame.csv**'
+
+And the DAG flow should be: **extract_data >> transform_data >> load_data**
 
 # Conclusion
 
