@@ -135,13 +135,13 @@ As it was told before, we need a database, and a table as well, because we need 
 - Now in worksheets we will create a new one with the button in the top-right corner 
 
 (1.1 image)\
-![Captura de pantalla 2023-02-28 a la(s) 1.08.18.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2F9z%2Fp_dbd1350mb1sczhb_zdz3s00000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_o4vzbT%2FCaptura%20de%20pantalla%202023-02-28%20a%20la%28s%29%201.08.18.png)
+![1.1.png](resources%2F1.1.png)
 
 (1.2 image)\
-![Captura de pantalla 2023-02-28 a la(s) 1.09.11.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2F9z%2Fp_dbd1350mb1sczhb_zdz3s00000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_eXXJeS%2FCaptura%20de%20pantalla%202023-02-28%20a%20la%28s%29%201.09.11.png)
+![1.2.png](resources%2F1.2.png)
 
 (1.3 image)\
-![Captura de pantalla 2023-02-28 a la(s) 1.08.55.png](..%2F..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2F9z%2Fp_dbd1350mb1sczhb_zdz3s00000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_tx22Un%2FCaptura%20de%20pantalla%202023-02-28%20a%20la%28s%29%201.08.55.png)
+![1.3.png](resources%2F1.3.png)
 
 ## Step 6
 
