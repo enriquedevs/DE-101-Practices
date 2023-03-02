@@ -12,6 +12,7 @@ In this practice we will focus on producing queries and storing them into views.
 - Create the needed tables and normalize as you consider.
 - Every query should be stored in a view.
 - Don't mix Companies in your results.
+- Every query should be stored in a `create_views.sql` in your own branch.
 
 ### Exercises
 
