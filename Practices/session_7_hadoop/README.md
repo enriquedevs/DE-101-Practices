@@ -101,6 +101,13 @@ Now, to have a look at your current running Docker containers, use the command t
 docker-compose ps
 ```
 
+The docker-compoe file configured a Yarn's Hadoop Environment on containers. Here are the list of the URL Access for each component:
+
+* Namenode: http://localhost:9870/dfshealth.html#tab-overview
+* History server: http://localhost:8188/applicationhistory
+* Datanode: http://localhost:9864/
+* Nodemanager: http://localhost:8042/node
+* Resource manager: http://localhost:8088/
 
 ### Step 2
 
@@ -166,15 +173,6 @@ http://localhost:9870
 
 
 ## Notes
-`docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `docker-hadoop_default`.
-
-Run `docker network inspect` on the network (e.g. `docker-hadoop_default`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
-
-* Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
-* History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
-* Datanode: http://<dockerhadoop_IP_address>:9864/
-* Nodemanager: http://<dockerhadoop_IP_address>:8042/node
-* Resource manager: http://<dockerhadoop_IP_address>:8088/
 
 ## Configure Environment Variables
 
