@@ -38,28 +38,31 @@ In this practice we will create different pipelines to load (Copy) data from dif
             "Value" float
         );
 
-* Create the "AAPL_landing" table also in your data warehouse ("AdventureWorksDW")
+* ## Create the "AAPL_landing" table also in your data warehouse ("AdventureWorksDW")
   
 &nbsp; 
 
 ### What you will learn
 * Azure Data Factory workspace
-* Azure Synapse workspace
-* How to LOAD data from a datalake into data warehouse or database
+* How to LOAD data from a datalake into database
 * How to LOAD data from a HTTP source into a DB
 * How to LOAD data from a DB into a DW
-* How to LOAD data from a python script (API + Spark dataframe) into a DB
-* How to LOAD data from a datalake into Snowflake
-* Add permission/role for Synapse in ADF
+* TRANSFORM data types with Data Flow activities in ADF
+* How to LOAD data from a datalake into Snowflake (Optional)
+
 
 &nbsp; 
 
 # Practice
 
-Remember that for each **Copy** activity, we will create a source dataset and a sink dataset.
+You are a data engineer working for a credit rating agency. You need to get Stock Market Data every day, store it in a Data Warehouse for financial research and analysis for further publication. You work in the team responsible of getting data from the Nasdaq Index from different resources or formats.
+
+
 
 On your azure portal, go to **All Resources**, select the data factory you created in the past session, and click on **Launch Studio**
-  ![img](documentation_images/ADF_launch_studio.png)
+![img](documentation_images/ADF_launch_studio.png)
+
+Remember that for each **Copy** activity, we will create a source dataset and a sink dataset.
 
 &nbsp; 
 
@@ -83,7 +86,7 @@ On your azure portal, go to **All Resources**, select the data factory you creat
 * Select the **Linked service** for Blob Storage created in the past session, similar to "blobdata101_ls"
 * Browse for the file called "AAPL.csv" in the "data" folder
 * Check the box for **First row as header**
-* On **Import schema** you can import from connection/store or select none (later you can import the schema)
+* On **Import schema** you can import from connection/store or select none (later you can import the schema as well)
 * Click **OK**
 * On the activity configurations, go to **Sink** and create a new dataset
 * Search for **Azure SQL Database**
@@ -121,6 +124,7 @@ On your azure portal, go to **All Resources**, select the data factory you creat
 * You can import the schema or import it later
 * Under your activit configurations go to **Mapping**
 * If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
+* Nasdaq Data Link API: [info](https://docs.data.nasdaq.com/docs/time-series), [rate/limits](https://docs.data.nasdaq.com/docs/rate-limits)
 
 &nbsp; 
 
@@ -149,7 +153,75 @@ On your azure portal, go to **All Resources**, select the data factory you creat
 
 &nbsp; 
 
-# Advanced / Optional
+# ADF Transformations
+
+In this practice we will start with simple transformations using data flow activity in ADF. This could also be achieved with a sql script, but for this session we will use the Azure Data Factory GUI.
+
+Keep in mind that there is not just one way to build a pipeline. It will depend on your business needs and resources available or even personal preference.
+
+&nbsp; 
+
+## Data type transformation:
+
+**Data Flow (AAPL)**
+* In your ADF workspace, create a new pipeline and drag a **Data Flow** activity. You could also add the activity in the "copy_from_csv_to_db_pl" pipeline so it would run the transformation inmediatly after the LOAD process. If you choose the second option it should look like this:
+  ![img](documentation_images/Load_transform_pipeline.png)
+* Click on the Data flow activity, and in the tabs that appear below, select **Settings** and click **New**
+  ![img](documentation_images/New_dataflow_transform_1.png)
+* Select **Add Source**
+  
+  ![img](documentation_images/Add_source_dataflow.png)
+* On **Source settings** select the dataset "AzureSqlTable_AAPL_ds" and leave the defaults
+  ![img](documentation_images/Source_settings_dataflow.png)
+* On the **Projection** tab you can preview the schema and data types
+  ![img](documentation_images/Source_projection_transform1_adf.png)
+* Click on the + icon beside the source image and select **Cast**:
+  
+  ![img](documentation_images/+_cast.png)
+* On the **Cast settings** tab make sure to set everything as the image below
+  ![img](documentation_images/Transform_1_adf.png)
+* Now click the **+** and select **Sink**
+* Under the **Sink settings** set the corresponding values:
+* You will need to create a New dataset using the SQL Database linked service and selecting "AAPL" table.
+  ![img](documentation_images/New_sink_dataset_transform_1.png)
+
+&nbsp; 
+
+
+**Data Flow (FRED_GDP)**
+* We will add another flow in the same activity. It will be the same as the above but for FRED_GDP data. This could be done in separate activities, but it is important to aknowledge the capacities of this tool. In fact, in ELT processes and datawarehousing many transformations involve more than one source, like when creating a Fact or a Dim table in a DW, or you just need a Join or a Lookup or other functions in your transformation pipeline and more than one source is required.
+* Add another source:
+  ![img](documentation_images/Add_source_transform2.png)
+* Now select the FredGdp dataset 
+* Add a **Cast** step
+* **Important**: Under **Cast settings**, make sure that you select the correct date format for casting. Check your FRED_GDP dataset or the csv file in the Blob Storage for the adequate date format.
+* Create a sink dataset selecting "FRED_GDP" table
+
+&nbsp; 
+
+* Now you can go to the pipeline and **Trigger now**
+* You can go to SSMS or Data Studio and run
+
+        SELECT TOP 100 * FROM dbo.AAPL;
+
+  And then
+
+        SELECT TOP 100 * FROM dbo.FRED_GDP;
+
+  You have succesfully completed this transformations!
+
+
+&nbsp; 
+
+
+Note: **Data flow** activities in ADF are very useful and efficient for low complexity transformations. However, for high complexity transformations, it is recomended to use Spark on Synapse or Spark on Databricks or other specialized tool for transformations.
+
+&nbsp; 
+
+&nbsp; 
+
+
+# Optional: Load to Snowflake
 
 &nbsp; 
 
@@ -175,71 +247,10 @@ On your azure portal, go to **All Resources**, select the data factory you creat
 
 &nbsp; 
 
-## Copy from python script to database
-
 &nbsp; 
 
-**Spark pool**
+# Setting things up for Session 18
 
+At least ONE HOUR BEFORE session 18:
+* Go to your Synapse workspace and create a new spark pool and upload requirements.txt. It takes aproximately 60 min to provision. Here are the [steps](../session_18_ADF_Transform/README.md).
 
-* On your Synapse workspace, go to **Manage** on the left panel, then select **Apache Spark pools** and create a new pool
-![img](documentation_images/spark_pool_new.png)
-&nbsp; 
-
-    ![img](documentation_images/spark_pool_config.png)
-* Wait for 40 minutes aproximately for the pool to be provisioned
-* Once successfully provisioned, under **Manage -> Apache Spark pools** click on **Packages**
-![img](documentation_images/spark_pool_packages_synapse.png)
-* Upload your "requirements.txt" file
-
-&nbsp; 
-
-**Python notebook**
-
-* Go to **Develop** on the left panel and create a new notebook (set any name)
-* Select python as language and attach the notebook to the spark pool you created
-![img](documentation_images/python_notebook_synapse.png)
-* Add the following code (it can be in one or multiple cells):
-
-&nbsp; 
-
-
-Import the api library and read the key for this python session
-
-        import nasdaqdatalink
-        nasdaqdatalink.read_key(filename="/data/.nasdaqapikey")
-        
-Get the AAPL info as spark dataframe from a specific nasdaq sources
-
-        aapltable = nasdaqdatalink.get_table('WIKI/PRICES', ticker = ['AAPL'])
-        
-Preview the data
-
-        aapltable.head()
-
-* You can run cell by cell or **Run all**
-* Once the data is correct, click on **Publish all**
-
-&nbsp; 
-
-**ADF pipeline**
-
-* Go to your ADF workspace
-* Create a new pipeline, set a propper name
-* Drag a new **Notebook** activity under **Synapse**
-* Go to **Azure Synapse Analytics (Artifacts)** in the activity configurations and create a new linked service:
-![img](documentation_images/ADF_synapse_artifact_ls.png)
-* Fill in the values as follow:
-![img](documentation_images/synapse_linked_service.png)
-* Under **Settings** in your activity configurations, set the spark pool configs the same as the one you created in your Synapse workspace
-![img](documentation_images/ADF_spark_settings.png)
-* Drag a new **Copy** activity and connect the notebook to the copy activity
-![img](documentation_images/ADF_connect_notebook_copy_activity.png)
-
-... steps under construction ...
-
-* On the **Sink** tab in your activity configurations, create a new dataset, select "Azure SQL Database", select the proper linked service, database and table ("AAPL_synapse")
-* You can import the schema, or import it later under **Mapping** tab
-* Click **Validate** and if there are no errors, click on **Publish** and then **Debug** or **Trigger now**
-* Go to Data Studio or SSMS, run a SELECT query to view the data
-* Once the data is in place in the database
