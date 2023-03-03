@@ -1,7 +1,47 @@
 
-# Hadoop Map Reduce
+# Hadoop Ecosystem
 
-## 1. Setup
+In this practice we will learn about Hadoop and how is integrated on Data Engineering environment.
+
+![Docker-Python](documentation_images/hadoop.png)
+
+### Prerequisites
+* [Install docker](https://docs.docker.com/engine/install/)
+
+### What You Will Learn
+- Hadoop Ecosystem
+- Map Reduce
+
+# Practice
+
+This will be a walkthrough to learn Hadoop Ecosystem and HDFS by processing files on Hadoop's Map Reduce
+
+![Docker-Python](documentation_images/hadoop-3.jpeg)
+
+### Requirements
+* Process HDFS files to use a Map Reduce Operation job on them.
+
+## 1. Step 1
+
+### Hadoop
+
+Hadoop is an open-source framework built on Java and was designed for distributed storage and processing of large data sets across clusters of commodity computers.
+
+![Docker-Python](documentation_images/hadoop-4.png)
+
+### Hadoop Ecosystem
+
+The Hadoop ecosystem is a collection of tools and technologies built on top of Hadoop that extend its functionality to provide a more comprehensive data processing and analytics platform. Some of the popular components of the Hadoop ecosystem include:
+
++ **Apache Hive**: A data warehouse system that allows you to query and analyze large datasets stored in Hadoop using a SQL-like language.
++ **Apache Pig**: A high-level scripting language that enables developers to create complex data transformations for Hadoop.
++ **Apache Spark**: A fast and flexible processing engine that can handle batch, streaming, and interactive workloads.
++ **Apache HBase**: A NoSQL database that provides real-time read/write access to Hadoop data.
++ **Apache Storm**: A real-time stream processing system that can process large volumes of data in real-time.
++ **HDFS (Hadoop Distributed File System)**: A distributed file system that provides a way to store and access large amounts of data across a cluster of computers.
+
+![Docker-Python](documentation_images/hadoop-2.png)
+
 Download images required for setting up HDFS and spin up necessary containers:
 ```
   docker-compose up -d
