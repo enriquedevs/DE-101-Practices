@@ -164,6 +164,10 @@ jar cf wc.jar WordCount*.class
 hadoop jar wc.jar WordCount /user/root/input /user/root/output
 ```
 
+![Docker-Python](documentation_images/java.png)
+
+![Docker-Python](documentation_images/hadoop-10.png)
+
 ## 5. Check Your Output
 
 Once the job is executed successfully, you can check your output using the cat command in HDFS:
