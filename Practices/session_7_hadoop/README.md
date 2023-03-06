@@ -111,16 +111,14 @@ The docker-compoe file configured a Yarn's Hadoop Environment on containers. Her
 
 ### Step 2
 
-Now let's copy necessary JAR and Input files.
-
-Now we need to copy the jar files which contains our map-reduce jobs and copy them inside the namenode (which will be running your jobs) in HDFS using the following Docker commands:
+Now let's copy necessary Java Word Count file and Input Twitter files.
 
 ```
 # Copy the Word Count with the Map Reduce instructions to the container
-docker cp submit/WordCount.jar hadoop_namenode:/tmp/
+docker cp submit/WordCount.java hadoop_namenode:/tmp
 
 # Copy the file in order to use it with Word Count program
-docker cp submit/my_input.txt hadoop_namenode:/tmp/
+docker cp submit/tweet.txt hadoop_namenode:/tmp
 ```
 
 ## 3. Interact with the namenode
@@ -140,20 +138,30 @@ cd /tmp
 hdfs dfs -ls /
 
 # Create a new directory inside HDFS using mkdir tag.
-hdfs dfs -mkdir -p /user/root
+hdfs dfs -mkdir -p /user/root/input
 
 # Copy the files to the input path in HDFS.
-hdfs dfs -put my_input.txt /user/root 
+hdfs dfs -put tweet.txt /user/root/input
 
 # Have a look at the content of your input file.
-hdfs dfs -cat /user/root/my_input.txt
+hdfs dfs -cat /user/root/input/tweet.txt
 ```
 
 ## 4. Run Hadoop Map Reduce Jobs
-Now you can run your map-reduce job using the following command:
+Now you can build and run your map-reduce job using the following commands:
 ```
+# Making necessary environment variables setup
+export PATH=${JAVA_HOME}/bin:${PATH}
+export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
+
+# Generating Java Classes
+hadoop com.sun.tools.javac.Main WordCount.java
+
+# Generating Java Jar file
+jar cf wc.jar WordCount*.class
+
 ## Run map reduce job from the path where you have the jar file.
-hadoop jar WordCount.jar org.apache.hadoop.examples.WordCount input my_output
+hadoop jar wc.jar WordCount /user/root/input /user/root/output
 ```
 
 ## 5. Check Your Output
@@ -161,7 +169,7 @@ hadoop jar WordCount.jar org.apache.hadoop.examples.WordCount input my_output
 Once the job is executed successfully, you can check your output using the cat command in HDFS:
 ```
 # Check the content of the output file after running the job
-hdfs dfs -cat my_output/*
+hdfs dfs -cat output/*
 ```
 
 You can access the HDFS namenode’s UI dashboard on your localhost at port 9870. Use the following link:
