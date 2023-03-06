@@ -87,8 +87,6 @@ YARN mode (short for Yet Another Resource Negotiator) is a more advanced mode of
 
 ![Docker-Python](documentation_images/yarn.png)
 
-![Docker-Python](documentation_images/yarn-2.png)
-
 Now, first start the containers that will create a Yarn's Hadoop Environment on containers:
 
 ```
