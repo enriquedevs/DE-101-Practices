@@ -10,6 +10,7 @@ CREATE TABLE Weather_london_landing
 WITH ( CLUSTERED INDEX (cod) 
 );
 
+
 -- COPY the data into the landing table
 COPY INTO Weather_london_landing
 (
@@ -23,12 +24,24 @@ FROM 'https://<datalake_name>.blob.core.windows.net/data/raw/pd_forecast.csv'
 WITH
 (
 FIRSTROW=2
-)
+);
+
+
+-- Go to SMSS or Data Studio, open a query from your Synapse connection and run:
+/*
+SELECT * FROM Weather_london_landing;
+*/
 
 
 -- TRANSFORM 1: Change single quote inside list field to doble quotes in landing table. This is needed for the TRANSFORM 2 that uses OPENJSON function.
 UPDATE Weather_london_landing
 SET list = REPLACE(list, char(39),'"');
+
+
+-- SMSS or Data Studio: make sure your data was transformed:
+/*
+SELECT * FROM Weather_london_landing;
+*/
 
 
 -- Create a local final(cleaned) table in the sql pool
@@ -64,3 +77,17 @@ WITH (
     visibility float        '$.visibility',
     wind_speed float        '$.wind.speed'
 );
+
+
+
+-- SMSS or Data Studio: 
+/*
+SELECT * FROM Weather_london;
+*/
+
+
+-- Troubleshooting (from SMSS, Data Studio or Synapse script): if you have some problems in the process, you can eliminate the tables an rerun the code
+/*
+DROP TABLE Weather_london_landing;
+DROP TABLE Weather_london;
+*/
