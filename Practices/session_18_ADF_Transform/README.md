@@ -1,12 +1,14 @@
 # Transformations: Azure Synapse Analytics
 
-### Prerequisites
+## Prerequisites
+
 * At least ONE HOUR BEFORE, go to your Synapse workspace and create a new spark pool and upload the python requirements. It takes aproximatle 60 min to provision. Here are the [steps](#spark-pool).
 * Make sure to have in hand your OpenWeather [API key](https://home.openweathermap.org/api_keys)
 
 &nbsp;
 
-### What you will learn
+## What you will learn
+
 * Synapse ELT pipeline
 * Synapse Analytics workspace and capabilities
 * How to LOAD data from a python script (API + Spark dataframe) into a DB
@@ -17,40 +19,30 @@
 
 # Practice
 
-In this practice we will create some transormations that will be executed leveraging the compute power of a cloud Data Warehouse and Spark engine. Synapse Analytics is a powerful service that that brings together data integration, enterprise data warehousing, and big data analytics. It gives you the freedom to query data on your terms, using either serverless or dedicated options—at scale. Azure Synapse brings these worlds together with a unified experience to ingest, explore, prepare, transform, manage, and serve data for immediate BI and machine learning needs.
+In this practice we will create some transormations that will be executed leveraging the compute power of a cloud Data Warehouse and Spark engine. Synapse Analytics is a powerful service that that brings together data integration, enterprise data warehousing, and big data analytics. It gives you the freedom to query data on your terms, using either serverless or dedicated options at scale. Azure Synapse brings these worlds together with a unified experience to ingest, explore, prepare, transform, manage, and serve data for immediate BI and machine learning needs.
 
 ![img](documentation_images/synapse_key_capabilities.png)
 
 &nbsp;
 
-## Azure Synapse (Spark, SQL, Python)
+## Azure Synapse Analytics (SQL, Spark, Python)
+
+&nbsp;
 
 This practice is composed of two parts:
 
-* First, we will STAGE data from the OpenWeather API with a python script and Spark engine into a csv file
+* First, we will EXTRACT and STAGE data from the OpenWeather API with a python script and Spark engine into a csv file
 * Second, we will LOAD and TRANSFORM the raw data using SQL in the DW
 
 There are many ways to achieve the same result. For example, the transformation could be done entirely with python and the Spark pool. But for the purpose of this module (ELT) we will execute it as stated above.
 
 Because of time limitations, we will trigger this pipeline manually from Synapse. We could use ADF as orchestrator and make a call to the Synapse pipeline. But, as the scope of the module is ELT, not Azure Cloud, we will focus on the main concepts learned. As optional/advanced feature, you will learn how to connect Synapse and ADF so they can communicate with each other. From that point on, it is for you to explore at your personal convenience. Synapse also has integration capabilities, letting you create and execute pipelines within synapse. It will depend on your business needs what to use and when.
 
-Azure Synapse has a higher cost, and since you are working on a free account with 200USD, it is recommended that you create the following resources execute the transformations of this practice, and then delete the SQL pool and Spark pool, so you keep the cost at the minimum. Your published scripts or pipelines and the synapse workspace alone will not generate any cost.
+Azure Synapse pools have a higher cost, and since you are working on a free account with 200USD, it is recommended that you create the following resources execute the transformations of this practice, and then delete the SQL pool and Spark pool, so you keep the cost at the minimum. Your published scripts or pipelines and the synapse workspace alone will not generate any cost.
 
 &nbsp;
 
-**Azure Synapse(Resource Provider)**
-
-* On the azure portal, type in and Select **Suscriptions**, select yours and then on the left panel **Resource Providers**
-* Type in Synapse, select the row and click **Register**
-  
-  <img src="documentation_images/synapse_resource_provider.png"  width=50% height=50%>
-* Make sure to have the following providers registered
-  
-  <img src="documentation_images/azure_resource_providers.png"  width=50% height=50%>
-
-&nbsp;
-
-**Azure Synapse(Workspace)**
+### **Azure Synapse(Workspace)**
 
 * On the Azure portal, type in and select **Azure Synapse Analytics**
 * Select **+ Create**
@@ -87,7 +79,7 @@ Azure Synapse has a higher cost, and since you are working on a free account wit
 
 &nbsp;
 
-**Dedicated SQL pool**
+#### **Dedicated SQL pool**
 
 * On your Synapse workspace, go to **Manage** on the left panel, then select **SQL pools** and create a new pool
 * Set a name for your DW, select the minimum **Performance level** (DW100C) and **Create**
@@ -99,7 +91,7 @@ Note: Your dedicated sql pool will generate cost, even if no transactions are go
 
 &nbsp;
 
-**SQL pool in SMSS or Data Studio**
+#### **SQL pool in SMSS or Data Studio**
 
 * On your Synapse workspace, go to **Manage --> SQL pools** on the left panel, then select your pool
 * Copy your workspace endpoint
@@ -119,7 +111,7 @@ Note: Your dedicated sql pool will generate cost, even if no transactions are go
 
 &nbsp;
 
-**Python notebook**
+#### **Python notebook**
 
 * On Synapse Studio, on the left panel go to **Develop** tab and **... --> Import** the notebook from this repo
   
@@ -149,7 +141,7 @@ NOTE: At the bottom of your notebook you will find commented SQL code. Synapse l
 
 &nbsp;
 
-**SQL script**
+#### **SQL script**
 
 * On Synapse Studio, on the left panel go to **Develop** tab and **... --> Import** the sql script from this repo
 * You will need to customize the code with url to your datalake container
@@ -169,7 +161,7 @@ NOTE: At the bottom of your notebook you will find commented SQL code. Synapse l
 
 &nbsp;
 
-**Access Control: Role for ADF**
+### **Access Control: Role for ADF**
 
 * As a general rule, each service that wants to interact with other services should be asigned a role for that purpose. 
 * On your Synapse workspace, go to **Manage** on the left panel
@@ -181,7 +173,7 @@ NOTE: At the bottom of your notebook you will find commented SQL code. Synapse l
 
 &nbsp;
 
-**ADF - Synapse pipeline**
+### **ADF - Synapse pipeline**
 
 * You can go now to ADF, create a pipeline, drag a Notebook activity
 * Activity configurations: Synapse artifacts --> create new as linked service. Select your synapse notebook, set the spark configurations (ADF, as orchestrator, can launch your spark pool with the same or different configurations)
