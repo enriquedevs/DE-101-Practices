@@ -44,6 +44,18 @@ You are a data engineer working for a credit rating agency. You need to get Stoc
 
 &nbsp;
 
+### **Resource Providers**
+
+* On the azure portal, type in and Select **Suscriptions**, select yours and then on the left panel **Resource Providers**
+* Type in Synapse, select the row and click **Register**
+  
+  <img src="documentation_images/synapse_resource_provider.png"  width=50% height=50%>
+* Make sure to have the following providers registered
+  
+  <img src="documentation_images/azure_resource_providers.png"  width=50% height=50%>
+
+&nbsp;
+
 ### **Blob Storage**
 
 * In the search bar, type in and select "Storage accounts"
