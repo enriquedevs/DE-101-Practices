@@ -266,6 +266,13 @@ with connect(
         upload_to_snowflake(connection, df, "products")
 ```
 
+# Conclusion
+
+As you can see, we created a CDC (Change Data Capture) that keeps the data from description,
+price and stock. this, just by using the "valid_for_year". but if the name of the product changes
+we wouldn't be able to know or track it.
+ 
+
 # HOMEWORK TIME !!!
 
 at this moment this whole script is able to produce a simple CDC in case that anything but the name of the product changes.

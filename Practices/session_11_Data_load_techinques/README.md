@@ -97,6 +97,12 @@ company B (this is done this way so the repository is not bigger than it should)
 Now we need to add the company B data, just adjust the origin of the data to the new files and change
 the company_name to "Company B".
 
+# Conclusion
+
+We used the Delta load and truncate and reload.
+When we tried to load data for the new table structure, we truncated the table data, and we loaded again everything.
+And then the Delta load by just adding te data for company B without removing company A's data.
+
 ## HOMEWORK TIME !!!
 
 Receive help from your teacher and assistants to make all this process to an 
