@@ -119,12 +119,43 @@ Once in the container's bash session, then move to code directory with following
 cd code
 ```
 
-Now run the python file with the following command
+Now run **clinic_rdd** python file with following command:
 
 ```
-python clinic_rdd
+python clinic_rdd.py
 ```
 
+This python script uses spark RDDs to load into clinic_db the csv data from clinic_1.csv
+
+## Step 3
+
+### Spark Dataframes
+
+**Spark DataFrames** are a higher-level abstraction built on top of RDDs (Resilient Distributed Datasets) that provide a more convenient and efficient way to work with structured and semi-structured data. **They are conceptually similar to tables in a relational database or data frames in R or Python Pandas**.
+
+Now run **clinic_dataframes** python file with following command:
+
+```
+python clinic_dataframes.py
+```
+
+This python script uses spark Dataframes to load into clinic_db the csv data from clinic_2.csv
+
+## Step 4
+
+### Spark SQL
+
+**Spark SQL** is a library in Apache Spark that provides a programming interface for working with structured and semi-structured data using SQL-like syntax. It enables users to query and manipulate data using SQL statements and provides support for executing SQL queries on top of Spark data sources, including Hive, Avro, Parquet, ORC, JSON, and JDBC.
+
+Spark SQL can be used with both DataFrames and RDDs. When using DataFrames, Spark SQL provides a more convenient way to query and manipulate data using SQL-like syntax. DataFrames can be registered as temporary tables or global tables, which can then be queried using SQL statements. Spark SQL also provides support for window functions, user-defined functions (UDFs), and streaming data.
+
+Now run **clinic_sparksql.py** python file with following command:
+
+```
+python clinic_sparksql.py
+```
+
+This python script uses Spark SQL to load into clinic_db the csv data from clinic_3.csv
 
 ## Conclusion
 

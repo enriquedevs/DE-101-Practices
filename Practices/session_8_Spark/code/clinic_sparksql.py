@@ -15,7 +15,7 @@ conn_params = {
 spark = SparkSession.builder.appName("ClinicApp").getOrCreate()
 
 # Read CSV file into DataFrame
-csv_file = spark.read.csv("./clinic_1.csv", header=True, inferSchema=True)
+csv_file = spark.read.csv("./clinic_3.csv", header=True, inferSchema=True)
 
 # Register DataFrame as temporary table
 csv_file.createOrReplaceTempView("clinic")
