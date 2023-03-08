@@ -48,6 +48,12 @@ Spark has the following components:
 + **Master**: The master node is responsible for managing the allocation of resources to the workers. It communicates with the workers to allocate resources and monitor their performance.
 + **Worker**: The worker node runs the tasks assigned by the driver program. It communicates with the master to receive tasks and allocate resources.
 
+### Spark Job Execution
+
+When a Spark job is submitted, the **driver** program breaks the job into smaller tasks and sends them to the **executors**. Each executor runs tasks in parallel, and once a task is completed, the result is sent back to the driver program. The driver program collects the results from all the tasks and combines them to produce the final output.
+
+Spark is designed to handle large amounts of data, and it does so by dividing data into partitions. Each partition is processed by a single executor in parallel. Spark provides a default partitioning strategy, but it also allows you to customize the partitioning strategy for better performance.
+
 ![Docker-Python](documentation_images/spark-7.png)
 
 ### Spark Run Modes
@@ -75,6 +81,50 @@ Spark has different Libraries such as:
 + **MLlib**: MLlib is a library for machine learning in Apache Spark. It provides an API for building machine learning models and supports various algorithms like classification, regression, clustering, and collaborative filtering. With MLlib, you can perform machine learning tasks on large-scale datasets.
 
 ![Docker-Python](documentation_images/spark-5.png)
+
+First let's start the containers from the docker-compose.yml with following command:
+
+```
+docker-compose up -d
+```
+
+The docker-compose command will start two containers that is a **postgre_db** and **python_app**, also the postgre_db will initialize a clinic database from **postgres/clinic.sql** file.
+
+## Step 2
+
+### Spark RDDs
+
+**Spark RDDs (Resilient Distributed Datasets)** are immutable distributed collections of objects that can be processed in parallel.
+
+### Spark Context
+
+**Spark Context** is the entry point for any Spark functionality. It provides a way to interact with a Spark cluster and create RDDs.
+
+### Data Processing
+
+Spark supports two main types of operations:
+
++ **Transformations**: Transformations are operations that create a new RDD from an existing RDD. Examples of transformations include map, filter, and reduceByKey.
++ **Actions**: Actions are operations that trigger the execution of a Spark job and return results to the driver program. Examples of actions include collect, reduce, and count.
+
+Now let's create a bash session to python_app with following command:
+
+```
+docker-compose exec python_app bash
+```
+
+Once in the container's bash session, then move to code directory with following command:
+
+```
+cd code
+```
+
+Now run the python file with the following command
+
+```
+python clinic_rdd
+```
+
 
 ## Conclusion
 
