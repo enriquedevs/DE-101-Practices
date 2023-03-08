@@ -1,0 +1,4 @@
+patient_name,patient_last_name,patient_address,appointment_date,appointment_time,doctor_name,doctor_last_name,doctor_clinical_specialization
+Daniel,Miller,246 Birch St,2022-01-07,4:00 PM,Elizabeth,Davis,Neurology
+Elizabeth,Davis,369 Maple St,2022-01-08,5:00 PM,William,Garcia,Gastroenterology
+William,Garcia,159 Oak St,2022-01-09,6:00 PM,David,Rodriguez,Neurology

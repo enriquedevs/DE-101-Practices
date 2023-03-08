@@ -1,0 +1,4 @@
+patient_name,patient_last_name,patient_address,appointment_date,appointment_time,doctor_name,doctor_last_name,doctor_clinical_specialization
+Emily,Williams,321 Oak St,2022-01-04,1:00 PM,Matthew,Brown,Cardiology
+Matthew,Brown,654 Pine St,2022-01-05,2:00 PM,Abigail,Jones,Dermatology
+Abigail,Jones,987 Cedar St,2022-01-06,3:00 PM,Daniel,Miller,Orthopedics
