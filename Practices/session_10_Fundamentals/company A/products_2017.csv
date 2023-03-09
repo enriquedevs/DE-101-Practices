@@ -1,0 +1,21 @@
+id,name,description,price,stock
+1,Rice,1 kilogram package of white rice,3.50,100
+2,Black beans,500 gram package of black beans,1.81,50
+3,Oil,1 liter bottle of vegetable oil,4.49,75
+4,Milk,1 liter bottle of skim milk,3.72,25
+5,Eggs,Dozen fresh eggs,5.99,40
+6,Bread,White sandwich bread,1.49,60
+7,Cheese,Fresh cow cheese,6.00,30
+8,Ham,200 gram package of cooked ham,2.99,20
+9,Tuna,Can of tuna in olive oil,1.99,15
+10,Pasta,500 gram package of short pasta,0.99,70
+11,Tomato sauce,500 gram jar of tomato sauce,1.49,45
+12,Coffee,250 gram package of ground coffee,5.99,10
+13,Sugar,1 kilogram package of white sugar,3.50,80
+14,Salt,1 kilogram package of fine salt,0.99,90
+15,Vinegar,500 ml bottle of apple cider vinegar,1.00,50
+16,Orange juice,1 liter bottle of natural orange juice,3.00,35
+17,Soda,2 liter bottle of cola soda,2.41,20
+18,Potato chips,200 gram bag of potato chips,0.50,60
+19,Cookies,250 gram package of oatmeal cookies,1.99,55
+20,Gum,10 piece pack of mint gum,1.00,100
