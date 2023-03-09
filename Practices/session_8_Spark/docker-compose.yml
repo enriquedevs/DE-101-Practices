@@ -1,0 +1,31 @@
+version: '3'
+services:
+  postgres_db:
+    image: postgres:11.1
+    environment:
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: clinic_db
+      POSTGRES_USER: myuser
+    ports:
+      - 5433:5432
+    networks:
+      - app-tier
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+
+  python_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres_db
+    networks:
+      - app-tier
+    command:
+      tail -f /dev/null
+    volumes:
+      - ./code:/app/code
+
+networks:
+  app-tier:
+    driver: bridge

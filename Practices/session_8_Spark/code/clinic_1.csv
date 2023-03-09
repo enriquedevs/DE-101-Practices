@@ -1,0 +1,4 @@
+patient_name,patient_last_name,patient_address,appointment_date,appointment_time,doctor_name,doctor_last_name,doctor_clinical_specialization
+John,Doe,123 Main St,2022-01-01,10:00 AM,Jane,Smith,Pediatrics
+Jane,Smith,456 Park Ave,2022-01-02,11:00 AM,Michael,Johnson,Family Medicine
+Michael,Johnson,789 Elm St,2022-01-03,12:00 PM,Emily,Williams,Cardiology
