@@ -1,6 +1,4 @@
 from pyspark.sql import SparkSession
-import psycopg2
-import csv
 
 # PostgreSQL connection parameters
 conn_params = {
@@ -12,34 +10,44 @@ conn_params = {
 }
 
 # Initialize Spark
-spark = SparkSession.builder.appName("ClinicApp").getOrCreate()
+spark = SparkSession.builder \
+    .appName("ClinicApp") \
+    .master("local[*]") \
+    .config('spark.jars', './postgresql-42.5.4.jar') \
+    .getOrCreate()
 
-# Read CSV file into DataFrame
-csv_file = spark.read.csv("./clinic_3.csv", header=True, inferSchema=True)
+# Read CSV file and declare a Temp View clinic
+print("Reading and loading a Temp View from csv file.")
+spark.read.csv("./clinic_3.csv", header=True, inferSchema=True).createOrReplaceTempView("clinic")
 
-# Register DataFrame as temporary table
-csv_file.createOrReplaceTempView("clinic")
+# Create DataFrames for each table with SparkSQL
+print("Initializing Dataframes with SparkSQL.")
 
-# Define SQL queries
-patients_query = "INSERT INTO patient (name, last_name, address) SELECT patient_name AS name, patient_last_name AS last_name, patient_address AS address FROM clinic"
-clinical_specializations_query = "INSERT INTO clinical_specialization (name) SELECT DISTINCT doctor_clinical_specialization AS name FROM clinic"
-doctors_query = "INSERT INTO doctor (name, last_name, clinical_specialization_id) SELECT doctor_name AS name, doctor_last_name AS last_name, cs.id AS clinical_specialization_id FROM clinic c JOIN clinical_specialization cs ON c.doctor_clinical_specialization = cs.name"
-appointments_query = "INSERT INTO appointment (date, time, patient_id, doctor_id) SELECT appointment_date AS date, appointment_time AS time, p.id AS patient_id, d.id AS doctor_id FROM clinic c JOIN patient p ON c.patient_name = p.name AND c.patient_last_name = p.last_name JOIN doctor d ON c.doctor_name = d.name AND c.doctor_last_name = d.last_name AND c.doctor_clinical_specialization = d.clinical_specialization_id"
+patient_df = spark.sql('select patient_name as name, patient_last_name as last_name, patient_address as address from clinic')
 
-# Define function to execute SQL query
-def execute_query(query):
-    conn = psycopg2.connect(**conn_params)
-    cur = conn.cursor()
-    cur.execute(query)
-    conn.commit()
-    cur.close()
-    conn.close()
+clinical_specialization_df = spark.sql('select doctor_clinical_specialization as name from clinic')
 
-# Execute SQL queries
-execute_query(patients_query)
-execute_query(clinical_specializations_query)
-execute_query(doctors_query)
-execute_query(appointments_query)
+doctor_df = spark.sql('select doctor_name as name, doctor_last_name as last_name from clinic')
 
-# Stop Spark session
-spark.stop()
+appointment_df = spark.sql('select to_date(appointment_date, "yyyy-MM-dd") as date, to_timestamp(appointment_time, "HH:mm a") as time from clinic')
+
+
+# Define save functions
+def save_to_postgres(df, table_name):
+    df.write \
+        .format("jdbc") \
+        .option("url", f"jdbc:postgresql://{conn_params['host']}:{conn_params['port']}/{conn_params['database']}") \
+        .option("dbtable", table_name) \
+        .option("user", conn_params["user"]) \
+        .option("password", conn_params["password"]) \
+        .option("driver", "org.postgresql.Driver") \
+        .mode("append") \
+        .save()
+
+# Save DataFrames to PostgreSQL
+print('Saving to postgres...')
+save_to_postgres(patient_df, "patient")
+save_to_postgres(clinical_specialization_df, "clinical_specialization")
+save_to_postgres(doctor_df, "doctor")
+save_to_postgres(appointment_df, "appointment")
+print('Save to postgres completed!')

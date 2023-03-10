@@ -14,7 +14,7 @@ conn_params = {
 def save_to_postgres(rdd, columns, table_name, spark):
     if table_name == 'appointment':
         df = spark.createDataFrame(rdd, columns)
-        df = df.select(to_date(df.date, 'yyyy-MM-dd').alias('date'), to_timestamp(df.time, 'hh:mm a').alias('time'))
+        df = df.select(to_date(df.date, 'yyyy-MM-dd').alias('date'), to_timestamp(df.time, 'HH:mm a').alias('time'))
     else:
         df = spark.createDataFrame(rdd, columns)
     df.write \
