@@ -127,6 +127,12 @@ python clinic_rdd.py
 
 This python script uses spark RDDs to load into clinic_db the csv data from clinic_1.csv
 
+### Spark DAG
+
+A DAG (Directed Acyclic Graph) in Spark refers to the sequence of stages and tasks that are executed in a specific order to complete a Spark job.
+
+**Every time an action is executed, Spark internally optimizes the execution or DAG flow to achieve the result.**
+
 ## Step 3
 
 ### Spark Dataframes
@@ -156,6 +162,36 @@ python clinic_sparksql.py
 ```
 
 This python script uses Spark SQL to load into clinic_db the csv data from clinic_3.csv
+
+## Homework Time!!
+
+From previous script runs, the data from CSV files has been loaded into the database tables of clinic_db.
+
+BUT currently the **ids** of the foreign keys to relate the `doctor_id` and `patient_id` on **appointment** table are missing. Also the `clinical_specialization_id` on **doctor** table are missing.
+
+Create a new python script that reads all the csv files and also read the data from the postgre clinic_db tables, and do necessary comparisons/transformations/joins to obtain and load the missing ids (`doctor_id`, `patient_id`) on **appointment** table and `clinical_specialization_id` on **doctor** table.
+
+Then to validate your solution, you can run following query and data should be retrieved:
+
+```
+SELECT 
+    a.id AS appointment_id, 
+    a.date, 
+    a.time, 
+    p.id AS patient_id, 
+    p.name AS patient_name, 
+    p.last_name AS patient_last_name, 
+    p.address AS patient_address, 
+    d.id AS doctor_id, 
+    d.name AS doctor_name, 
+    d.last_name AS doctor_last_name, 
+    cs.name AS doctor_clinical_specialization
+FROM 
+    appointment a
+    JOIN patient p ON p.id = a.patient_id
+    JOIN doctor d ON d.id = a.doctor_id
+    JOIN clinical_specialization cs ON cs.id = d.clinical_specialization_id;
+```
 
 ## Conclusion
 
