@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS doctor (
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(100),
     last_name VARCHAR(100),
-    clinical_specialization_id INT NOT NULL,
+    clinical_specialization_id INT,
     CONSTRAINT fk_doctor_clinical_specialization FOREIGN KEY (clinical_specialization_id) REFERENCES clinical_specialization (id)
 );
 
@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS appointment (
     id SERIAL PRIMARY KEY NOT NULL,
     date DATE,
     time TIME,
-    patient_id INT NOT NULL,
-    doctor_id INT NOT NULL,
+    patient_id INT,
+    doctor_id INT,
     CONSTRAINT fk_appointment_doctor FOREIGN KEY (doctor_id) REFERENCES doctor (id),
     CONSTRAINT fk_appointment_patient FOREIGN KEY (patient_id) REFERENCES patient (id)
 );

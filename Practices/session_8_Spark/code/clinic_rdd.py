@@ -1,4 +1,5 @@
-from pyspark import SparkConf, SparkContext
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import to_date, to_timestamp
 
 # PostgreSQL connection parameters
 conn_params = {
@@ -9,12 +10,13 @@ conn_params = {
     "password": "mypassword"
 }
 
-# Define a function to return all elements except for the first one
-def remove_first(iterator):
-    return list(iterator)[1:]
-
 # Define save functions
-def save_to_postgres(df, table_name):
+def save_to_postgres(rdd, columns, table_name, spark):
+    if table_name == 'appointment':
+        df = spark.createDataFrame(rdd, columns)
+        df = df.select(to_date(df.date, 'yyyy-MM-dd').alias('date'), to_timestamp(df.time, 'hh:mm a').alias('time'))
+    else:
+        df = spark.createDataFrame(rdd, columns)
     df.write \
         .format("jdbc") \
         .option("url", f"jdbc:postgresql://{conn_params['host']}:{conn_params['port']}/{conn_params['database']}") \
@@ -25,20 +27,25 @@ def save_to_postgres(df, table_name):
         .mode("append") \
         .save()
 
-# Initialize Spark
-conf = SparkConf().setAppName("ClinicApp").setMaster("local[*]")
-sc = SparkContext(conf=conf)
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("ClinicApp") \
+    .master("local[*]") \
+    .config('spark.jars', './postgresql-42.5.4.jar') \
+    .getOrCreate()
 
 # Read CSV to RDD
-file_rdd = sc.textFile('./clinic_1.csv')
+file_rdd = spark.sparkContext.textFile('./clinic_1.csv')
 
 print(f'file has {file_rdd.count()} rows')
 
 print('CSV file content')
 file_rdd.foreach(lambda row: print(row))
 
+header = file_rdd.first()
+
 # Obtaining CSV file content without the header
-rows_rdd = file_rdd.mapPartitionsWithIndex(lambda i, iterator: remove_first(iterator) if i > 0 else iterator)
+rows_rdd = file_rdd.filter(lambda row: row != header)
 
 print('CSV file content without header')
 rows_rdd.foreach(lambda row: print(row))
@@ -50,14 +57,15 @@ print('CSV file content')
 mapped_rdd.foreach(lambda row: print(row))
 
 # Obtaining individual RDDs for each table
-patient_rdd = mapped_rdd.map(lambda row: (row[0], row[1], row[3]))
-clinical_specialization_rdd = mapped_rdd.map(lambda row: (row[7]))
-doctor_rdd = mapped_rdd.map(lambda row: (row[5], row[6]))
-appointment_rdd = mapped_rdd.map(lambda row: (row[3], row[4]))
+patient_rdd = mapped_rdd.map(lambda row: [row[0], row[1], row[2]])
+clinical_specialization_rdd = mapped_rdd.map(lambda row: [row[7]])
+doctor_rdd = mapped_rdd.map(lambda row: [row[5], row[6]])
+appointment_rdd = mapped_rdd.map(lambda row: [row[3], row[4]])
 
-# Saving to postgres
+# Saving to postgresdo
 print('Saving to postgres...')
-df1 = patient_rdd.toDF(['name', 'last_name', 'address'])
-save_to_postgres(df1, 'patient')
-
-print('Saved to postgres complete!')
+save_to_postgres(patient_rdd, ['name', 'last_name', 'address'], 'patient', spark)
+save_to_postgres(clinical_specialization_rdd, ['name'], 'clinical_specialization', spark)
+save_to_postgres(doctor_rdd, ['name', 'last_name'], 'doctor', spark)
+save_to_postgres(appointment_rdd, ['date', 'time'], 'appointment', spark)
+print('Save to postgres completed!')
