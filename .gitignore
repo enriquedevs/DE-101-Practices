@@ -11,9 +11,10 @@ logs
 # MACOS files
 .DS_Store
 
-# Adding homework data
 Practices/session_10_Fundamentals/homework/data
+Practices/session_10_Fundamentals/homework/data/*
 Practices/session_11_Data_load_techinques/generator/data
+Practices/session_11_Data_load_techinques/generator/data/*
 Practices/session_12_SQL_Reporting/generator/data
 
 # Pycache files
