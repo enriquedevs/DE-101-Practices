@@ -29,8 +29,7 @@ clinical_specialization_df = spark.sql('select doctor_clinical_specialization as
 
 doctor_df = spark.sql('select doctor_name as name, doctor_last_name as last_name from clinic')
 
-appointment_df = spark.sql('select to_date(appointment_date, "yyyy-MM-dd") as date, to_timestamp(appointment_time, "HH:mm a") as time from clinic')
-
+appointment_df = spark.sql("select to_date(appointment_date, 'yyyy-MM-dd') as date, to_timestamp(appointment_time, 'HH:mm a') as time from clinic")
 
 # Define save functions
 def save_to_postgres(df, table_name):
