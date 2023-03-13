@@ -1,0 +1,11 @@
+id,product_name,product_price,product_country,number_sold_per_day
+1,Sony PlayStation 5,499,Japan,100
+2,Xbox Series X,499,USA,90
+3,Nintendo Switch,299,Japan,80
+4,PlayStation VR,399,Japan,70
+5,Oculus Quest 2,299,USA,60
+6,Razer Blade 15,1899,USA,50
+7,Asus ROG Zephyrus G14,1499,Taiwan,40
+8,HP Omen 15,1599,USA,30
+9,Alienware m15 R5,2199,USA,20
+10,MSI GS66 Stealth,1799,Taiwan,10

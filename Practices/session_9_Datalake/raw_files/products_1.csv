@@ -1,0 +1,11 @@
+id,product_name,product_price,product_country,number_sold_per_day
+1,Apple iPhone 13,999,USA,100
+2,Samsung Galaxy S21,899,Korea,90
+3,Google Pixel 6,799,USA,80
+4,OnePlus 9 Pro,899,China,70
+5,Xiaomi Mi 11,799,China,60
+6,Huawei P50 Pro,1099,China,50
+7,Apple MacBook Pro,1999,USA,40
+8,Dell XPS 13,1399,USA,30
+9,Lenovo ThinkPad X1,1499,China,20
+10,Microsoft Surface Laptop 4,1299,USA,10

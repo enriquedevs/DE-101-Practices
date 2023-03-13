@@ -1,0 +1,11 @@
+id,product_name,product_price,product_country,number_sold_per_day
+1,Amazon Echo Dot,39,USA,100
+2,Google Nest Mini,49,USA,90
+3,Apple HomePod Mini,99,USA,80
+4,Sonos One,199,USA,70
+5,Logitech Harmony Elite,349,Switzerland,60
+6,Philips Hue White and Color Ambiance Starter Kit,199,Netherlands,50
+7,Nest Learning Thermostat,249,USA,40
+8,Ring Video Doorbell 4,199,USA,30
+9,Arlo Pro 4,199,USA,20
+10,SimpliSafe Home Security System,229,USA,10

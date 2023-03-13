@@ -214,70 +214,57 @@ The docker-compose command will start sic containers that has a Hadoop YARN cont
 
 ## Step 2
 
-### Spark RDDs
+### Uploading Raw files into HDFS
 
-**Spark RDDs (Resilient Distributed Datasets)** are immutable distributed collections of objects that can be processed in parallel.
+Now we are going to upload the `raw_files` of the products into HDFS.
 
-### Spark Context
-
-**Spark Context** is the entry point for any Spark functionality. It provides a way to interact with a Spark cluster and create RDDs.
-
-### Data Processing
-
-Spark supports two main types of operations:
-
-+ **Transformations**: Transformations are operations that create a new RDD from an existing RDD. Examples of transformations include map, filter, and reduceByKey.
-+ **Actions**: Actions are operations that trigger the execution of a Spark job and return results to the driver program. Examples of actions include collect, reduce, and count.
-
-Now let's create a bash session to python_app with following command:
+First let's copy all the CSV files of `raw_files` directory into the namenode container with the following command:
 
 ```
-docker-compose exec python_app bash
+docker cp ./raw_files session_9_datalake-namenode-1:/tmp
 ```
 
-Once in the container's bash session, then move to code directory with following command:
+Now let's connect to the namenode service container with:
 
 ```
-cd code
+docker-compose exec namenode bash
 ```
 
-Now run **clinic_rdd** python file with following command:
+Now move to /tmp/raw_files with the following command:
 
 ```
-python clinic_rdd.py
+cd /tmp/raw_files/
 ```
 
-This python script uses spark RDDs to load into clinic_db the csv data from clinic_1.csv
+Once there now let's create  `/raw/year=2023/month=01/day=01/` and `/raw/year=2023/month=01/day=02/` directories on HDFS:
 
-### Spark DAG
+```
+$ hdfs dfs -mkdir -p /raw/year=2023/month=01/day=01/
+$ hdfs dfs -mkdir -p /raw/year=2023/month=01/day=02/
+```
 
-A DAG (Directed Acyclic Graph) in Spark refers to the sequence of stages and tasks that are executed in a specific order to complete a Spark job.
+Now upload into `/raw/year=2023/month=01/day=01/` the **products_1.csv** and **products_2.csv** with the following commands:
 
-**Every time an action is executed, Spark internally optimizes the execution or DAG flow to achieve the result.**
+```
+$ hdfs dfs -put products_1.csv /raw/year=2023/month=01/day=01/
+$ hdfs dfs -put products_2.csv /raw/year=2023/month=01/day=01/
+```
+
+Now upload into `/raw/year=2023/month=01/day=02/` the **products_3.csv** with following command:
+
+```
+hdfs dfs -put products_3.csv /raw/year=2023/month=01/day=02/
+```
+
+Now we are done uploading the raw files into hdfs, now let's exit of the container's bash session with:
+
+```
+exit
+```
 
 ## Step 3
 
-### Spark Dataframes
-
-**Spark DataFrames** are a higher-level abstraction built on top of RDDs (Resilient Distributed Datasets) that provide a more convenient and efficient way to work with structured and semi-structured data. **They are conceptually similar to tables in a relational database or data frames in R or Python Pandas**.
-
-Now run **clinic_dataframes** python file with following command:
-
-```
-python clinic_dataframes.py
-```
-
-This python script uses spark Dataframes to load into clinic_db the csv data from clinic_2.csv
-
-## Step 4
-
-### Spark SQL
-
-**Spark SQL** is a library in Apache Spark that provides a programming interface for working with structured and semi-structured data using SQL-like syntax. It enables users to query and manipulate data using SQL statements and provides support for executing SQL queries on top of Spark data sources, including Hive, Avro, Parquet, ORC, JSON, and JDBC.
-
-Spark SQL can be used with both DataFrames and RDDs. When using DataFrames, Spark SQL provides a more convenient way to query and manipulate data using SQL-like syntax. DataFrames can be registered as temporary tables or global tables, which can then be queried using SQL statements. Spark SQL also provides support for window functions, user-defined functions (UDFs), and streaming data.
-
-Now run **clinic_sparksql.py** python file with following command:
+### Creating Hive tables from RAW files
 
 ```
 python clinic_sparksql.py
