@@ -321,16 +321,10 @@ Now let's do a select * from products to see what happen:
 select * from products;
 ```
 
-As we can see, there is NO data, the reason is because we need to add the partitions of the directories that we created to load the data, to do so let's execute following statements:
+As we can see, there is NO data, the reason is because we need to add the partitions of the directories that we created to load the data, to do so let's execute following statement:
 
 ```
-ALTER TABLE products ADD PARTITION (year=2023, month=01, day=01) LOCATION '/raw/year=2023/month=01/day=01/';
-```
-
-and also:
-
-```
-ALTER TABLE products ADD PARTITION (year=2023, month=01, day=02) LOCATION '/raw/year=2023/month=01/day=02/';
+MSCK REPAIR TABLE products;
 ```
 
 And if we do again a select * from products, we would able to see data now:
