@@ -1,86 +1,208 @@
 # Datalake
 
-In this practice we will develop a simple ETL pipeline on Apache Spark.
+In this practice we will setup a datalake on HDFS and Hive environment.
 
-![Docker-Python](documentation_images/spark-4.png)
+![Docker-Python](documentation_images/data-lake.jpg)
 
 ### Prerequisites
 * [Install docker](https://docs.docker.com/engine/install/) 
-* Install a db client (i.e. [DBeaver](https://dbeaver.io/download/)) 
 
 ### What You Will Learn
-- Apache Spark Concepts and Components
-- Spark RDDs (Resilent Distributed Datasets)
-- Spark Dataframes
-- Spark SQL
+- Datalake Concepts and Components
+- Hive
+- HDFS
+- Implement a Datalake on HDFS and Hive
 
 # Practice
 
-You're working on a clinic, and the clinic has a database of the appointments that were made between the patient and the doctor.
+You're working on a global e-commerce company, and the company recieves multiple CSV and JSON files every day about the products that has been sold.
 
-The clinic provides you CSV files with historical data of the appointments and they ask you to load the data to the database.
+The company wants to have the product information into a single source that can be consumed by other systems. To achieve that, the company wants you to design and implement a datalake for it.
 
-![img](documentation_images/clinic.jpeg)
+![img](documentation_images/data-lake-2.jpeg)
 
 ### Requirements
-* Process Clinic's CSV files to load them into PostgreDB.
+* Create a Datalake for the product files of the e-commerce.
 
 ## Step 1
 
-### Spark
+### Datalake
 
-Apache Spark is an open-source distributed computing framework built on Scala and it's used for big data processing and analytics. Currently Spark supports multiple languages including **Java, Scala, Python, and R**. Also is capable to connect to different sources (such as databases, hdfs, files, cloud services), able to transform data and load data to sources.
+A datalake is a centralized repository that allows you to **store and manage large volumes of structured, semi-structured, and unstructured data**. In a datalake, data is stored in its raw form, without any transformation or pre-processing, so that it can be accessed and analyzed by different teams across the organization. Also the **data or files stored on the datalake, it can be given an schema so that way you can query the data of the files on regular SQL**.
 
-![Docker-Python](documentation_images/spark-3.png)
+![Docker-Python](documentation_images/data-lake-3.jpeg)
 
-### How Does Spark Work?
+### Where can be implemented a Datalake?
 
-Apache Spark uses a distributed **in-memory** computing model that allows it to process large amounts of data in parallel. Such memory can be RAM memory or GPU memory that allows spark to be fast while extracting, processing and loading the data.
+There are several different forms in which a datalake can be implemented, depending on the technologies and tools that are used. Some of the most common implementations of datalakes include:
 
-![Docker-Python](documentation_images/spark-6.jpeg)
++ **HDFS with Hive**: As I mentioned earlier, HDFS and Hive are commonly used to implement datalakes. HDFS provides a distributed file system for storing large volumes of data, while Hive provides a SQL-like interface for querying and analyzing the data.
++ **S3 with Athena**: Amazon S3 is a cloud-based storage service that is commonly used to implement datalakes. Athena is a serverless query service that allows you to run SQL queries against data stored in S3. This combination provides a scalable and cost-effective solution for storing and querying large volumes of data.
++ **Azure Blob Storage with Azure Data Lake Analytics**: Microsoft Azure provides Blob Storage, which is a scalable and secure cloud storage solution that can be used to store large volumes of data. Azure Data Lake Analytics is a serverless analytics service that allows you to run big data analytics jobs against data stored in Blob Storage.
++ **Google Cloud Storage with BigQuery**: Google Cloud Storage is a scalable and secure cloud storage solution that can be used to implement a datalake. BigQuery is a fully-managed data warehouse service that allows you to run SQL queries against data stored in Cloud Storage.
 
-### Spark Components
+![Docker-Python](documentation_images/data-lake-6.png)
 
-Spark has the following components:
+### How to Implement a Data Lake on HDFS/Hive
 
-+ **Driver**: The driver program is responsible for coordinating the Spark application. It runs on the client machine and creates the SparkContext, which is the entry point for any Spark functionality. The driver program is responsible for dividing the tasks into smaller tasks and sending them to the executors.
-+ **Executors**: Executors are worker nodes that run tasks assigned by the driver program. They run on the cluster and are responsible for executing the tasks, storing data, and communicating with the driver program.
-+ **Master**: The master node is responsible for managing the allocation of resources to the workers. It communicates with the workers to allocate resources and monitor their performance.
-+ **Worker**: The worker node runs the tasks assigned by the driver program. It communicates with the master to receive tasks and allocate resources.
+To implement a datalake using HDFS and Hive, you would typically follow these steps:
 
-### Spark Job Execution
+1. **Ingest data into HDFS**: The first step is to ingest the data that you want to store into HDFS. This can be done using a variety of tools, including Apache Kafka, Apache Flume, and Apache NiFi. The data can be stored in its raw form, without any transformation or pre-processing.
+2. **Define a schema**: Once the data is stored in HDFS, you can define a schema for it using Hive. This involves creating a table that defines the structure of the data, including the column names, data types, and any other metadata that is required.
+3. **Query the data**: Once the schema is defined, you can query the data using HiveQL. Hive will automatically map the queries to the data stored in HDFS, and it will distribute the queries across the nodes in the Hadoop cluster to perform the analysis at scale.
+4. **Iterate and refine**: As you work with the data, you may discover that the schema needs to be refined or updated to better support your analysis. Hive allows you to easily modify the schema as needed, without having to manually modify the data stored in HDFS.
 
-When a Spark job is submitted, the **driver** program breaks the job into smaller tasks and sends them to the **executors**. Each executor runs tasks in parallel, and once a task is completed, the result is sent back to the driver program. The driver program collects the results from all the tasks and combines them to produce the final output.
+![Docker-Python](documentation_images/data-lake-8.png)
 
-Spark is designed to handle large amounts of data, and it does so by dividing data into partitions. Each partition is processed by a single executor in parallel. Spark provides a default partitioning strategy, but it also allows you to customize the partitioning strategy for better performance.
+### How files can be stored on a Datalake's Filesystem
 
-![Docker-Python](documentation_images/spark-7.png)
+If you're storing raw, pre-processed, and processed data in a datalake, it's a good idea to organize the data in a way that makes it easy to manage and query. One common approach is to use a hierarchical directory structure, where the data is organized by year, month, and day. Here's an example of how you could organize the data in a datalake:
 
-### Spark Run Modes
++ **Raw data**: The raw data can be stored in a top-level directory called "raw", with subdirectories for each year, month, and day. For example, you could have a directory structure like this:
 
-Spark has multiple run modes according to the infrastructure where is run:
+```
+raw/
+   year=2022/
+      month=01/
+         day=01/
+            data1.csv
+            data2.csv
+         day=02/
+            data3.csv
+            data4.csv
+      month=02/
+         day=01/
+            data5.csv
+            data6.csv
+         day=02/
+            data7.csv
+            data8.csv
+   year=2023/
+      month=01/
+         day=01/
+            data9.csv
+            data10.csv
+         day=02/
+            data11.csv
+            data12.csv
+      month=02/
+         day=01/
+            data13.csv
+            data14.csv
+         day=02/
+            data15.csv
+            data16.csv
+```
++ **Pre-processed data**: The pre-processed data can be stored in a separate directory called "pre-processed", with a similar directory structure as the raw data. For example, you could have a directory structure like this:
 
-+ **Standalone**: This mode is used to run Spark on a single machine or cluster without using any other cluster manager. The standalone mode comes bundled with Spark and provides a simple way to set up a cluster.
-+ **YARN**: This mode is used to run Spark on a Hadoop cluster managed by YARN (Yet Another Resource Negotiator). YARN manages resources like CPU and memory across the cluster and ensures efficient resource utilization.
-Apache Mesos: Apache Mesos is a distributed systems kernel that provides efficient resource isolation and sharing across distributed applications. Spark can run on Mesos to take advantage of its resource management capabilities.
-+ **Kubernetes**: Kubernetes is a container orchestration platform that automates the deployment, scaling, and management of containerized applications. Spark can run on Kubernetes to leverage its containerization features and cluster management capabilities.
-+ **Amazon EMR**: Amazon EMR (Elastic MapReduce) is a managed Hadoop service offered by Amazon Web Services. Spark can run on EMR to process large-scale data on the cloud and leverage AWS resources like S3 and EC2.
-+ **Databricks**: Databricks is a cloud-based big data processing and analytics platform built on top of Apache Spark. Databricks provides a managed Spark cluster and a unified analytics platform for data engineering, machine learning, and business intelligence.
+```
+preprocessed/
+   year=2022/
+      month=01/
+         day=01/
+            data1_preprocessed.csv
+            data2_preprocessed.csv
+         day=02/
+            data3_preprocessed.csv
+            data4_preprocessed.csv
+      month=02/
+         day=01/
+            data5_preprocessed.csv
+            data6_preprocessed.csv
+         day=02/
+            data7_preprocessed.csv
+            data8_preprocessed.csv
+   year=2023/
+      month=01/
+         day=01/
+            data9_preprocessed.csv
+            data10_preprocessed.csv
+         day=02/
+            data11_preprocessed.csv
+            data12_preprocessed.csv
+      month=02/
+         day=01/
+            data13_preprocessed.csv
+            data14_preprocessed.csv
+         day=02/
+            data15_preprocessed.csv
+            data16_preprocessed.csv
+```
 
-![Docker-Python](documentation_images/spark-8.png)
++ **Processed data**: The processed data can be stored in a separate directory called "processed", with a similar directory structure as the raw data and pre-processed data. For example, you could have a directory structure like this:
 
-### Spark Libraries
+```
+processed/
+   year=2022/
+      month=01/
+         day=01/
+            data1_processed.csv
+            data2_processed.csv
+         day=02/
+            data3_processed.csv
+            data4_processed.csv
+      month=02/
+         day=01/
+            data5_processed.csv
+            data6_processed.csv
+         day=02/
+            data7_processed.csv
+            data8_processed.csv
+   year=2023/
+      month=01/
+         day=01/
+            data9_processed.csv
+            data10_processed.csv
+         day=02/
+            data11_processed.csv
+            data12_processed.csv
+      month=02/
+         day=01/
+            data13_processed.csv
+            data14_processed.csv
+         day=02/
+            data15_processed.csv
+            data16_processed.csv
+```
 
-Spark has different Libraries such as:
+### Apache Hive
 
-+ **Spark RDDs (Spark Core)**: RDDs (Resilient Distributed Datasets) are a fundamental data structure in Spark. RDDs are immutable distributed collections of objects that can be processed in parallel. RDDs can be created from Hadoop InputFormats or by transforming other RDDs. **RDDs are the core data structure in Spark** and serve as the building blocks for all other libraries and APIs.
-+ **Spark DataFrames**: Spark DataFrames are a distributed collection of data organized into named columns. They are similar to tables in a relational database and can be manipulated using SQL-like queries. Spark DataFrames provide a more optimized and efficient way to process structured data compared to RDDs.
-+ **Spark SQL**: Spark SQL is a Spark module that provides support for structured data processing. It allows you to query data using SQL and provides a DataFrame API for manipulating data. Spark SQL also supports reading and writing data from various structured data sources like JDBC, Avro, and Parquet.
-+ **Spark Streaming**: Spark Streaming is a library used for real-time stream processing. It provides a high-level API for processing data in real-time and supports various data sources like Kafka, Flume, and Twitter. With Spark Streaming, you can perform real-time analytics on live data streams.
-+ **GraphX**: GraphX is a library for graph processing in Apache Spark. It provides an API for creating and manipulating graphs and supports various graph algorithms like PageRank and connected components. With GraphX, you can analyze and process large-scale graph data.
-+ **MLlib**: MLlib is a library for machine learning in Apache Spark. It provides an API for building machine learning models and supports various algorithms like classification, regression, clustering, and collaborative filtering. With MLlib, you can perform machine learning tasks on large-scale datasets.
+Apache Hive is a tool that is built on top of Hadoop and is designed to allow you to query and analyze data stored in HDFS or other distributed storage systems. **Hive provides a SQL-like language called HiveQL to query data**, and it is able to take advantage of the distributed processing capabilities of Hadoop to perform queries at scale.
 
-![Docker-Python](documentation_images/spark-5.png)
+One of the key features of Hive is its ability to create schemas for files stored on HDFS. When you create a table in Hive, you define the schema of the table, including the column names, data types, and any other metadata that is required. **Hive then maps the columns in the table to the columns in the underlying data files stored on HDFS**, based on the file format and the data in the files.
+
+Hive **supports a wide range of file formats, including CSV, JSON, Avro, ORC, and Parquet**. Each file format has its own way of storing data, and Hive is able to interpret the data in the files and create schemas for the tables based on the file format.
+
+For example, if you have a CSV file stored on HDFS that contains customer data, you can create a table in Hive that maps to the columns in the CSV file. Here is an example HiveQL statement that creates a table based on a CSV file stored on HDFS:
+
+```
+CREATE TABLE customers (
+    id INT,
+    name STRING,
+    email STRING,
+    age INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION '/path/to/csv/file';
+```
+
+And then you can query the CSV file data as regular SQL queries.
+
+### Apache Hive Components
+
+Hive have multiple components, such as:
+
++ **Hive Metastore**: The Hive Metastore is a central repository that stores metadata information about Hive tables, including the table schema, column names, data types, and partitioning information. The Metastore stores this metadata in a relational database, such as MySQL, Oracle, or PostgreSQL. By separating the metadata from the actual data stored on HDFS, Hive is able to provide a level of abstraction that allows users to query and analyze data using SQL-like syntax, without having to worry about the underlying storage system.
++ **Hive Query Processor**: The Hive Query Processor is responsible for translating HiveQL queries into MapReduce or Tez jobs that can be executed on a Hadoop cluster. The Query Processor parses the HiveQL queries, performs optimization, and generates a query plan that is optimized for distributed processing.
++ **Hive Execution Engine**: The Hive Execution Engine is responsible for executing the MapReduce or Tez jobs generated by the Query Processor. The Execution Engine manages the distribution of the jobs across the nodes in the Hadoop cluster and ensures that the jobs are executed in a fault-tolerant and scalable manner.
++ **Hive CLI and Beeline**: The Hive CLI (Command Line Interface) and Beeline are command-line tools that allow users to interact with Hive using a command-line interface. The Hive CLI is an interactive shell that allows users to enter HiveQL commands and receive the results directly in the shell. Beeline is a JDBC client that can be used to connect to Hive from external tools and applications.
++ **Hive Drivers and APIs**: Hive provides a variety of drivers and APIs that allow developers to integrate Hive with external tools and applications. These drivers and APIs include JDBC, ODBC, and Thrift, and they allow developers to use Hive as a data warehousing tool for a wide range of use cases.
+
+![Docker-Python](documentation_images/data-lake-10.jpeg)
+
 
 First let's start the containers from the docker-compose.yml with following command:
 
@@ -88,7 +210,7 @@ First let's start the containers from the docker-compose.yml with following comm
 docker-compose up -d
 ```
 
-The docker-compose command will start two containers that is a **postgre_db** and **python_app**, also the postgre_db will initialize a clinic database from **postgres/clinic.sql** file.
+The docker-compose command will start sic containers that has a Hadoop YARN containerized environment with hive integration-
 
 ## Step 2
 
@@ -163,37 +285,8 @@ python clinic_sparksql.py
 
 This python script uses Spark SQL to load into clinic_db the csv data from clinic_3.csv
 
-## Homework Time!!
-
-From previous script runs, the data from CSV files has been loaded into the database tables of clinic_db.
-
-BUT currently the **ids** of the foreign keys to relate the `doctor_id` and `patient_id` on **appointment** table are missing. Also the `clinical_specialization_id` on **doctor** table are missing.
-
-Create a new python script that reads all the csv files and also read the data from the postgre clinic_db tables, and do necessary comparisons/transformations/joins to obtain and load the missing ids (`doctor_id`, `patient_id`) on **appointment** table and `clinical_specialization_id` on **doctor** table.
-
-Then to validate your solution, you can run following query and data should be retrieved:
-
-```
-SELECT 
-    a.id AS appointment_id, 
-    a.date, 
-    a.time, 
-    p.id AS patient_id, 
-    p.name AS patient_name, 
-    p.last_name AS patient_last_name, 
-    p.address AS patient_address, 
-    d.id AS doctor_id, 
-    d.name AS doctor_name, 
-    d.last_name AS doctor_last_name, 
-    cs.name AS doctor_clinical_specialization
-FROM 
-    appointment a
-    JOIN patient p ON p.id = a.patient_id
-    JOIN doctor d ON d.id = a.doctor_id
-    JOIN clinical_specialization cs ON cs.id = d.clinical_specialization_id;
-```
 
 ## Conclusion
 
-Overall, Apache Spark is a powerful open-source distributed computing framework used for big data processing and analytics. It is built for speed and supports multiple languages including Java, Scala, Python, and R. Spark provides a wide range of libraries and APIs for data processing, machine learning, graph processing, and stream processing.
+In summary, a datalake is a centralized repository for storing and managing large volumes of data, and it can be implemented using HDFS and Hive to provide a scalable and fault-tolerant storage and querying solution for big data analytics and data science projects.
 
