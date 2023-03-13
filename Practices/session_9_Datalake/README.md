@@ -266,11 +266,104 @@ exit
 
 ### Creating Hive tables from RAW files
 
+Now we are going to create tables on Hive by using the RAW files that we uploaded into HDFS.
+
+First, let's connect to hive-metastore service container with following command:
+
 ```
-python clinic_sparksql.py
+docker-compose exec hive-metastore bash
 ```
 
-This python script uses Spark SQL to load into clinic_db the csv data from clinic_3.csv
+Once there, now we are able to connect to Hive with following command:
+
+```
+hive
+```
+
+Then we can create a new database for the products with following command:
+
+```
+create database products_db;
+```
+
+Once done, you can see available databases with following command;
+
+```
+show databases;
+```
+
+Then, let's use products_db by executing following command:
+
+```
+use products_db;
+```
+
+Now we are going to create a **products** table with the data that we uploaded into HDFS, to do so, let's execute following command:
+
+```
+CREATE EXTERNAL TABLE products (
+  id INT,
+  product_name STRING,
+  product_price INT,
+  product_country STRING,
+  number_sold_per_day INT
+)
+PARTITIONED BY (year INT, month INT, day INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/raw/';
+```
+
+Now let's do a select * from products to see what happen:
+
+```
+select * from products;
+```
+
+As we can see, there is NO data, the reason is because we need to add the partitions of the directories that we created to load the data, to do so let's execute following statements:
+
+```
+ALTER TABLE products ADD PARTITION (year=2023, month=01, day=01) LOCATION '/raw/year=2023/month=01/day=01/';
+```
+
+and also:
+
+```
+ALTER TABLE products ADD PARTITION (year=2023, month=01, day=02) LOCATION '/raw/year=2023/month=01/day=02/';
+```
+
+And if we do again a select * from products, we would able to see data now:
+
+```
+select * from products;
+```
+
+Also we can filter the data even by year, month and day, for example if we like the data from (year=2023, month=01, day=02), we can do the following SQL statement:
+
+```
+select * from products where year='2023' and month='01' and day='01';
+```
+
+### Notes
+
+Also Hive is capable to automatically add partitions, you can see this page for more information:
+
+https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.0.0/using-hiveql/content/hive-create_partitions_dynamically.html
+
+Also you can connect to Hive within hive-metastore with following command:
+
+```
+/opt/hive/bin/beeline -u jdbc:hive2://localhost:10000
+```
+
+In this case the connection is made by a JDBC java driver.
+
+Also there are other JDBC Java drivers to connect to Hive, one of the most populars is presto
+
+```
+./presto.jar --server localhost:8080 --catalog hive --schema default
+```
 
 
 ## Conclusion
