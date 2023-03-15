@@ -271,18 +271,3 @@ with connect(
 As you can see, we created a CDC (Change Data Capture) that keeps the data from description,
 price and stock. this, just by using the "valid_for_year". but if the name of the product changes
 we wouldn't be able to know or track it.
- 
-
-# HOMEWORK TIME !!!
-
-at this moment this whole script is able to produce a simple CDC in case that anything but the name of the product changes.
-
-But the problem is that there would be a problem if suddenly, Company A decides to send you data for every month or day.
-Even, what happens if a product changes its description, or even the name?
-
-use the `homework/generator.py` script to generate enough data for you to do this homework
-
-- try to lose the **least amount** possible of data
-- don't modify the script unless it is to fix an error
-- You can use the ID column, but if possible try not to use it
-- This is an important homework because you will use the result in the session 12 practice
