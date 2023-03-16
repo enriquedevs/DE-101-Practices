@@ -232,13 +232,23 @@ NOTE: **Data flow** activities in ADF are very useful and efficient for low comp
 
 ### **Copy from datalake to snowflake**
 
+* Make sure you have in your snowflake database the following table:
+
+      CREATE TABLE products_adf (
+          id int,
+          name varchar(500),
+          description varchar(500),
+          price varchar(50),
+          stock varchar(50)
+      )
+
 * Create a new pipeline, set a propper name
 * Drag a new **Copy data** activity
 * Go to Source in the activity configurations and create a new source dataset
 * Search for **Azure Blob Storage**, then select **DelimitedText**
 * Select a name for your dataset, could be "snowflake_data_csv_ds" (you can also rename datasets later)
 * Select the **Linked service** for Blob Storage created in the past session, similar to "blobdata101_ls"
-* Browse for the file called "data.csv" in the "data" folder
+* Browse for the file called "products_2015.csv" in the "data" folder
 * Check the box for **First row as header**
 * On **Import schema** you can import from connection/store or select none (later you can import the schema)
 * Click **OK**
@@ -246,7 +256,7 @@ NOTE: **Data flow** activities in ADF are very useful and efficient for low comp
 * Search for **Snowflake**
 * Set a name for your dataset ("Snowflake_data__sink_ds"), select the linked service for snowflake you created before
 * Fill in the correct values
-* Under your activit configurations go to **Mapping**
+* Under your activit configurations go to **Mapping** and mapp the id to integer in your destination schema, the rest should be strings
 * If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
 * You can go to your Snowflake account and you will find your data there!
 

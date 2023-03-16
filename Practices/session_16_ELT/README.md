@@ -26,6 +26,10 @@ In this practice we will setup the environment, tools and resources necesary for
 
 You are a data engineer working for a credit rating agency. You need to get Stock Market Data every day, store it in a Data Warehouse for financial research and analysis for further publication. You work in the team responsible of getting Nasdaq data from different resources or formats.
 
+![img](documentation_images/ETL-Process.png)
+
+[Image reference](https://rivery.io/blog/etl-vs-elt/)
+
 &nbsp;
 
 &nbsp;
@@ -195,7 +199,7 @@ You are a data engineer working for a credit rating agency. You need to get Stoc
   * On the search bar, type in and select **Snowflake**
   * Name: "snowflake_ls"
   * Enter your snowflake account ("accountname.southcentral-us.azure")
-  * Fill in the values for user, pssw, db, dw and role
+  * Fill in the values for user, pssw, db, dw
   * Test your connection and create
   
     <img src="documentation_images/ADF_snowflake_ls.png"  width=50% height=50%>
