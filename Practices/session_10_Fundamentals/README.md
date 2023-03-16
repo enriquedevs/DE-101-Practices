@@ -94,7 +94,7 @@ list_dir = os.listdir("data") # this will get all the files and directories unde
 csv_files = filter(lambda item: item.endswith(".csv")) # Making sure that we are just using the correct file format
 
 for csv_file in csv_files:
-    df = pd.read_csv(csv_file)
+    df = pd.read_csv(f'./data/{csv_file}')
 ```
 
 ## Step 4
@@ -106,13 +106,13 @@ such as the date in which they were created, or in this case, at least the year.
 import os
 import pandas as pd
 
-list_dir = os.listdir("company A")  # this will get all the files and directories under the folder company B
+list_dir = os.listdir("data")  # this will get all the files and directories under the folder company B
 
 csv_files = filter(lambda item: item.endswith(".csv"),
                    list_dir)  # Making sure that we are just using the correct file format
 
 for current_file in csv_files:
-    df = pd.read_csv(current_file)
+    df = pd.read_csv(f'./data/{current_file}')
     _, year = current_file.split("_")
     year = year.replace(".csv", "")
     df["valid_for_year"] = year
@@ -208,13 +208,13 @@ with connect(
         warehouse="<SNOWFLAKE_WAREHOUSE>",
         region="<SNOWFLAKE_AWS_REGION>"
 ) as connection:
-    list_dir = os.listdir("company A")  # this will get all the files and directories under the folder company B
+    list_dir = os.listdir("data")  # this will get all the files and directories under the folder company B
 
     csv_files = filter(lambda item: item.endswith(".csv"),
                        list_dir)  # Making sure that we are just using the correct file format
 
     for current_file in csv_files:
-        df = pd.read_csv(current_file)
+        df = pd.read_csv(f'./data/{current_file}')
         _, year = current_file.split("_")
         year = year.replace(".csv", "")
         df["valid_for_year"] = year
@@ -253,13 +253,13 @@ with connect(
         warehouse="<SNOWFLAKE_WAREHOUSE>",
         region="<SNOWFLAKE_AWS_REGION>"
 ) as connection:
-    list_dir = os.listdir("company A")  # this will get all the files and directories under the folder company B
+    list_dir = os.listdir("data")  # this will get all the files and directories under the folder company B
 
     csv_files = filter(lambda item: item.endswith(".csv"),
                        list_dir)  # Making sure that we are just using the correct file format
 
     for current_file in csv_files:
-        df = pd.read_csv(current_file)
+        df = pd.read_csv(f'./data/{current_file}')
         _, year = current_file.split("_")
         year = year.replace(".csv", "")
         df["valid_for_year"] = year
