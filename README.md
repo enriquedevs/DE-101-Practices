@@ -13,6 +13,12 @@ Data Engineering 101 Practices
 * [Practice Session 5: ETL Architecture and Introduction to Airflow](Practices/session_5_ETL_Airflow/)
 * [Practice Session 6: Ingesting Data from sources and Cloud Introduction](Practices/session_6_Airflow_Cloud/)
 
+## Module 6: ELT and Database Integration Tools
+
+* [Practice Session 16: ELT Environments and Database Integration Tools](Practices/session_16_ELT/)
+* [Practice Session 17: ADF Extract - Load and Simple Transformations](Practices/session_17_ADF_Load)
+* [Practice Session 18: ADF Advanced ELT Pipelines](Practices/session_18_ADF_Transform)
+
 ## Module 7: Data Processing Architectures and Troubleshooting
 
 * [Practice Session 19: Data Processing Architectures – Part 1​](Practices/session_19_Batch/)
