@@ -14,6 +14,18 @@ while this is not a Load technique like the other two, this is a very helpful to
 costs, because you will store your data into an S3 bucket instead of a normal table, and is also
 useful for ELT processes.
 
+## CDC
+
+Change data capture (CDC) is a technique used to capture and record changes made to data in a database. The goal of CDC is to make it possible to keep a replica of the data in a secondary system up-to-date with the changes made in the primary system, in near real-time. CDC is particularly useful in scenarios where data needs to be replicated across systems for analytics, reporting, or backup purposes.
+
+CDC works by monitoring the database for changes, such as inserts, updates, and deletes, and capturing those changes in real-time. The captured changes are then stored in a log, which can be used to apply the same changes to a secondary system. There are different ways to implement CDC, such as using database triggers, log-based replication, or a combination of both.
+
+## Loading Techniques
+
++ **Truncate and reload**: In this method, the entire table is deleted and then reloaded with fresh data. This method is useful when the data is small or the entire table needs to be refreshed. However, it can be time-consuming and can cause data loss if not done carefully.
++ **Incremental/Delta/Upsert**: In this method, only the changes made since the last data load are loaded into the table. This method is useful when the data is large and only a small amount of data has changed since the last load. This can reduce the amount of data that needs to be loaded and can save time. Depending on the specific implementation, this method may be referred to as incremental, delta, or upsert.
++ **Append**: In this method, new data is added to the existing data in the table. This method is useful when the new data needs to be added to the existing data rather than replacing it. This method can be used for cases where the data is constantly being updated and needs to be refreshed regularly.
+
 
 # Practice
 
@@ -54,13 +66,14 @@ import pandas as pd
 
 
 def upload_to_snowflake(connection: SnowflakeConnection, data_frame: pd.DataFrame, table_name):
-    data_frame.drop("id")
+    data_frame = data_frame.drop("id", axis=1)
     
     with connection.cursor() as cursor:
-        column_secrets = ['?'] * len(data_frame.columns)
+        column_secrets = ['%s'] * len(data_frame.columns)
         column_preparated_str = ','.join(column_secrets)
         query = f"INSERT INTO {table_name} VALUES ({column_preparated_str})"
         cursor.executemany(query, data_frame.values.tolist())
+        print('Data Frame inserted!')
 ```
 
 ## Step 3
@@ -91,11 +104,48 @@ and then we can run the python script that uploads the data.
 
 ## Step 5
 
-Use the `generator.py` script (remember to install pandas) to create the whole data for 
-company B (this is done this way so the repository is not bigger than it should) and load it.
+Let's use a generic function to load both company A and company B, it can be the following
 
-Now we need to add the company B data, just adjust the origin of the data to the new files and change
-the company_name to "Company B".
+```
+def insert_company_data(company):
+    list_dir = os.listdir(company) 
+
+    csv_files = filter(lambda item: item.endswith(".csv"),
+                       list_dir)  # Making sure that we are just using the correct file format
+
+
+    for current_file in csv_files:
+        print(current_file)
+        df = pd.read_csv(f'./{company}/{current_file}')
+        _, year = current_file.split("_")
+        year = year.replace(".csv", "")
+        df["valid_for_year"] = year
+        df["company_name"] = company
+        print(df)
+        upload_to_snowflake(connection, df, "products")
+```
+
+## Step 6
+
+Now let's call this function inside the snowflake connect code as
+
+```
+with connect(
+    account="jmb74483",
+    user="enriquegarciaenroute",
+    password="Lalilulelo2121",
+    database="fundamentals_db",
+    warehouse="COMPUTE_WH",
+    region="us-west-2"
+) as connection:
+
+    for company in ['Company A', 'Company B']:
+        insert_company_data(company)
+```
+
+## Step 7
+
+Let's run the code and see both companies are on the products table.
 
 # Conclusion
 

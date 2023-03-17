@@ -9,7 +9,7 @@ Use the generator script to produce the data for your practice.
 In this practice we will focus on producing queries and storing them into views.
 ### Considerations
 
-- Create the needed tables and normalize as you consider.
+- Create the needed fact and dimensions tables as you consider.
 - Every query should be stored in a view.
 - Don't mix Companies in your results.
 - Every query should be stored in a `create_views.sql` in your own branch.
