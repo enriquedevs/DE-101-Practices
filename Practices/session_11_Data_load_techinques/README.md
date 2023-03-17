@@ -102,8 +102,3 @@ the company_name to "Company B".
 We used the Delta load and truncate and reload.
 When we tried to load data for the new table structure, we truncated the table data, and we loaded again everything.
 And then the Delta load by just adding te data for company B without removing company A's data.
-
-## HOMEWORK TIME !!!
-
-Receive help from your teacher and assistants to make all this process to an 
-external table. You can see the [external table configuration.](https://docs.snowflake.com/en/user-guide/data-load-s3-config-storage-integration)
