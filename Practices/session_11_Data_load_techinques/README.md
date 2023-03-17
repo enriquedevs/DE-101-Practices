@@ -14,11 +14,13 @@ while this is not a Load technique like the other two, this is a very helpful to
 costs, because you will store your data into an S3 bucket instead of a normal table, and is also
 useful for ELT processes.
 
-## CDC
+## CDC (Change Data Capture)
 
 Change data capture (CDC) is a technique used to capture and record changes made to data in a database. The goal of CDC is to make it possible to keep a replica of the data in a secondary system up-to-date with the changes made in the primary system, in near real-time. CDC is particularly useful in scenarios where data needs to be replicated across systems for analytics, reporting, or backup purposes.
 
 CDC works by monitoring the database for changes, such as inserts, updates, and deletes, and capturing those changes in real-time. The captured changes are then stored in a log, which can be used to apply the same changes to a secondary system. There are different ways to implement CDC, such as using database triggers, log-based replication, or a combination of both.
+
+![Docker-Python](documentation_images/cdc.png)
 
 ## Loading Techniques
 
