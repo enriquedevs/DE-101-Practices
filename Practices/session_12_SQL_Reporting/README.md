@@ -7,6 +7,7 @@ You will learn about sql querying for data reporting.
 Use the generator script to produce the data for your practice.
 
 In this practice we will focus on producing queries and storing them into views.
+
 ### Considerations
 
 - Create the needed fact and dimensions tables as you consider.

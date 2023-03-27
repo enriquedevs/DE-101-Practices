@@ -1,10 +1,10 @@
 # Session Name
 
-Here we will learn on the power BI usage (or the reporting service of your choice)
+Here we will learn the usage of a BI or visualization tool (such as Tableau or the one of your preference)
 
 # Practice
 
-We will focus on creating reports with power BI in this session.
+We will focus on creating reports on Tableau in this session.
 
 ### Considerations
 
