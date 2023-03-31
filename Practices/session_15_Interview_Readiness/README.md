@@ -87,10 +87,9 @@ When analyzing the time and space complexity of an algorithm, we typically focus
 
 The format very commonly it is asked to do a design from an scenario of a OLTP or OLAP database and then do queries about the design. Here are resources to practice those:
 
-- https://leetcode.com
-- https://www.hackerrank.com
-
+- https://www.hackerrank.com/domains/sql
 
 Also it is asked sometimes a coding challenge on the strongest language to solve a problem, here are resources to practice those
 
-- https://www.hackerrank.com/domains/sql
+- https://leetcode.com
+- https://www.hackerrank.com
