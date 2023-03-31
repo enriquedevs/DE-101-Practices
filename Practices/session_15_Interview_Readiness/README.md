@@ -29,6 +29,7 @@ As a recruiter, the following common areas are evaluated while hiring new Data E
 * Types of data load: Truncate and reload, Incremental/Delta/Upsert, Append
 * Designing end to end ETL
 * Designing end to end ELT
+* Data troubleshooting
 * Algorithm problem solving, common used algorithms are: 
 1. Binary Search
 2. Bubble Sort
