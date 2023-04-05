@@ -32,6 +32,32 @@ You are a data engineer working for a credit rating agency. You need to get Stoc
 
 &nbsp;
 
+## ETL VS ELT
+
+### Advantages of ETL
+
+1. **Flexible transformations**: ETL allows for complex data transformations to be applied during the transformation phase, which can make it easier to clean, normalize, and enrich data before loading it into the destination system.
+2. **Data quality control**: ETL processes often include data quality control checks, which can help ensure that data is accurate, complete, and consistent across different sources.
+3. **Integration with legacy systems**: ETL is well-suited for integrating data from legacy systems that may have different data formats or structures.
+
+### Disadvantages of ETL
+
+1. **Slow processing**: ETL can be slower than ELT because it requires data to be transformed before it is loaded into the destination system.
+2. **Scalability issues**: As the volume of data increases, ETL processes can become more complex and difficult to scale.
+3. **Increased storage requirements**: ETL often requires the creation of intermediate data structures, which can increase storage requirements and result in additional data processing and management costs.
+
+### Advantages of ELT:
+
+1. **Faster processing**: ELT can be faster than ETL because it loads data into the destination system first, and then performs transformations using the processing power of the destination system.
+2. **Scalability**: ELT is well-suited for large-scale data processing and can be easily scaled to accommodate increased data volumes.
+3. **Lower storage requirements**: ELT often requires fewer intermediate data structures, which can reduce storage requirements and save costs.
+
+### Disadvantages of ELT:
+
+1. **Limited data transformations**: ELT does not provide the same level of flexibility for data transformations as ETL, which can make it more difficult to clean, normalize, and enrich data before loading it into the destination system.
+2. **Dependency on destination system**: ELT relies on the processing power and capabilities of the destination system, which can limit flexibility and may require additional investments in hardware and infrastructure.
+3. **Data quality control**: ELT processes may require additional steps to ensure data quality and consistency across different sources.
+
 &nbsp;
 
 ## STEP 1: Set the playground
