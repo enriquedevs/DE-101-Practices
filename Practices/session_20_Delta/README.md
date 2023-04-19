@@ -202,7 +202,7 @@ spark.sql("UPDATE nyc.taxis SET fare_per_distance_unit = fare/distance")
 Now query the table to see the new column.
 
 ```python
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unitF ROM nyc.taxis").show()
+spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
 ```
 
 ### Expressive SQL for Row Level Changes
@@ -222,7 +222,7 @@ spark.sql("DELETE FROM nyc.taxis WHERE fare_per_distance_unit IS NULL")
 ```
 
 ```python
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unitF ROM nyc.taxis").show()
+spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
 ```
 
 Finally, let's count the number of rows in the table.
@@ -280,7 +280,7 @@ spark.sql(f"CALL demo.system.rollback_to_snapshot('nyc.taxis', {original_snapsho
 ```
 
 ```python
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unitF ROM nyc.taxis").show()
+spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
 ```
 
 Another look at the history table shows that the original state of the table has been added as a new entry
