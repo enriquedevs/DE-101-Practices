@@ -187,7 +187,7 @@ def load_data(transformed_data):
     with open("/opt/airflow/dags/output.csv", "w") as csv:
         csv.write(transformed_data)
     print("Data Loaded into CSV File")
-
+    
 t1 = PythonOperator(
     task_id='extract_data',
     python_callable=extract_data,

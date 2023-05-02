@@ -38,87 +38,11 @@ The company provides you a census data on csv file and they requested you to gat
 
 # Let's do it!
 
-
-## Step 1
-
-### Python for Data Engineering
-
-Python is a popular programming language for data engineering due to several reasons:
-
-+ **Easy-to-learn and intuitive syntax**: Python's syntax is straightforward and easy to learn, making it an ideal language for beginners. The code is also easy to read and write, making it more efficient for data engineers to work with complex data pipelines.
-+ **Wide range of libraries and frameworks**: Python has a large and growing collection of open-source libraries and frameworks, specifically designed for data engineering tasks. These libraries include Pandas, Numpy, Scikit-learn, TensorFlow, PyTorch, Apache Spark, and many more.
-+ **Versatility**: Python is a versatile language that can be used for a wide range of tasks, from data processing and analysis to machine learning and data visualization. This versatility makes it an ideal language for data engineers who need to work with a variety of tools and technologies.
-+ **Integration with big data technologies**: Python can be used to integrate with big data technologies like Hadoop, Spark, and Hive. This makes it easy for data engineers to work with large data sets, implement data processing workflows, and create scalable data pipelines.
-+ **Community support**: Python has a large and active community of developers and data scientists who contribute to the development of libraries and frameworks. The community provides extensive support, resources, and documentation, making it easy for data engineers to find solutions to their problems.
-
-![img](documentation_images/python-de.jpg)
-
-### Python Virtual Environment
-**A virtual environment is a self-contained Python environment that allows you to install and run packages separately from your main Python installation. This is especially useful for projects that have different package requirements.**
-
-![img](documentation_images/pyenv.png)
-
-First, we are going to set up a virtual environment in Python, you will need to use the following commands:
-
-```
-python -m venv myenv
-source myenv/bin/activate
-```
-
-* **'python -m venv myenv'** - This command creates a virtual environment with the name "myenv" using the venv module in Python. A virtual environment allows you to isolate the dependencies for your project from the rest of your system, making it easier to manage different versions of libraries for different projects.
-
-* **'source myenv/bin/activate'** - This command activates the virtual environment "myenv". When a virtual environment is activated, any packages you install using pip will be installed in that environment, rather than in your system Python installation. This helps ensure that your project has access to the correct version of libraries, without affecting other projects that may have different requirements.
-
-## Step 2
-
-Now let's install numpy and pandas libraries with following command:
-
-```
-pip install numpy pandas
-```
-
-### Numpy
-**NumPy is a library for the Python programming language that provides support for arrays and matrices. It is a fundamental library for scientific computing with Python, including support for a wide variety of mathematical and statistical operations. The main feature of NumPy is its N-dimensional array object, which allows you to perform operations on arrays of any size and shape, including element-wise operations, matrix multiplication, and basic linear algebra.**
-
-![img](documentation_images/numpy.png)
-
-### Pandas
-**pandas is a library for the Python programming language that provides data structures and functions needed for data analysis and data manipulation. It is particularly well-suited for working with labeled, tabular data in a way that is intuitive and easy to understand. The main data structure in pandas is the DataFrame, which is a two-dimensional table with labeled rows and columns. With pandas, you can perform operations on the data, such as filtering, grouping, aggregating, and transforming, with ease. Additionally, pandas provides built-in support for working with data from a variety of sources, including CSV, Excel, SQL databases, and more.**
-
-![img](documentation_images/dataframe.png)
-
-
 ## Step 3
 ### Numpy Arrays
 First let's create a python script to start using numpy arrays.
 
-To do so, create a python file as **'numpy_example.py'** and add the following content
-
-```
-import numpy as np
-
-# create a single-dimensional NumPy array
-arr1 = np.array([1, 2, 3, 4, 5, 6, 6, 4, 3, 4, 2, 4])
-
-# create a two-dimensional NumPy array
-arr2 = np.array([[5, 2, 3], [4, 5, 5], [8, 9, 1]])
-
-# calculate the average value of arr1
-avg1 = np.mean(arr1)
-print("Average value of arr1:", avg1)
-
-# calculate the minimum value of arr2
-min2 = np.min(arr2)
-print("Minimum value of arr2:", min2)
-
-# calculate the maximum value of arr2
-max2 = np.max(arr2)
-print("Maximum value of arr2:", max2)
-
-# calculate the sum of the values in arr2
-sum2 = np.sum(arr2)
-print("Sum of values in arr2:", sum2)
-```
+To do so, follow to the python file named [numpy_example.py](src/numpy_example.py)
 
 The code creates following numpy arrays:
 * arr1: It's a single dimension array
@@ -148,7 +72,7 @@ Here are some most commons functions on numpy:
 + **np.transpose()**: Transposes a NumPy array.
 + **np.random()**: Generates random numbers or arrays in a NumPy array.
 
-Now let's run this file on the terminal with:
+Now let's run this file on the terminal inside our docker container using:
 ```
 python numpy_example.py
 ```
@@ -158,40 +82,15 @@ python numpy_example.py
 
 Now we will use the CSV data source to read the data from it by using numpy.
 
-Let's create now **'numpy_census.py'** python file with following content:
-
-```
-import numpy as np
-import csv
-
-# Load the CSV file into a NumPy array
-with open('./resources/census_data.csv') as csvfile:
-    data = np.genfromtxt(csvfile, delimiter=',', skip_header=1)
-
-# Extract the hours-per-week and age columns
-hours = data[:, 12] # extracts hours_per_week values on an array
-age = data[:, 0] # extracs age values on an array
-
-# Calculate the average hours-per-week
-avg_hours = np.mean(hours)
-
-# Find the maximum and minimum age
-max_age = np.max(age)
-min_age = np.min(age)
-avg_age = np.mean(age)
-
-# Print the results
-print("Average hours-per-week:", avg_hours)
-print("Maximum age:", max_age)
-print("Minimum age:", min_age)
-print("Average age:", avg_age)
-```
+Let's follow to the python file named [numpy_census.py](src/numpy_census.py)
 
 In this example, we use the NumPy **genfromtxt()** function to load the given CSV file into a NumPy array. We then extract the hours-per-week, and age columns from the array and use various NumPy functions to perform calculations on these columns, such as calculating the average hours-per-week, and finding the maximum, minimum and average age.
 
 As note:
 
-+ In **data[:, 12]**, the colon **:** before the comma specifies that we want to select all rows of the data array. The number **12** after the comma specifies that we want to select the 12th column of the data array. So **data[:, 12]** selects all rows and the 12th column of the data array, which corresponds to the **"hours-per-week"** column in the given CSV file.
++ In **data[:, 12]**, the colon **:** before the comma specifies that we want to select all rows of the data array.  
+The number **12** after the comma specifies that we want to select the 12th column of the data array.  
+So **data[:, 12]** selects all rows and the 12th column of the data array, which corresponds to the **"hours-per-week"** column in the given CSV file.
 
 To run this file, do the following command:
 
@@ -204,36 +103,7 @@ python numpy_census.py
 
 Pandas dataframes are a two-dimensional data structure that allows you to store and manipulate tabular data. It's like a "table" data structure on Python.
 
-Now let's create a **'pandas_example.py'** file with following content:
-
-```
-import pandas as pd
-
-# Create a sample DataFrame
-data = {'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eva'],
-        'Age': [25, 30, 35, 40, 45],
-        'Salary': [50000, 60000, 70000, 80000, 90000],
-        'Experience': [3, 5, 7, 9, 11]}
-
-df = pd.DataFrame(data)
-
-# Calculate the average salary
-avg_salary = df['Salary'].mean()
-
-# Find the maximum and minimum age
-max_age = df['Age'].max()
-min_age = df['Age'].min()
-
-# Use apply() to create a new columns ('Salary plus Experience' and 'Name with Age')
-df['Salary plus Experience'] = df.apply(lambda row: row['Salary'] + row['Experience'], axis=1)
-df['Name with Age'] = df.apply(lambda row: f"{row['Name']} is having {row['Age']} years old", axis=1)
-
-# Print the results
-print("Average salary:", avg_salary)
-print("Maximum age:", max_age)
-print("Minimum age:", min_age)
-print(df)
-```
+Let's follow to the python file named [pandas_example.py](src/pandas_example.py)
 
 In this example, we create a sample DataFrame using a Python dictionary and the Pandas DataFrame() constructor. We then perform some simple operations on the DataFrame, such as calculating the average salary, finding the maximum and minimum age, and using the **apply()** method to create a new column that has the sum of two existing columns.
 
@@ -265,31 +135,7 @@ python pandas_example.py
 ### Reading and Writing Data with Pandas Dataframes
 Now we will use the CSV data source to read the data from it by using pandas dataframes.
 
-Let's create now **'pandas_census.py'** python file with following content:
-
-```
-import pandas as pd
-
-# read the CSV file into a pandas DataFrame
-df = pd.read_csv('resources/census_data.csv')
-
-# calculate the average hours-per-week
-avg_hours = df['hours-per-week'].mean()
-print('Average hours-per-week:', avg_hours)
-
-# calculate the minimum and maximum age
-min_age = df['age'].min()
-max_age = df['age'].max()
-print('Minimum age:', min_age)
-print('Maximum age:', max_age)
-
-# create a new DataFrame with the specified columns
-new_df = df[['age', 'education', 'native-country', 'salary']]
-
-# save the new DataFrame to a CSV file
-new_df.to_csv('census_demographics.csv', index=False)
-print('DataFrame saved to census_demographics.csv')
-```
+Let's follow to the python file named [pandas_census.py](src/pandas_census.py)
 
 In this script, we first read the **census_data.csv** file into a Pandas DataFrame using the **read_csv()** function. We then calculate the average hours-per-week, minimum and maximum age, and most common occupation using various DataFrame functions.
 
