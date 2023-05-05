@@ -139,11 +139,12 @@ For this docker compose environment, the DAGs for Apache Airflow are stored in t
 
 ![img](documentation_images/dag-3.png)
 
-# TODO: make this 
-Now to create a new DAG, create a new Python script named as **'dag.py'** (as note, you can also name the python file with any name to create a dag) in the **./dags** directory. And add the following code to dag.py:
+Follow the [file_dag.py](dags/file_dag.py) so you can know the process that a DAG follows for it to work.
 
-
-The DAG reads data from a JSON file located at /opt/airflow/dags/input.json (that is mapped with your ./dags directory) and writes the transformed data into a CSV file located at /opt/airflow/dags/output.csv (that will be seen on ./dags directory as well).
+The DAG reads the files that are into /opt/airflow/dags/files/input and passes them with a new UUID name
+in the folder /opt/airflow/dags/files/raw but now in parquet type (which is a row-based filesystem).
+Then it's transformed from [...]/raw to [...]/clean with new columns and the required transformations.
+And finally moved from [...]/clean/ to [...]/output/
 
 ## Step 4
 ### Check Your New DAG on Airflow UI

@@ -5,10 +5,11 @@ import pathlib
 import pandas as pd
 
 
-def main(**kwargs):
-    file_name = kwargs.pop("file_name")
-    AIRFLOW_HOME = os.getenv('AIRFLOW_HOME')
+def main(ti, **kwargs):
+    file_names = ti.xcom_pull(task_ids=["step_2_task"])[0]
+    for file_name in file_names:
+        AIRFLOW_HOME = os.getenv('AIRFLOW_HOME')
 
-    directory = pathlib.Path(AIRFLOW_HOME, "dags", "files", "clean", file_name)
-    df = pd.read_parquet(directory)
-    df.to_parquet(pathlib.Path(AIRFLOW_HOME, "dags", "files", "output"))
+        directory = pathlib.Path(AIRFLOW_HOME, "dags", "files", "clean", file_name)
+        df = pd.read_parquet(directory)
+        df.to_parquet(pathlib.Path(AIRFLOW_HOME, "dags", "files", "output", file_name))
