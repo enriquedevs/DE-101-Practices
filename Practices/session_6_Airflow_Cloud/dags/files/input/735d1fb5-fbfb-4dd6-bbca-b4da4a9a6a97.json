@@ -1,0 +1,98 @@
+[
+    {
+        "user_id": 1,
+        "x_coordinate": 20,
+        "y_coordinate": 30,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 2,
+        "x_coordinate": 10,
+        "y_coordinate": 15,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 3,
+        "x_coordinate": 5,
+        "y_coordinate": 25,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 4,
+        "x_coordinate": 40,
+        "y_coordinate": 10,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 5,
+        "x_coordinate": 35,
+        "y_coordinate": 5,
+        "date": "2022-03-04"
+    },
+    {
+        "user_id": 3,
+        "x_coordinate": 50,
+        "y_coordinate": 25,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 2,
+        "x_coordinate": 60,
+        "y_coordinate": 20,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 2,
+        "x_coordinate": 70,
+        "y_coordinate": 30,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 1,
+        "x_coordinate": 80,
+        "y_coordinate": 15,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 4,
+        "x_coordinate": 90,
+        "y_coordinate": 25,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 5,
+        "x_coordinate": 15,
+        "y_coordinate": 40,
+        "date": "2022-03-04"
+    },
+    {
+        "user_id": 2,
+        "x_coordinate": 30,
+        "y_coordinate": 50,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 4,
+        "x_coordinate": 45,
+        "y_coordinate": 60,
+        "date": "2022-03-01"
+    },
+    {
+        "user_id": 3,
+        "x_coordinate": 55,
+        "y_coordinate": 40,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 2,
+        "x_coordinate": 65,
+        "y_coordinate": 50,
+        "date": "2022-03-02"
+    },
+    {
+        "user_id": 4,
+        "x_coordinate": 75,
+        "y_coordinate": 60,
+        "date": "2022-03-02"
+    }
+]

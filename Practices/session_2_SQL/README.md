@@ -5,10 +5,13 @@ In this practice we will manipulate data on a Relational Database within a Docke
 ![img](documentation_images/docker-mysql.png)
 
 ### Prerequisites
-* [Install docker](https://docs.docker.com/engine/install/) 
-* Install a db client (i.e. [DBeaver](https://dbeaver.io/download/)) 
+
+* [Install docker](https://docs.docker.com/engine/install/)
+* Install a db client (i.e. [DBeaver](https://dbeaver.io/download/))
+* Follow the [pre-setup guideline](pre-setup%20README.md)
 
 ### What You Will Learn
+
 - How to use a docker container of a relational database
 - Docker commands
 - Operative System commands and Overview
@@ -19,110 +22,27 @@ In this practice we will manipulate data on a Relational Database within a Docke
 
 # Practice
 
-You're working on a clinic, and the clinic needs a database to have records of the appointments that were made between the patient and the doctor.
+You're working on a clinic, and the clinic needs a database to have records of the appointments that were made between
+the patient and the doctor.
 
-The clinic only provides you a CSV file with the historical data of the appointments and they ask you to create the database from it.
+The clinic only provides you a CSV file with the historical data of the appointments and they ask you to create the
+database from it.
 
 ![img](documentation_images/clinic.jpeg)
 
-
 ### Requirements
+
 - Develop and setup a docker container of a Relational Database by using the provided [CSV](clinic.csv) file's data
 
 # Let's do it!
 
-
-
 ## Step 1
-
-First, we are going to create a docker container with a MySQL image to create a clinic Database
-
-Create within this folder a Dockerfile with the following content:
-
-```
-FROM mysql
-ENV MYSQL_ROOT_PASSWORD=mypassword
-ENV MYSQL_DATABASE=mydatabase
-ENV MYSQL_USER=myuser
-ENV MYSQL_PASSWORD=mypassword
-EXPOSE 3306
-```
-
-### Dockerfile
-**A Dockerfile is a script that contains instructions for building a Docker image. A Dockerfile is used to create an image, which can then be used to create new containers. A Dockerfile typically includes instructions for setting environment variables, copying files, and running commands.**
-
-![img](documentation_images/dockerfile.png)
-
-Now build a docker image with the following command:
-
-```
-docker build -t clinic .
-```
-
-This command builds a docker image with name as **´clinic´** by using the **´-t´** flag.
-
-Now you can see the images on your docker with following command:
-
-```
-docker images
-```
-
-### Docker Image
-**A Docker image is a pre-built package that contains all the necessary files and dependencies to run an application or service. You can think of an image as a snapshot of an application or service that can be used to create new containers.**
-
-![img](documentation_images/docker-image-docker-container.jpg)
-
-You can find and download images from the [Docker Hub](https://hub.docker.com/search), which is a public registry of Docker images. You can also create your own images by writing a Dockerfile, which is a script that contains instructions for building an image.
-
-Now let's create a container with the following command:
-
-```
-docker run --rm -d -p 6603:3306 --name clinic-container clinic
-```
-
-This command will create a docker container named as **´clinic-container´** from **´clinic´** image.
-* The **´-d´** option runs the container in detached mode, which allows it to run in the background.
-* The **-p** flag helps to publish Publish container's port(s) to the host, in this case `<host-port>:<container-port>`
-* The **--rm** flag instructs Docker to also remove the anonymous volumes associated with the container if the container is removed
-
-### Docker Container
-**A Docker container is a running instance of a Docker image. When you start a container, Docker creates a new, isolated environment for the application or service to run in. Containers are lightweight and efficient, and you can run multiple containers on the same host.**
-
-![img](documentation_images/docker-registry.png)
-
-### Docker commands
-
-List of common docker commands:
-* **docker run** : Runs a new container from an image
-* **docker ps** : Lists all running containers
-* **docker stop** : Stops a running container
-* **docker start** : Starts a stopped container
-* **docker logs** : Shows the log output of a container
-* **docker build** : Builds an image from a Dockerfile
-* **docker push**: Upload an image to a registry
-* **docker pull** : Pulls an image or a repository from the registry
-* **docker rm** : Remove one or more containers
-* **docker image rm**: Remove one or more images
-* **docker commit**: Create a new image based on changes made to a running container
-
-![img](documentation_images/docker-image.png)
-
-### Docker VS Virtual Machine
-
-Docker containers are lightweight, portable, and self-sufficient environments that allow you to run applications in isolation from the host system. Containers are built on top of the host operating system and share the host's kernel. They are lightweight because they don't include an operating system, but instead rely on the host's kernel to provide the necessary services.
-
-Virtual machines (VMs) are software-based systems that mimic the hardware of a physical computer. They run on top of a hypervisor, which is a software layer that sits between the VM and the host operating system. VMs are typically used to run multiple operating systems on the same host, each in its own isolated environment.
-
-![img](documentation_images/container-vs-virtual-machine.png)
-
-
-## Step 2
 
 Now let's create a sample **´clinic_db´** within the mysql database.
 
 First, let's connect to the docker container with the following command:
 
-```
+```shell
 docker exec -it clinic-container bash
 ```
 
@@ -130,7 +50,7 @@ This command will connect to **´clinic_container´** on a bash console.
 
 Now within docker container, with following command will connect to mysql instance:
 
-```
+```shell
 mysql -u root -p
 ```
 
@@ -138,18 +58,18 @@ This command will ask you for a password and type: **mypassword**
 
 Now let's create **´clinic_db´** on mysql with the following command:
 
-```
+```sql
 create database clinic_db;
 ```
 
 This command will create the database **´clinic_db´**
 
-
-## Step 3
+## Step 2
 
 Following up, let's connect to the database by using a Database client, on this case with DBeaver.
 
-First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on the upper left of the IDE:
+First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on
+the upper left of the IDE:
 
 ![img](documentation_images/dbeaver-1.png)
 
@@ -158,6 +78,7 @@ Then a pop up window will open and here selects **´MySQL´** option and click o
 ![img](documentation_images/dbeaver-2.png)
 
 Then on connection parameters use the following:
+
 + Server Host: **localhost**
 + Port: **6603**
 + Database: **clinic_db**
@@ -174,8 +95,7 @@ Now click on Test connection and should appear as **´Connected´**
 
 ![img](documentation_images/dbeaver-5.png)
 
-
-## Step 4
+## Step 3
 
 Now let's check the CSV file data and create an initial definition of the database
 
@@ -193,13 +113,20 @@ Abigail,Jones,987 Cedar St,2022-01-06,3:00 PM,Daniel,Miller,Orthopedics
 
 On this case there are the following columns:
 
-patient_name | patient_last_name | patient_address | appointment_date | appointment_time | doctor_name | doctor_last_name | doctor_clinical_specialization
---- |-------------------| --- | --- |--- |--- |--- |--- 
-String | String            | String | Date | Time | String | String | String 
+| Column Name                    | Data Type |
+|--------------------------------|-----------|
+| patient_name                   | String    |
+| patient_last_name              | String    |  
+| patient_address                | String    |
+| appointment_date               | Date      | 
+| appointment_time               | Time      | 
+| doctor_name                    | String    | 
+| doctor_last_name               | String    | 
+| doctor_clinical_specialization | String    |
 
 Now let's create a database table definition for this data:
 
-```
+```sql
 create table clinic_raw (
     patient_name varchar(100),
     patient_last_name varchar(100),
@@ -211,17 +138,18 @@ create table clinic_raw (
     doctor_clinical_specialization varchar(100)
 );
 ```
+
 To execute it on database, you can open dbeaver and execute it on a SQL Script tab:
 
 ![img](documentation_images/dbeaver-6.png)
 
-## Step 5
+## Step 4
 
 Now let's load CSV data into the raw table.
 
 First copy csv file from local to the container with the following command:
 
-```
+```shell
 docker cp clinic.csv clinic-container:/tmp/clinic.csv
 ```
 
@@ -229,28 +157,30 @@ This command will copy local host **´clinic.csv´** file to clinic-container's 
 
 Now let's connect to clinic_db with the command:
 
-```
+```shell
 docker exec -it clinic-container mysql --local-infile=1 -u root -p
 ```
 
 This command will connect to mysql db from the docker's **´clinic-container´** that we ran before.
+
 * The mysql command option **´--local-infile=1´** will allow to import local files while executing SQL statements
 
-Once on mysql prompt, let's set a global variable that will allow us to use local files from SQL statements by using the following command:
+Once on mysql prompt, let's set a global variable that will allow us to use local files from SQL statements by using the
+following command:
 
-```
+```sql
 SET GLOBAL local_infile=1;
 ```
 
 Then switch to **´clinic_db´** with the following command:
 
-```
+```sql
 USE clinic_db;
 ```
 
 Once there, we can import CSV data to **´clinic_raw´** table with the following command:
 
-```
+```sql
 LOAD DATA LOCAL INFILE "/tmp/clinic.csv"
 INTO TABLE clinic_raw
 COLUMNS TERMINATED BY ','
@@ -261,14 +191,18 @@ IGNORE 1 LINES;
 ```
 
 This command did the following:
-* **LOAD DATA LOCAL INFILE**: This specifies that the data to be loaded is in a file, and it should be loaded locally from the client machine, rather than from the server.
+
+* **LOAD DATA LOCAL INFILE**: This specifies that the data to be loaded is in a file, and it should be loaded locally
+  from the client machine, rather than from the server.
 * **"/tmp/clinic.csv"**: This specifies the path to the CSV file that contains the data to be loaded.
 * **INTO TABLE clinic_raw**: This specifies the name of the table in the database where the data should be loaded.
 * **COLUMNS TERMINATED BY ','**: This specifies that the fields in the CSV file are separated by commas.
 * **OPTIONALLY ENCLOSED BY '"'**: This specifies that each field in the CSV file may be enclosed in double quotes.
-* **ESCAPED BY '"'**: This specifies that a double quote character within a field can be escaped by a double quote character.
+* **ESCAPED BY '"'**: This specifies that a double quote character within a field can be escaped by a double quote
+  character.
 * **LINES TERMINATED BY '\n'**: This specifies that each line in the CSV file is terminated by a newline character.
-* **IGNORE 1 LINES**: This specifies that the first line of the CSV file should be ignored, as it typically contains headers or column names and is not part of the actual data to be loaded.
+* **IGNORE 1 LINES**: This specifies that the first line of the CSV file should be ignored, as it typically contains
+  headers or column names and is not part of the actual data to be loaded.
 
 Now let's verify all csv data is present by using the following SQL statements:
 
@@ -280,15 +214,92 @@ And following data will show:
 
 ![img](documentation_images/clinic-raw-table.png)
 
+## Step 5
+Normalization is a process of organizing data in a database to minimize redundancy and eliminate data anomalies. The process involves applying a set of rules called normal forms. The higher the normal form, the less redundancy and fewer anomalies the database has.
+
+Here are the steps to normalize the clinic_raw table from the first normal form (1NF) to the third normal form (3NF):
+
+### 1NF (Unnormalized Form)
+- The clinic_raw table is in the unnormalized form (UNF) or 1NF because it contains repeating groups and multiple values in some of its columns.
+
+### 2NF (First Normal Form)
+- To convert the clinic_raw table to 2NF, we need to identify the functional dependencies between the columns.
+
+- The patient name, last name, and address together uniquely identify a patient, so we can extract them into a separate table.
+
+- The doctor name, last name, and clinical specialization together uniquely identify a doctor, so we can extract them into a separate table.
+
+- The appointment date, time, patient name, last name, address, doctor name, last name, and clinical specialization together uniquely identify an appointment, so we can extract them into a separate table.
+
+- After applying these steps, we will have three tables: Patient, Doctor, and Appointment.
+
+### 3NF (Second Normal Form)
+- To convert the clinic_raw table to 3NF, we need to identify and remove transitive dependencies between the columns.
+
+- In the Appointment table, doctor_name, doctor_last_name, and doctor_clinical_specialization are all dependent on the doctor_id column. We can create a new Doctor table to remove this transitive dependency.
+
+- Similarly, in the Appointment table, patient_name, patient_last_name, and patient_address are all dependent on the patient_id column. We can create a new Patient table to remove this transitive dependency.
+
+### Let's write 
+
+We need to create the data DDLs for our tables now that we know which are the problems with the clinic_raw.
+
+So let's create the query for the Patient table. 
+
+```sql
+CREATE TABLE Patient
+(
+    patient_id        INT PRIMARY KEY,
+    patient_name      VARCHAR(100),
+    patient_last_name VARCHAR(100),
+    patient_address   VARCHAR(200)
+);
+
+```
+
+Now the Doctor table.
+
+```sql
+CREATE TABLE Doctor
+(
+    doctor_id                      INT PRIMARY KEY,
+    doctor_name                    VARCHAR(100),
+    doctor_last_name               VARCHAR(100),
+    doctor_clinical_specialization VARCHAR(100)
+);
+
+```
+
+And finally our main table "Appointment".
+
+```sql
+CREATE TABLE Appointment
+(
+    appointment_id   INT PRIMARY KEY,
+    appointment_date DATE,
+    appointment_time TIME,
+    patient_id       INT,
+    doctor_id        INT,
+    FOREIGN KEY (patient_id) REFERENCES Patient (patient_id),
+    FOREIGN KEY (doctor_id) REFERENCES Doctor (doctor_id)
+);
+```
+
 ## HOMEWORK TIME !!!
 
-For Homework, let's do the following:
+Now that we have all of our new tables, we need to fill them. 
+Make a script using sql to load your data from clinic_raw to the new tables
 
-**Normalize the clinic-raw table until Third Normal Form (3NF) and write the DDL statements of the new database structure (CREATE TABLE Statements)**
+We still have functional problems in this table, can you identify them?
 
+just make a list of the possible problems that we would have with this structure.
 
 # Conclusion
 
-Docker is a powerful tool that makes it easy to run and manage databases like MySQL. By following this practice, you should now have a solid understanding of how to use Docker to run and manage a MySQL container. Remember that Docker is just one of many tools you can use to manage your databases, and that you should always choose the right tool for the job.
+Docker is a powerful tool that makes it easy to run and manage databases like MySQL. By following this practice, you
+should now have a solid understanding of how to use Docker to run and manage a MySQL container. Remember that Docker is
+just one of many tools you can use to manage your databases, and that you should always choose the right tool for the
+job.
 
-I hope this guide was helpful in your understanding of using Docker with MySQL. You are now equipped with the knowledge to deploy and manage your MySQL databases using Docker. Happy coding!
+I hope this guide was helpful in your understanding of using Docker with MySQL. You are now equipped with the knowledge
+to deploy and manage your MySQL databases using Docker. Happy coding!
