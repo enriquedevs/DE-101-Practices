@@ -89,13 +89,13 @@ YARN mode (short for Yet Another Resource Negotiator) is a more advanced mode of
 
 Now, first start the containers that will create a Yarn's Hadoop Environment on containers:
 
-```
+```shell
 docker-compose up -d
 ```
 
 Now, to have a look at your current running Docker containers, use the command to list all active containers:
 
-```
+```shell
 docker-compose ps
 ```
 
@@ -111,7 +111,7 @@ The docker-compoe file configured a Yarn's Hadoop Environment on containers. Her
 
 Now let's copy necessary Java Word Count file and Input Twitter files.
 
-```
+```shell
 # Copy the Word Count with the Map Reduce instructions to the container
 docker cp submit/WordCount.java hadoop_namenode:/tmp
 
@@ -122,13 +122,13 @@ docker cp submit/tweet.txt hadoop_namenode:/tmp
 ## 3. Interact with the namenode
 
 Enter inside namenode and open bash:
-```
+```shell
 docker-compose exec namenode bash
 ```
 
 Once you enter the name node in an interactive terminal, use
 the following HDFS commands to interact with the namenode:
-```
+```shell
 # Move to /tmp directory
 cd /tmp
 
@@ -147,7 +147,7 @@ hdfs dfs -cat /user/root/input/tweet.txt
 
 ## 4. Run Hadoop Map Reduce Jobs
 Now you can build and run your map-reduce job using the following commands:
-```
+```shell
 # Making necessary environment variables setup
 export PATH=${JAVA_HOME}/bin:${PATH}
 export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
@@ -169,15 +169,12 @@ hadoop jar wc.jar WordCount /user/root/input /user/root/output
 ## 5. Check Your Output
 
 Once the job is executed successfully, you can check your output using the cat command in HDFS:
-```
+```shell
 # Check the content of the output file after running the job
 hdfs dfs -cat output/*
 ```
 
-You can access the HDFS namenode’s UI dashboard on your localhost at port 9870. Use the following link:
-```
-http://localhost:9870
-```
+You can access the HDFS namenode’s UI dashboard on your localhost at port 9870. Use [this link](http://localhost:9870)
 
 ![img](documentation_images/hadoop_ui.png)
 
@@ -187,16 +184,16 @@ http://localhost:9870
 ## Configure Environment Variables
 
 The configuration parameters can be specified in the hadoop.env file or as environmental variables for specific services (e.g. namenode, datanode etc.):
-```
+```shell
   CORE_CONF_fs_defaultFS=hdfs://namenode:8020
 ```
 
 CORE_CONF corresponds to core-site.xml. fs_defaultFS=hdfs://namenode:8020 will be transformed into:
-```
+```xml
   <property><name>fs.defaultFS</name><value>hdfs://namenode:8020</value></property>
 ```
 To define dash inside a configuration parameter, use triple underscore, such as YARN_CONF_yarn_log___aggregation___enable=true (yarn-site.xml):
-```
+```xml
   <property><name>yarn.log-aggregation-enable</name><value>true</value></property>
 ```
 

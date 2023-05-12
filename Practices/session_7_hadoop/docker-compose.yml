@@ -2,7 +2,9 @@ version: "3"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    build:
+      context: .
+      dockerfile: namenode/Dockerfile
     container_name: hadoop_namenode
     restart: always
     ports:
@@ -30,6 +32,11 @@ services:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
     container_name: resourcemanager
     restart: always
+    expose:
+      - 8032
+    ports:
+      - "8032:8032"
+      - "8088:8088"
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
     env_file:
