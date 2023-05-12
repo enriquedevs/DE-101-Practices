@@ -22,4 +22,3 @@ def main(ti, **kwargs):
         transformed_df.to_parquet(destination)
 
     return file_names
-

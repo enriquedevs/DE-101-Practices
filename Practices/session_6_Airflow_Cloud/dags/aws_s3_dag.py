@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from airflow import DAG, XComArg
 from airflow.operators.python import PythonOperator
 
-from scripts import get_data, transform_data, load_data
+from scripts import get_data, transform_data
 
 default_args = {
     'owner': 'airflow',
@@ -13,7 +13,7 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-with DAG('file_dag',
+with DAG('aws_s3_dag',
          default_args=default_args,
          schedule_interval=None,
          concurrency=3,
@@ -21,20 +21,21 @@ with DAG('file_dag',
     step_1 = PythonOperator(
         task_id='step_1_task',
         python_callable=get_data.main,
-        provide_context=True
+        op_kwargs=dict(
+            s3_bucket_name='s3-enroute-public-bucket',
+            aws_conn_id='aws_conn'
+        )
     )
 
     step_2 = PythonOperator(
         task_id='step_2_task',
         python_callable=transform_data.main,
-        provide_context=True,
-    )
-
-    step_3 = PythonOperator(
-        task_id='step_3_task',
-        python_callable=load_data.main,
-        provide_context=True,
+        op_kwargs=dict(
+            execution_time_inp=XComArg(step_1),
+            s3_bucket_name='s3-enroute-public-bucket',
+            aws_conn_id='aws_conn'
+        )
     )
 
     # noinspection PyStatementEffect
-    step_1 >> step_2 >> step_3
+    step_1 >> step_2
