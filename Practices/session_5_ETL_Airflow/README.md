@@ -6,6 +6,8 @@ In this practice we will develop a simple ETL pipeline on Airflow to understand 
 
 ### Prerequisites
 * [Install docker](https://docs.docker.com/engine/install/)
+* [pre-setup](pre-setup%20README.md)
+
 ### What You Will Learn
 - ETL Concepts
 - Airflow Components
@@ -25,7 +27,7 @@ The company is receiving JSON files from the user events, and they want you to t
 
 # Let's do it!
 
-## Step 3
+## Step 1
 
 ### Creating Your First DAG
 DAGs (Directed Acyclic Graphs) are a collection of tasks that define a workflow in Apache Airflow. Each DAG defines a series of tasks and their dependencies, which the scheduler uses to determine the order of execution. 
@@ -43,7 +45,7 @@ in the folder /opt/airflow/dags/files/raw but now in parquet type (which is a ro
 Then it's transformed from [...]/raw to [...]/clean with new columns and the required transformations.
 And finally moved from [...]/clean/ to [...]/output/
 
-## Step 4
+## Step 2
 ### Check Your New DAG on Airflow UI
 
 Now let's go back to Airflow UI and trigger your DAG to run it.

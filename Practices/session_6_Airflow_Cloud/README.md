@@ -7,6 +7,7 @@ In this practice we will develop a simple ETL pipeline on Airflow and start usin
 ### Prerequisites
 
 * [Install docker](https://docs.docker.com/engine/install/)
+* [pre-setup](pre-setup%20README.md)
 
 ### What You Will Learn
 
@@ -32,8 +33,7 @@ to CSV format at S3 because later they want to load it into a Database.
 # Let's do it!
 
 
-
-## Step 2
+## Step 1
 
 Now let's create an S3 Public Bucket on AWS.
 
@@ -48,7 +48,7 @@ Creating a Public S3 Bucket with Public Access:
 Note: Be aware of the security implications of creating a public S3 bucket, as anyone on the internet will be able to
 access the files in the bucket.
 
-## Step 3
+## Step 2
 
 ### Airflow Hooks
 
@@ -60,7 +60,7 @@ Now let's create an AirflowDAG
 
 Follow the [aws_dag.py](dags/aws_dag.py), so you can know the process that a DAG follows for it to work.
 
-## Step 4
+## Step 3
 
 ### Check Your New DAG on Airflow UI
 
