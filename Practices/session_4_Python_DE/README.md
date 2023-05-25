@@ -6,6 +6,7 @@ In this practice we will develop and use a Python script to process data by usin
 
 ### Prerequisites
 * [Install Python on local machine](https://www.python.org/downloads/) 
+* [pre-setup](PRE-SETUP%20README.md)
 
 ### What You Will Learn
 - Process data on a Python Script
