@@ -288,11 +288,9 @@ CREATE TABLE Appointment
 ## HOMEWORK TIME !!!
 
 Now that we have all of our new tables, we need to fill them. 
-Make a script using sql to load your data from clinic_raw to the new tables
+Make a script using sql to load your data from clinic_raw to the new tables.
 
-We still have functional problems in this table, can you identify them?
-
-just make a list of the possible problems that we would have with this structure.
+Submit your SQL script on Canvas' Session 2 - Homework
 
 # Conclusion
 
