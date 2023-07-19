@@ -19,3 +19,4 @@ new_df = df[['age', 'education', 'native-country', 'salary']]
 # save the new DataFrame to a CSV file
 new_df.to_csv('census_demographics.csv', index=False)
 print('DataFrame saved to census_demographics.csv')
+

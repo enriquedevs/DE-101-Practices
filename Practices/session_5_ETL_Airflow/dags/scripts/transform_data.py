@@ -9,7 +9,7 @@ def main(ti, **kwargs):
     AIRFLOW_HOME = os.getenv('AIRFLOW_HOME')
     for file_name in file_names:
         print(file_name)
-        extracted_data = os.path.join(AIRFLOW_HOME, "dags", "files", "raw", file_name)
+        extracted_data = os.path.join(AIRFLOW_HOME, "dags", "files", file_name)
 
         df = pd.read_parquet(extracted_data)
 
@@ -18,7 +18,7 @@ def main(ti, **kwargs):
         df['month'] = df['date'].dt.month
         df['day'] = df['date'].dt.day
         transformed_df: pd.DataFrame = df[['year', 'month', 'day', 'user_id', 'x_coordinate', 'y_coordinate']]
-        destination = pathlib.Path(AIRFLOW_HOME, "dags", "files", "clean", file_name)
+        destination = pathlib.Path(AIRFLOW_HOME, "dags", "files", file_name)
         transformed_df.to_parquet(destination)
 
     return file_names

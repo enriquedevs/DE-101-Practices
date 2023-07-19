@@ -57,6 +57,7 @@ with DAG('aws_dag', default_args=default_args, schedule_interval=timedelta(days=
         }
     )
 
+
 # Set the task dependencies
 # noinspection PyStatementEffect
 json_to_csv_task

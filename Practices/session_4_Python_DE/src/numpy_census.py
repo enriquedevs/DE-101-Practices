@@ -4,6 +4,7 @@ import numpy as np
 with open('./resources/census_data.csv') as csvfile:
     data = np.genfromtxt(csvfile, delimiter=',', skip_header=1)
 
+
 # Extract the hours-per-week and age columns
 hours = data[:, 12]  # extracts hours_per_week values on an array
 age = data[:, 0]  # extracs age values on an array
