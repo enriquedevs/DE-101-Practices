@@ -1,6 +1,6 @@
 # Pre-setup
 
-Try to read this before the Session, so you can start the session the same time as the teacher   
+Try to read this before the Session, so you can start the session the same time as the teacher.
 
 ## Start
 
@@ -8,7 +8,7 @@ First, we are going to create a docker container with a MySQL image to create a 
 
 Create within this folder a Dockerfile with the following content:
 
-```
+```Dockerfile
 FROM mysql
 ENV MYSQL_ROOT_PASSWORD=mypassword
 ENV MYSQL_DATABASE=mydatabase
@@ -27,7 +27,7 @@ environment variables, copying files, and running commands.**
 
 Now build a docker image with the following command:
 
-```
+```sh
 docker build -t clinic .
 ```
 
@@ -35,7 +35,7 @@ This command builds a docker image with name as **´clinic´** by using the **´
 
 Now you can see the images on your docker with following command:
 
-```
+```sh
 docker images
 ```
 
@@ -53,7 +53,7 @@ for building an image.
 
 Now let's create a container with the following command:
 
-```
+```sh
 docker run --rm -d -p 6603:3306 --name clinic-container clinic
 ```
 
