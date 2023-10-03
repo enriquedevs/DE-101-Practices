@@ -232,6 +232,13 @@ Find more information here:
 * [Pre Setup][pre_setup]
 * [Python Install][python]
 
+* [What is Numpy used for in Python][numpy_uses_python]
+* [Numpy: Getting started][numpy_docs]
+* [When not to use Numpy][no_use_numpy]
+
+* [Pandas: Docs][pandas_docs]
+* [Benchmark: Pandas Alternatives][pandas_alt]
+
 [pre_setup]: pre-setup%20README.md
 
 [python]: https://www.python.org/downloads/
