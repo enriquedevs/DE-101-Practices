@@ -14,8 +14,7 @@ In this course we will be using some cloud providers, but for this specific less
 
 AWS is a the cloud provided by Amazon.com, the services it offers can help you build, deploy and manage your infrastructure and their applications.
 
-***AWS Regions**: Whenever you are making usage of AWS you will be using some specific Region resources, which means you decide where your application will be hosted.
-  Each Region is identified by a code name, such as us-east-1 (North Virginia), eu-west-1 (Ireland), and ap-southeast-2 (Sydney).
+***AWS Regions**: Whenever you are making usage of AWS you will be using some specific Region resources, which means you decide where your application will be hosted.Each Region is identified by a code name, such as us-east-1 (North Virginia), eu-west-1 (Ireland), and ap-southeast-2 (Sydney).
 ***AWS Availability Zones**: Inside these regions the load is distributed, the idea is to have an architecture when if one goes down the other availability zones are still up.
 
 ![img](documentation_images/cloud-5.png)

@@ -1,20 +1,15 @@
-# Session Name
+# Reporting Bases
 
-Here we will learn the usage of a BI or visualization tool (such as Tableau or the one of your preference)
+>Reporting Bases: Base (Usually raw) data or datasources used for generating reports in BI and Data Analytics.
 
-# Practice
+In this lesson we will explore a BI or visualization tool (such as Tableau or the one of your preference)
 
-We will focus on creating reports on Tableau in this session.
+## Exercises
 
-### Considerations
+Using the already created views from the last session:
 
-- You won't create any views or load any code for this practice.
-
-### Exercises
-
-Using the already created views from the last module, create
-as many reports as you consider.
-
+* Connect your database with your BI tool
+* Create as many reports as you consider
 
 ## BI Tools
 
@@ -22,11 +17,11 @@ as many reports as you consider.
 
 Some popular BI tools include:
 
-+ **Tableau**: A powerful and user-friendly tool for data visualization and analysis, Tableau allows users to create interactive and shareable dashboards that provide insights into various aspects of the business.
-+ **Microsoft Power BI**: A suite of business analytics tools that helps users create interactive visualizations, reports, and dashboards. Power BI offers seamless integration with other Microsoft products, making it a popular choice for organizations using Microsoft solutions.
-+ **QlikView/Qlik Sense**: Qlik offers two BI products, QlikView and Qlik Sense. Both provide a platform for data discovery, visualization, and analysis, with Qlik Sense focusing on self-service analytics and a modern, responsive interface.
-+ **Looker**: A cloud-based BI platform that provides data exploration, visualization, and reporting capabilities. Looker is known for its ability to integrate with a wide range of data sources and its scalable architecture.
-+ **SAP BusinessObjects**: A comprehensive BI suite that offers tools for reporting, analysis, and data visualization. SAP BusinessObjects caters to a wide range of users, from business analysts to IT professionals, and integrates well with SAP's other enterprise software solutions.
+* **Tableau**: A powerful and user-friendly tool for data visualization and analysis, Tableau allows users to create interactive and shareable dashboards that provide insights into various aspects of the business.
+* **Microsoft Power BI**: A suite of business analytics tools that helps users create interactive visualizations, reports, and dashboards. Power BI offers seamless integration with other Microsoft products, making it a popular choice for organizations using Microsoft solutions.
+* **QlikView/Qlik Sense**: Qlik offers two BI products, QlikView and Qlik Sense. Both provide a platform for data discovery, visualization, and analysis, with Qlik Sense focusing on self-service analytics and a modern, responsive interface.
+* **Looker**: A cloud-based BI platform that provides data exploration, visualization, and reporting capabilities. Looker is known for its ability to integrate with a wide range of data sources and its scalable architecture.
+* **SAP BusinessObjects**: A comprehensive BI suite that offers tools for reporting, analysis, and data visualization. SAP BusinessObjects caters to a wide range of users, from business analysts to IT professionals, and integrates well with SAP's other enterprise software solutions.
 
 ![image](resources%2Fbi-tools-2.png)
 
@@ -56,6 +51,29 @@ Data Science focuses on extracting insights, knowledge, and patterns from data u
 4. **Experimentation and hypothesis testing**: They design experiments and tests to validate hypotheses and evaluate the effectiveness of different strategies or solutions.
 5. **Decision support**: Data scientists communicate their findings to stakeholders and help them make data-driven decisions.
 
-In summary, data engineering focuses on building the data infrastructure and pipelines, ensuring data quality and availability, while data science focuses on analyzing, modeling, and visualizing data to derive insights and support decision-making. Both fields are essential for organizations to leverage data effectively, and they often collaborate closely to achieve the organization's data-driven goals.
+## Conclusion
 
-![image](resources%2FETL-Architecture.jpg)
+*Data engineering* cares about data transformation and quality (ETL, ELT...) and *Data science* uses that processed information to get value out of that information (Reports, BI, Querys...)
+
+Reporting bases are created by Data Engineers, then are used by data scientists
+
+## Still curious
+
+We mention some BI tools today, however the most popular BI are Tableau and Power BI.
+
+*What are the main differences?
+*When will you choose one or the other?
+*Which one is cheaper?
+*Could you give a "no-brain" of a situation where you will pick:
+  *Power BI
+  *Tableu
+
+You can use the following articles to try answer these questions:
+
+*[Tableau vs. Power BI: The Better Choice in 2023?][tableau_vs_powerbi]
+*[Power BI vs Tableau: Which Should You Choose in 2023?][which]
+*[Power BI vs. Tableau: Top 10 Major Differences][differences]
+
+[tableau_vs_powerbi]: https://geekflare.com/tableau-vs-power-bi/
+[which]: https://www.datacamp.com/blog/power-bi-vs-tableau-which-one-should-you-choose
+[differences]: https://intellipaat.com/blog/power-bi-vs-tableau-difference/
