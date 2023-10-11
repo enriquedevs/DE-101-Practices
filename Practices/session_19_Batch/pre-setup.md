@@ -1,7 +1,5 @@
 # Pre-Setup
 
-We will be using the Azure account created in the [lesson 16][prev_lesson]
-
 ## Pre-requisites
 
 - Install Docker
