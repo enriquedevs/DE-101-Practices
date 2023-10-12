@@ -83,7 +83,7 @@ In this practice, you learned how to configure Apache Airflow using Docker Compo
 *Business Process Automation
 *Educational Institutions
 
-***Note**As a general measure, if you can use a CRON like service, airflow can help you to do the same. But be careful, there are additional tools that may suite better your needs depending on what you are planning to use.*
+***Note:** As a general measure, if you can use a CRON like service, airflow can help you to do the same. But be careful, there are additional tools that may suite better your needs depending on what you are planning to use.*
 
 >
 

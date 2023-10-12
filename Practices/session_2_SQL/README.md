@@ -6,7 +6,7 @@ In this practice we will manipulate data on a Relational Database within a Docke
 
 ## Prerequisites
 
-* Follow the [pre-setup guideline][pre_setup]
+* Follow the [pre-setup guideline](pre-setup.md)
 
 ## Before start
 
