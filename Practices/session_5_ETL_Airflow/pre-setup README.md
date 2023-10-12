@@ -3,6 +3,7 @@
 ## Step 1
 
 ### ETL
+
 ETL stands for **Extract, Transform, Load**, and it refers to the process of extracting data from one or more sources, transforming the data into a suitable format, and loading it into a target destination for storage or analysis.
 
 ![img](documentation_images/etl.png)
@@ -57,26 +58,27 @@ Airflow supports multiple executor modes, which determine how tasks are executed
 
 ![img](documentation_images/celery.gif)
 
-
 Now let's get started with the practice!
 
 First, we are going to run the docker-compose.yml that start docker containers that has Airflow Celery Components, to run it execute following command:
-```
+
+```sh
 docker-compose up -d
 ```
 
 ### Understanding the Docker Compose file
+
 The provided Docker Compose file is a YAML file that describes the services required for Apache Airflow to run. The file consists of several services, each of which is defined as a container:
 
-* **Postgres**: A relational database that stores metadata for Apache Airflow (It's the Metastore Database).
-* **Redis**: An in-memory data structure store used for Apache Airflow's Celery Executor.
-* **Airflow Web Server**: The web server for Apache Airflow's web interface.  It can be accessed at **http://localhost:8080**
-* **Airflow Scheduler**: The scheduler for Apache Airflow that runs DAGs and monitors task execution.
-* **Airflow Worker**: The worker that executes tasks assigned by the scheduler.
-* **Airflow Triggerer**: Component that is responsible for triggering the scheduling of DAG runs.
-* **Airflow CLI**: Component that provides an interface for interacting with the Airflow command-line interface (CLI).
-* **Airflow Flower UI**: Component that provides a web-based monitoring tool for Celery workers. It can be accessed at **http://localhost:5555**
-* **Airflow Init**: This Service sets up initial configuration parameters when the containers are started. It also runs database migrations and creates the administrator account.
+***Postgres**: A relational database that stores metadata for Apache Airflow (It's the Metastore Database).
+***Redis**: An in-memory data structure store used for Apache Airflow's Celery Executor.
+***Airflow Web Server**: The web server for Apache Airflow's web interface.  It can be accessed at **<http://localhost:8080>**
+***Airflow Scheduler**: The scheduler for Apache Airflow that runs DAGs and monitors task execution.
+***Airflow Worker**: The worker that executes tasks assigned by the scheduler.
+***Airflow Triggerer**: Component that is responsible for triggering the scheduling of DAG runs.
+***Airflow CLI**: Component that provides an interface for interacting with the Airflow command-line interface (CLI).
+***Airflow Flower UI**: Component that provides a web-based monitoring tool for Celery workers. It can be accessed at **<http://localhost:5555>**
+***Airflow Init**: This Service sets up initial configuration parameters when the containers are started. It also runs database migrations and creates the administrator account.
 
 The version field defines the version of Docker Compose that this file uses. The x-airflow-common section is an anchor that is reused by other services to specify common configurations. The environment section defines the environment variables used by Apache Airflow, such as the database connection string and Celery configurations. The volumes section maps the local directories to directories within the containers, and the user field specifies the user and group that run the container.
 
@@ -88,7 +90,7 @@ Now let's start exploring Airflow Web UI.
 
 Once docker-compose runs all the Airflow Celery component containers, now let's open a web browser and open following URL to access to Airflow Web UI:
 
-http://localhost:8080
+<http://localhost:8080>
 
 Once opened you will see following screen:
 

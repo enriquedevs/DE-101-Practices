@@ -4,19 +4,19 @@ In this practice we will develop a simple ETL pipeline on Airflow and start usin
 
 ![Docker-Python](documentation_images/cloud.png)
 
-### Prerequisites
+## Prerequisites
 
 * [Install docker](https://docs.docker.com/engine/install/)
 * [pre-setup](pre-setup%20README.md)
 
-### What You Will Learn
+## What You Will Learn
 
-- Airflow Components
-- Airflow DAGs
-- Cloud Concepts
-- AWS Introduction
+*Airflow Components
+*Airflow DAGs
+*Cloud Concepts
+*AWS Introduction
 
-# Practice
+## Practice
 
 Suppose you are working on an Ad Company that process data from the users to then know what is the best suitable ad to
 give them when they are navigating on the internet.
@@ -30,12 +30,7 @@ to CSV format at S3 because later they want to load it into a Database.
 
 * Use Airflow to create an ETL pipeline to process JSON file into a CSV file at S3
 
-# Let's do it!
-
-
-## Step 1
-
-Now let's create an S3 Public Bucket on AWS.
+## Step 1 - AWS S3
 
 Creating a Public S3 Bucket with Public Access:
 
@@ -45,53 +40,56 @@ Creating a Public S3 Bucket with Public Access:
 4. After the bucket is created, go to the Permissions tab and select "Bucket Policy".
 5. Enter a policy that grants public read access to the bucket.
 
-Note: Be aware of the security implications of creating a public S3 bucket, as anyone on the internet will be able to
-access the files in the bucket.
+>Note: Be aware of the security implications of creating a public S3 bucket, as anyone on the internet will be able to access the files in the bucket.
 
-## Step 2
-
-### Airflow Hooks
+## Step 2-  Airflow Hooks
 
 An Airflow Hook is an interface to external systems or databases that allows Airflow tasks to interact with those
 systems. Hooks abstract away the details of the system's API or protocol and provide a consistent interface for tasks to
 use.
 
-Now let's create an AirflowDAG
-
 Follow the [aws_dag.py](dags/aws_dag.py), so you can know the process that a DAG follows for it to work.
 
-## Step 3
+## Step 3 - Check Your New DAG on Airflow UI
 
-### Check Your New DAG on Airflow UI
+Go back to Airflow UI and trigger your DAG to run it.
 
-Now let's go back to Airflow UI and trigger your DAG to run it.
-
-To do so, on the Airflow UI, enable your **aws_dag** on the left part by clicking the button, and on the right side
+On the Airflow UI, enable your **aws_dag** on the left part by clicking the button, and on the right side
 click the Play button and select 'Trigger DAG' to run it:
 
 ![img](documentation_images/cloud-9.png)
 
-Now let's review the S3 Bucket and check that output.csv is on the bucket:
+Review the S3 Bucket and check that output.csv is on the bucket:
 
 ![img](documentation_images/cloud-10.png)
 
-## Homework Time!!
+## Homework Time
 
 Now modify **aws_dag.py** code, to have 3 tasks instead of 1 task, the tasks will be the following:
 
-+ **extract_data**: Task that has as a parameters (**s3_bucket_name, s3_key_name, aws_conn_id**) and this task reads
-  from the JSON data file from S3Hook and the output is the **input_json** string
-+ **transform_data**: Task that has as a parameters the **input_json** string, and it transforms the JSON string into
-  CSV string similar as **csv_string** and the output is **csv_string**
-+ **load_data**: Task that has as a parameters (**aws_conn_id, s3_bucket_name, csv_string**) and this task put the CSV
-  file into the bucket, also the CSV file should be named as '**your_name_lastnamame.csv**'
+***extract_data**: Task that has as a parameters (**s3_bucket_name, s3_key_name, aws_conn_id**) and this task reads from the JSON data file from S3Hook and the output is the **input_json** string
+***transform_data**: Task that has as a parameters the **input_json** string, and it transforms the JSON string into CSV string similar as **csv_string** and the output is **csv_string**
+***load_data**: Task that has as a parameters (**aws_conn_id, s3_bucket_name, csv_string**) and this task put the CSV file into the bucket, also the CSV file should be named as '**your_name_lastnamame.csv**'
 
 And the DAG flow should be: **extract_data >> transform_data >> load_data**
 
-# Conclusion
+## Conclusion
 
-In conclusion, using AWS and Airflow together with S3 Hooks can provide a highly scalable and flexible platform for
-automating data workflows in the cloud. With AWS, you have access to a wide range of powerful services and tools, such
-as S3, EC2, and RDS, that can help you store, process, and analyze data. Airflow provides a flexible and easy-to-use
-platform for defining, scheduling, and monitoring workflows, while S3 Hooks allow you to seamlessly integrate S3 with
-your workflows.
+We just explore the powerful capabilities of Apache Airflow and the cloud. We delved into the fundamental components of Airflow, learned about DAGs (Directed Acyclic Graphs), and gained insights into cloud computing concepts with a specific focus on Amazon Web Services (AWS).
+
+Now you have some hands-on experience in combining the power of Apache Airflow and cloud computing to build data processing pipelines.
+
+## Still curious
+
+S3 is behind scenes probably the most used service for everyone, on the backend this storage is used for databases, lambda temporary code, docker registry...
+
+*Article: [S3 architecture][aws_s3]
+*Article [How S3 buckets work][s3_bucket]
+
+## Links
+
+*[S3 architecture][aws_s3]
+*[How S3 buckets work][s3_bucket]
+
+[aws_s3]: https://saturncloud.io/blog/what-is-amazon-s3-architecture-and-how-it-works/
+[s3_bucket]: https://www.whatsupgold.com/blog/understanding-how-aws-s3-buckets-work
