@@ -545,7 +545,7 @@ Want to learn more: [SQL Naming Conventions][sql_conventions]
 
 ### Used during this session
 
-* [Pre Setup][pre_setup]
+* [Pre-Setup][pre-setup]
 * [Clinic CSV][csv]
 * [SQL Naming Conventions][sql_conventions]
 
@@ -564,8 +564,8 @@ Want to learn more: [SQL Naming Conventions][sql_conventions]
 * Article: [Operative Systems Overview][os_overview]
 * Video Playlist: [1NF to 5NF][normal_forms]
 
-[pre-setup]: pre-setup.md
-[csv]: clinic.csv
+[pre-setup]: ./pre-setup.md
+[csv]: ./practice_files/clinic.csv
 [sql_conventions]: https://www.sqlshack.com/learn-sql-naming-conventions/
 
 [session_1]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EXc9as6OIdRJj0e64wrPAzMBRjwis40WzWOdaVL9o7ohCQ?e=zYChbp
