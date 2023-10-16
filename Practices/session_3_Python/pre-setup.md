@@ -1,6 +1,8 @@
 # Pre-setup
 
-## Step 1 - Docker compose
+## Steps
+
+### Step 1 - Docker compose
 
 ![img](img/docker-compose.png)
 
@@ -57,7 +59,7 @@
 
 >Overall, this file creates two services, postgres_db and python_app. postgres_db service runs postgres:11.1 image and python_app service runs an image built from a Dockerfile in the current directory. These services are connected to the same network and python_app is dependent on postgres_db service.
 
-## Step 2 - Dockerfile
+### Step 2 - Dockerfile
 
 * Create a Dockerfile for `python_app`
 
@@ -87,7 +89,7 @@
   * `RUN` is used to execute commands in the container. In this case, pip install is run to install the dependencies listed in requirements.txt
   * `CMD` is used to specify the command that should be run when the container starts. In this case, the tail command is used to display the last lines of a file and the -f option is used to keep the command running and display new lines as they are added to the file. By using tail -f /dev/null you are not looking at any file but it keeps running
 
-## Step 3 - Requirements file
+### Step 3 - Requirements file
 
 * Create a file named `requirements.txt` with following content:
 
@@ -97,7 +99,7 @@
 
   > psycopg2 is a PostgreSQL library for Python. It is used to connect to, query and manage a PostgreSQL database from a Python script.
 
-## Step 4 - Start the composer
+### Step 4 - Start the composer
 
 * Run the containers
 
@@ -107,7 +109,7 @@
 
   >This command will pull the required images, create the containers, and start them in detached mode.
 
-## Step 5 - Verify containers state
+### Step 5 - Verify containers state
 
 * Check the running containers
 

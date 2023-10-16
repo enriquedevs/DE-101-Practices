@@ -96,14 +96,16 @@
 * Each pre-setup must contain the following sections
   * `# Pre-setup`
   * `## Prerequisites` (Optional) \
-  List of requirements with their links to install...
+    List of requirements with their links to install...
+  * `## Steps` \
+    This section is just a wrapper for all the steps
   * `### Step <Number> - <Step name>`
-  * `## Links`
-  This section will contain all links used during the document \
-  Ex.
-  * During the document `...check this [article][article_link] for more information..`
-  * Links section:
-    * `* [More information article][article_link]`
-    * `[article_link]: https://articlesite.com`
+  * `## Links` \
+    This section will contain all links used during the document \
+    Ex.
+    * During the document `...check this [article][article_link] for more information..`
+    * Links section:
+      * `* [More information article][article_link]`
+      * `[article_link]: https://articlesite.com`
 
 >Pre-setup will not contain theory information, it may contain some brief explaining parameter commands or similar quick reference items, but any relevant concept must be explained in the same folder `README.md` in the section `## Before Start`
