@@ -83,7 +83,7 @@ The clinic only provides you a CSV file with the historical data of the appointm
 
 ### Requirements
 
-Using the docker container setup from the [pre-setup][pre_setup]:
+Using the docker container setup from the [pre-setup][pre-setup]:
 
 * Create `clinic_db` schema within your database
 * Load the [clinic csv](clinic.csv) into a table named `clinic_raw`
