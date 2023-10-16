@@ -98,8 +98,8 @@ If you are a maintainer of this repo, follow the guideline in this [document][ma
 [session_9]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EWBljNu40UZPvjBUPZmlhlwB_osRpH6GZCGOXn0p62vpJw?e=OSPTCp
 [session_10]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/ERjDTOF4o4VAsoWaL8P7GcQBk3pXjZ8zA3A71-4ZNHfOyQ?e=hJXg2c
 
-[practice_2]: ./Practices/session_2_SQL/README.md
-[practice_3]: ./Practices/session_3_Python/README.md
+[practice_2]: ./Practices/session_2_sql/README.md
+[practice_3]: ./Practices/session_3_python/README.md
 [practice_4]: ./Practices/session_4_Python_DE/README.md
 [practice_5]: ./Practices/session_5_ETL_Airflow/README.md
 [practice_6]: ./Practices/session_6_Airflow_Cloud/README.md

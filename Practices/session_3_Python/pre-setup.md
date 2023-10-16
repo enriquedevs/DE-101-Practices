@@ -2,7 +2,7 @@
 
 ## Steps
 
-### Step 1 - Docker compose
+### Step 1 - Docker Compose
 
 ![img](img/docker-compose.png)
 
