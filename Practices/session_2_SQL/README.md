@@ -209,7 +209,7 @@ If this triggers an error, your script was not executed, if the result is `Selec
 
   ```sh
   # Open a new terminal for this
-  docker cp clinic.csv clinic-container:/tmp/clinic.csv
+  docker cp practice_files/clinic.csv clinic-container:/tmp/clinic.csv
   ```
 
 * Connect to clinic_db
