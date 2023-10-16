@@ -1,4 +1,4 @@
-# SQL Overview and Relational DBs on Containers Practice
+# SQL Overview and Relational DB's on Containers
 
 In this practice we will manipulate data on a Relational Database within a Docker container
 
@@ -6,7 +6,7 @@ In this practice we will manipulate data on a Relational Database within a Docke
 
 ## Prerequisites
 
-* Follow the [pre-setup guideline](pre-setup.md)
+* Follow the [pre-setup guideline][pre-setup]
 
 ## Before start
 
@@ -83,7 +83,7 @@ The clinic only provides you a CSV file with the historical data of the appointm
 
 ### Requirements
 
-Using the docker container setup from the [pre-setup][pre_setup]:
+Using the docker container setup from the [pre-setup][pre-setup]:
 
 * Create `clinic_db` schema within your database
 * Load the [clinic csv](clinic.csv) into a table named `clinic_raw`
@@ -209,7 +209,7 @@ If this triggers an error, your script was not executed, if the result is `Selec
 
   ```sh
   # Open a new terminal for this
-  docker cp clinic.csv clinic-container:/tmp/clinic.csv
+  docker cp practice_files/clinic.csv clinic-container:/tmp/clinic.csv
   ```
 
 * Connect to clinic_db
@@ -265,6 +265,8 @@ The result should look like this
 ### Step 5 - Normalize
 
 >Normalization: is a process where you apply the 3 Normal Forms (3NF), the 3NF are rules or guidelines used in database design to ensure data integrity and minimize data redundancy within a relational database.
+>
+>*Note: 4NF and 5NF exists, however as a general standard most enterprises use only 3NF, check the link section for 4NF and 5NF.*
 
 Use as reference the Columns we just define:
 
@@ -541,10 +543,38 @@ Want to learn more: [SQL Naming Conventions][sql_conventions]
 
 ## Links
 
-* [Pre Setup][pre_setup]
+### Used during this session
+
+* [Pre-Setup][pre-setup]
 * [Clinic CSV][csv]
 * [SQL Naming Conventions][sql_conventions]
 
-[pre_setup]: pre-setup%20README.md
-[csv]: clinic.csv
+### Enroute Reference
+
+* [1 - Database Types and Relational Databases][session_1]
+* [2 - Docker for DB Development][session_2]
+* [4 - DB Design][session_4]
+* [5 - Normalization][session_5]
+
+### Reinforce Lesson and homework help
+
+* Video: [OLAP vs OLTP][olap_oltp]
+* Doc: [Docker][docker]
+* Doc: [Github with SSH][ssh_gh]
+* Article: [Operative Systems Overview][os_overview]
+* Video Playlist: [1NF to 5NF][normal_forms]
+
+[pre-setup]: ./pre-setup.md
+[csv]: ./practice_files/clinic.csv
 [sql_conventions]: https://www.sqlshack.com/learn-sql-naming-conventions/
+
+[session_1]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EXc9as6OIdRJj0e64wrPAzMBRjwis40WzWOdaVL9o7ohCQ?e=zYChbp
+[session_2]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EeYUIr-pP9ZFgJePZ_2fnccB3RepOHcmY-lypQ6InmrfLA?e=BT3vrq
+[session_4]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EVmiyBEKrsxKuHktIHwoNiQBzmY1iK289BWWUw1OdSSV4g?e=vBdf48
+[session_5]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/Eemvtf9ceWhPjnzhBNHXqyMBSRBs2Sf4Vj4IiOvemmqdzg?e=av5DxK
+
+[olap_oltp]: https://www.youtube.com/watch?v=iw-5kFzIdgY
+[docker]: https://docs.docker.com/get-started/
+[ssh_gh]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+[os_overview]: https://www.tutorialspoint.com/operating_system/index.htm
+[normal_forms]: https://www.youtube.com/playlist?list=PLLGlmW7jT-nTr1ory9o2MgsOmmx2w8FB3

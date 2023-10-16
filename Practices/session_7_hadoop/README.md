@@ -1,4 +1,3 @@
-
 # Hadoop Ecosystem
 
 In this practice we will learn about Hadoop and how is integrated on Data Engineering environment.

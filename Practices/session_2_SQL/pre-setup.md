@@ -9,9 +9,9 @@ On this course we will be using the pre-setup as preparation before the session
 * [DBeaver][dbeaver] \
   **We will not be using the DBeaver during this document, however we will be using it during the session*
 
-## Docker environment
+## Steps
 
-### Creating Dockerfile
+### Step 1 - Dockerfile
 
 * Within this folder create a file named `Dockerfile`
 
@@ -24,7 +24,7 @@ On this course we will be using the pre-setup as preparation before the session
   EXPOSE 3306 
   ```
 
-### Build image
+### Step 2 - Docker Image
 
 * Run the following command
 
@@ -40,7 +40,7 @@ On this course we will be using the pre-setup as preparation before the session
 
   >An image with the name `clinic` should be listed
 
-### Create & run container
+### Step 3 - Container
 
 * Run the following command
 
@@ -54,7 +54,7 @@ On this course we will be using the pre-setup as preparation before the session
   * The `-p` flag helps to publish Publish container's port(s) to the host, in this case `<host-port>:<container-port>`
   * The `--rm` flag instructs Docker to also remove the anonymous volumes associated with the container if the container is removed
 
-### Install VSCode Extension
+### Step 4 (Optional) - Install VSCode Extension
 
 This extension will help you manage docker if you are still new with the command line, eventually you will need to interact with the Docker CLI, but if you running container un your local PC this will do the work easier.
 
