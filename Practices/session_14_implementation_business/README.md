@@ -1,4 +1,4 @@
-# Implementation for business
+# Implementation for Business
 
 ## Practice
 

@@ -1,4 +1,4 @@
-# Practice: Lakehouse architecture with Iceberg and PySpark
+# Lakehouse architecture with Iceberg and PySpark
 
 In this practice you will learn how to use Iceberg and PySpark to create a lakehouse architecture.
 

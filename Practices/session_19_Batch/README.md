@@ -1,4 +1,4 @@
-# Practice: batch data pipeline with Airflow, HDFS, Hive and Spark
+# Batch data pipeline with Airflow, HDFS, Hive and Spark
 
 In this practice you will implement a data pipeline using a batch architecture.
 

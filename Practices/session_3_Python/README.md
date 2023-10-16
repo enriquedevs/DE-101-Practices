@@ -6,8 +6,20 @@ In this practice we will develop and use a Python application running on a docke
 
 ## Prerequisites
 
-* [Install docker][install_docker]
-* Follow the [pre-setup guideline][pre_setup])
+* Follow the [pre-setup guideline][pre-setup]
+
+## Before start
+
+Let's review some concepts we used during the pre-setup:
+
+* Docker Compose \
+  Docker Compose is a tool for defining and running multi-container Docker applications. It allows you to configure your application's services, networks, and volumes in a single docker-compose.yml file, and then start and stop them using a single command.
+
+  >In simple terms, Docker is for managing containers, composer (Docker compose) is to manage multi-container environments
+
+* Docker lifecycle \
+  Below you can see some docker commands and how they interact with each other and with the OS
+  ![img](img/docker-lifecycle.jpeg)
 
 ## What You Will Learn
 
@@ -370,11 +382,28 @@ How do I improve?
 
 ## Links
 
-* [Pre Setup][pre_setup]
-* [Install Docker][install_docker]
-* [documentation][python docs]
+### Used during this session
 
-[pre_setup]: pre-setup%20README.md
+* [Pre-Setup][pre-setup]
+* [Python Documentation][python docs]
 
-[install_docker]: https://docs.docker.com/engine/install/
+### Reinforce Lesson and homework help
+
+* Article: [Python Object Oriented Programming][python_poo]
+* Article: [Python Basics][python_basics]
+* Book: [A Whirlwind Tour of Python][python_tour]
+* Discussion: [Difference between venv, pyvenv, pyenv, virtualenv...][python_env]
+* Article: [Your guide to pyenv][python_pyenv]
+* Discussion: [Why is virtualenv necessary?][python_why_pyenv]
+* Video: [10 Design Patterns Explained in 10 Minutes][design_patterns_video]
+
+[pre-setup]: pre-setup.md
 [python docs]: https://docs.python.org/3/tutorial/index.html
+
+[python_poo]: https://www.programiz.com/python-programming/object-oriented-programming
+[python_basics]: http://ai.berkeley.edu/tutorial.html#PythonBasics
+[python_tour]: https://jakevdp.github.io/WhirlwindTourOfPython/
+[python_env]: https://stackoverflow.com/questions/41573587/what-is-the-difference-between-venv-pyvenv-pyenv-virtualenv-virtualenvwrappe
+[python_pyenv]: https://learnpython.com/blog/change-python-versions/
+[design_patterns_video]: https://www.youtube.com/watch?v=tv-_1er1mWI
+[python_why_pyenv]: https://stackoverflow.com/questions/23948317/why-is-virtualenv-necessary
