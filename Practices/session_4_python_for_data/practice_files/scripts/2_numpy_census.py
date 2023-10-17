@@ -1,12 +1,12 @@
 import numpy as np
 
 # Load the CSV file into a NumPy array
-with open('./resources/census_data.csv') as csvfile:
+with open('../census_data.csv') as csvfile:
     data = np.genfromtxt(csvfile, delimiter=',', skip_header=1)
 
 
 # Extract the hours-per-week and age columns
-hours = data[:, 12]  # extracts hours_per_week values on an array
+hours = data[:, 12]  # extracts hours-per-week values on an array
 age = data[:, 0]  # extracs age values on an array
 
 # Calculate the average hours-per-week
