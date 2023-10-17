@@ -1,7 +1,7 @@
 import pandas as pd
 
 # read the CSV file into a pandas DataFrame
-df = pd.read_csv('resources/census_data.csv')
+df = pd.read_csv('../census_data.csv')
 
 # calculate the average hours-per-week
 avg_hours = df['hours-per-week'].mean()

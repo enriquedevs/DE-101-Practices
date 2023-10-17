@@ -63,10 +63,15 @@
     >All theory content must be placed here or in any of the children subsections
   * `### Requirements` \
     Specific requirements list to achieve the goal described above
+    * Link the pre-setup if any
+    * Credentials + other non installers
+    * All the installers must be in the pre-setup document \
+      Specific setup for the installers can be mentioned here, such as connections test for databases...
   * `### Step <Number> - <Step name>` \
-    Develop the step, avoid developing the step in the step name: \
-    Ex. use: `### Step 1 - Docker` instead of `### Step 1 - Create the dockerfile`
-    >Use as many steps as required
+    Develop the step
+    * Avoid developing the step in the step name: \
+      Ex. use: `### Step 1 - Docker` instead of `### Step 1 - Create the dockerfile`
+      >Use as many steps as required
   * `## Homework` (Optional) \
     Described in a short list
   * `## Conclusion` (Optional) \
@@ -91,6 +96,8 @@
       [sql_conventions]: https://www.sqlshack.com/learn-sql-naming-conventions/
       ```
 
+Template: [Session template][template_readme]
+
 ## pre-setup.md
 
 * Each pre-setup must contain the following sections
@@ -109,3 +116,13 @@
       * `[article_link]: https://articlesite.com`
 
 >Pre-setup will not contain theory information, it may contain some brief explaining parameter commands or similar quick reference items, but any relevant concept must be explained in the same folder `README.md` in the section `## Before Start`
+
+Template: [pre-setup][template_pre]
+
+## Links
+
+* [Session template][template_readme]
+* [Pre-setup template][template_pre]
+
+[template_readme]: ./template-readme.md
+[template_pre]: ./template-pre-setup.md
