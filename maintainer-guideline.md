@@ -49,7 +49,7 @@
 
 ### Subfolders
 
-* Files inside `img` will follow the `kebab-case` naming, they can be `png` or `jpg`
+* Files inside `img` will follow the `kebab-case` naming, they can be `png`, `jpg` or `gif`
 * Files inside `practice_files` may or may not follow the casing rules, this depends on the practice contents and the writers preference, however, ensure the casing is consistent for that folder.
   * It does not need to match other folders style, just be consistent with itself.
 
