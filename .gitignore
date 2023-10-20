@@ -1,21 +1,16 @@
-# IDE files
-.idea
-
-# Virtual Env files and directories
-venv
-myenv
-
-# Logs directory of Airflow
-logs
-
 # MACOS files
 .DS_Store
+
+# Pycache files
+*__pycache__
+
+# sessions py files
+Practices/session_5_etl_and_airflow/practice_files/logs
+Practices/session_5_etl_and_airflow/practice_files/plugins
+Practices/session_5_etl_and_airflow/practice_files/dags/output/*
 
 Practices/session_10_Fundamentals (to be reformed)/homework/data
 Practices/session_10_Fundamentals (to be reformed)/homework/data/*
 Practices/session_11_Data_load_techinques (to be reformed)/generator/data
 Practices/session_11_Data_load_techinques (to be reformed)/generator/data/*
 Practices/session_12_SQL_Reporting/generator/data
-
-# Pycache files
-__pycache__

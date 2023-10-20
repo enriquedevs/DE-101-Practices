@@ -394,6 +394,8 @@ What alternatives exists to Numpy and Pandas? In which scenarios we want to use 
 
 ## Links
 
+### Used during this session
+
 * [Pre Setup][pre-setup]
 
 * [What is Numpy used for in Python][numpy_uses_python]
@@ -403,6 +405,13 @@ What alternatives exists to Numpy and Pandas? In which scenarios we want to use 
 * [Pandas: Docs][pandas_docs]
 * [Benchmark: Pandas Alternatives][pandas_alt]
 
+### Reinforce Lesson and homework help
+
+* [NumPy Tutorial][py_numpy]
+* [NumPy and Pandas Tutorial – Data Analysis with Python][py_numpy_pandas]
+* [Python Pandas Tutorial][py_pandas]
+* [How to get started with scripting in Python][py_scripting]
+
 [pre-setup]: ./pre-setup.md
 
 [numpy_uses_python]: https://www.activestate.com/resources/quick-reads/what-is-numpy-used-for-in-python/
@@ -411,3 +420,8 @@ What alternatives exists to Numpy and Pandas? In which scenarios we want to use 
 
 [pandas_docs]: https://pandas.pydata.org/docs/ç
 [pandas_alt]: https://www.datacamp.com/tutorial/benchmarking-high-performance-pandas-alternatives
+
+[py_numpy_pandas]: https://cloudxlab.com/blog/numpy-pandas-introduction/
+[py_numpy]: https://www.tutorialspoint.com/numpy/index.htm
+[py_pandas]: https://www.tutorialspoint.com/python_pandas/index.htm
+[py_scripting]: https://www.redhat.com/sysadmin/python-scripting-intro
