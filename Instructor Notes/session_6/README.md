@@ -1,4 +1,4 @@
-# Admin notes
+# Instructor Notes
 
 ## Enroute account used objects
 
@@ -10,7 +10,7 @@
 
 ## User Policies
 
-Policy for `student user` (de-101-s3)
+Policy for `student user` (de-101-rw-s3)
 
 ```json
 {
@@ -33,7 +33,7 @@ Policy for `student user` (de-101-s3)
 }
 ```
 
-## Notes
+## Additional Notes
 
 * Empty and Delete bucket after practice
 * Deactivate user
