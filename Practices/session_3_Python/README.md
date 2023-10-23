@@ -2,7 +2,7 @@
 
 In this practice we will develop and use a Python application running on a docker container
 
-![Docker-Python](documentation_images/docker-python.png)
+![Docker-Python](img/docker-python.png)
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ This Zoo only passed you a list of the classification of the animals, and you wi
 
 Once classification is done, store them into a database.
 
-![img](documentation_images/zoo.png)
+![img](img/zoo.png)
 
 ### Requirements
 
@@ -88,7 +88,7 @@ And there you go! You should see HELLO WORLD!! message on the command prompt
 
 Now lets create our first python classes, in this case let's create the following classes:
 
-![img](documentation_images/animal-diagram.png)
+![img](img/animal-diagram.png)
 
 To do so, lets create a directory to have all the classes on it.
 
@@ -226,11 +226,11 @@ Now let's connect to PostgreSQL using DBeaver to create animal table
 
 First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on the upper left of the IDE:
 
-![img](documentation_images/dbeaver-1.png)
+![img](img/dbeaver-1.png)
 
 Then a pop up window will open and here selects **´PostgreSQL´** option and click on **Next**
 
-![img](documentation_images/dbeaver-2.png)
+![img](img/dbeaver-2.png)
 
 Then on connection parameters use the following:
 
@@ -240,15 +240,15 @@ Then on connection parameters use the following:
 * Username: **myuser**
 * Password: **mypassword**
 
-![img](documentation_images/dbeaver-3.png)
+![img](img/dbeaver-3.png)
 
 Now click on Test connection and should appear as **´Connected´**
 
-![img](documentation_images/dbeaver-4.png)
+![img](img/dbeaver-4.png)
 
 Once done, now let's open a sql script by using this connection by clicking **´SQL´** button that is on the upper left part of the menu
 
-![img](documentation_images/dbeaver-5.png)
+![img](img/dbeaver-5.png)
 
 Now, let's create the animal table by writing and executing the following create table on the SQL script editor:
 
@@ -261,7 +261,7 @@ create table animal(
 );
 ```
 
-![img](documentation_images/dbeaver-6.png)
+![img](img/dbeaver-6.png)
 
 ### Step 5
 
@@ -318,7 +318,7 @@ Check Animal table on DB on dbeaver by running following query:
 select * from animal;
 ```
 
-![img](documentation_images/dbeaver-7.png)
+![img](img/dbeaver-7.png)
 
 ## HOMEWORK TIME
 
