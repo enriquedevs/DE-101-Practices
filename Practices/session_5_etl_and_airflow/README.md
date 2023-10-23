@@ -2,7 +2,7 @@
 
 In this practice we will develop a simple ETL pipeline on Airflow to understand each part of the ETL process
 
-![Docker-Python](documentation_images/etl-3.jpg)
+![Docker-Python](img/etl-3.jpg)
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ Let's review some concepts and technologies we used during the pre-setup:
 
 >Once the data is loaded it can be used for reporting, querying...
 
-![img](documentation_images/etl-2.png)
+![img](img/etl-2.png)
 
 >For ETL, there are many platforms, tools and frameworks that can be used to implement an ETL Pipeline, such as: `NiFi`, `Airflow`, `AWS Data Pipeline`, `Azure Data Factory`...
 
@@ -78,7 +78,7 @@ Determine how tasks are executed across a cluster of worker nodes.
   * `Simpler` to setup and maintain
   * Good for `smaller` deployments or testing environments
 
-    ![img](documentation_images/local.png)
+    ![img](img/local.png)
 
 * `Celery Executor`
   * `Distributed` executor
@@ -87,7 +87,7 @@ Determine how tasks are executed across a cluster of worker nodes.
   * `High` scalability and concurrency
   * Recommended for `large` deployments where high concurrency is needed
 
-    ![img](documentation_images/celery.gif)
+    ![img](img/celery.gif)
 
 >These are not the only executor modes, however they are the most common.
 
@@ -115,7 +115,7 @@ Determine how tasks are executed across a cluster of worker nodes.
   Sets up initial configuration parameters when the containers are started.
   * It will go off when all other services are up
 
-  ![img](documentation_images/celery-2.png)
+  ![img](img/celery-2.png)
 
 ## What You Will Learn
 
@@ -129,7 +129,7 @@ Suppose you are working on an Ad Company that process data from the users to the
 
 The company is receiving JSON files from the user events, and they want you to transform them to CSV format because later they want to load it into a Database.
 
-![img](documentation_images/ias.png)
+![img](img/ias.png)
 
 ### Requirements
 
@@ -187,7 +187,7 @@ The DAG on file `1_extract`, does the following
 
 Since all the services: `WebUI`, `Scheduler`, `Executor`, `Task Instance` are polling the metastore and dags folders, all will be updated at the same time of the `Run Status`
 
-![img](documentation_images/dag-3.png)
+![img](img/dag-3.png)
 
 #### Manual run - Parquet DAG
 

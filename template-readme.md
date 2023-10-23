@@ -54,6 +54,10 @@ By following this practice, you should now have a solid understanding of how to 
 
 ## Links
 
+### Used during this session
+
 * [Pre-Setup][pre-setup]
+
+### Session reinforment and homework help
 
 [pre-setup]: ./pre-setup.md

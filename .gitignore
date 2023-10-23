@@ -4,10 +4,10 @@
 # Pycache files
 *__pycache__
 
-# sessions py files
-Practices/session_5_etl_and_airflow/practice_files/logs
-Practices/session_5_etl_and_airflow/practice_files/plugins
-Practices/session_5_etl_and_airflow/practice_files/dags/output/*
+# Sessions practice files
+Practices/*/practice_files/logs
+Practices/*/practice_files/plugins
+Practices/*/practice_files/dags/output/*
 
 Practices/session_10_Fundamentals (to be reformed)/homework/data
 Practices/session_10_Fundamentals (to be reformed)/homework/data/*

@@ -46,6 +46,8 @@
       This contain a pre-setup instructions for the session
     * `practice_files` \
       This folder will contain any additional file required for the practice
+    * `admin notes` \
+      This file will contain some notes for the instructor, such as policies setups...
 
 ### Subfolders
 
