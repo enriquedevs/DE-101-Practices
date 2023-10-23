@@ -124,8 +124,10 @@ For this step we will setup a hook for later use in code
 * Open `Airflow WebUI`
   * Login
 * From the top menu click `Admin`
-* Select `Connections`
-* Clic `+` icon to add a new record
+* Select `Connections` \
+  ![img](img/conn-1.png)
+* Clic `+` icon to add a new record \
+  ![img](img/conn-2.png)
 * Create a new connection with the following parameters
   * `Connection Id`: (`conn_id`) the name of your connection \
     Recommended `aws_conn`
@@ -133,11 +135,14 @@ For this step we will setup a hook for later use in code
   * `AWS Access Key ID`: The value provided by the professor \
     In this example we will use `ABC` for screenshots
   * `AWS Secret Access Key`: The value provided by the professor \
-    In this example we will use `DEF` for screenshots
+    In this example we will use `DEF` for screenshots \
+  ![img](img/conn-3.png)
 * Clic `Test` \
-  A green banner should be displayed
+  A green banner should be displayed \
+  ![img](img/conn-4.png)
 * Clic `Save` \
-  A green banner should be displayed and the new connection will be added to the list
+  A green banner should be displayed and the new connection will be added to the list \
+  ![img](img/conn-5.png)
 
 ### Step 3 - ETL with Hooks
 
