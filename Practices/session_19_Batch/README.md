@@ -317,30 +317,6 @@ To stop the Spark cluster, run the following command:
 
   Article: [Airflow Best Practices][airflow_best_practices]
 
-* What are airflow XComs?
-
-  >XComs (short for “cross-communications”) are a mechanism that let Tasks talk to each other, as by default Tasks are entirely isolated and may be running on entirely different machines.
-
-  The idea behind XCom is that you can reuse some output as part of your next task in the thread.
-
-  But you also need to be careful, this data is serialized and as you imagine, this also consumes memory.
-
-  * How to use it efficiently?
-
-  Imagine you need to process 10 files in a folder
-
-  * For the first task you add the hash id
-  * For the second task you calculate the sum between 2 columns
-  * For the third task you save the file into a cloud
-
-  The common sense is telling me to serialize the dataframe and pass it between tasks, but with this we are serializing data/deserializing using more memory than we need.
-
-  The solution is to output the name of the file instead and save the file at the end of each step.
-
-  This solution not only is more efficient, but also ensures if something goes wrong I can restart from the step that went wrong.
-
-  Article: [Airflow XComs][xcoms]
-
 ## Links
 
 * [HDFS][hdfs]
@@ -358,7 +334,6 @@ To stop the Spark cluster, run the following command:
 * [SlackWebhookOperator][slack_webhook_operator]
 * [Airflow — Writing your own Operators and Hooks][custom_hook_and_operator]
 * [Airflow Best Practices][airflow_best_practices]
-* [Airflow XComs][xcoms]
 
 [hdfs]: https://aws.amazon.com/es/emr/details/hadoop/what-is-hadoop/
 [hive]: https://aws.amazon.com/es/big-data/what-is-hive/
@@ -382,4 +357,3 @@ To stop the Spark cluster, run the following command:
 
 [custom_hook_and_operator]: https://medium.com/b6-engineering/airflow-writing-your-own-operators-and-hooks-93fcfbc7bd
 [airflow_best_practices]: https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html
-[xcoms]: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/xcoms.html
