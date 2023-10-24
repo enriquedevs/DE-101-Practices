@@ -541,6 +541,20 @@ Want to learn more: [SQL Naming Conventions][sql_conventions]
 * Risks of triggers usage
 * Distributed transactions (Transaction layers)
 
+### Is there a situation where Normal Forms are not optimal?
+
+>Yes, some situations requiere we prioritize query performance over data storage.
+
+Let's imagine a 20 billion record table joining to get the name, how many time will it consume? \
+Now if I get some statistics and get 95% of the querys to that table always do that join
+
+Would that make sense to join those 2 tables in disk rather than in query?
+
+It's not always that easy, every situation need to be assesed, here are some resources that might will help you
+
+* [Denormalization: When, Why, and How][denorm_questions]
+* [When to Denormalize a Database Design][denorm_db]
+
 ## Links
 
 ### Used during this session
@@ -567,6 +581,9 @@ Want to learn more: [SQL Naming Conventions][sql_conventions]
 [pre-setup]: ./pre-setup.md
 [csv]: ./practice_files/clinic.csv
 [sql_conventions]: https://www.sqlshack.com/learn-sql-naming-conventions/
+
+[denorm_questions]: https://www.vertabelo.com/blog/denormalization-when-why-and-how/
+[denorm_db]: https://stackoverflow.com/questions/4301089/when-to-denormalize-a-database-design
 
 [session_1]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EXc9as6OIdRJj0e64wrPAzMBRjwis40WzWOdaVL9o7ohCQ?e=zYChbp
 [session_2]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EeYUIr-pP9ZFgJePZ_2fnccB3RepOHcmY-lypQ6InmrfLA?e=BT3vrq

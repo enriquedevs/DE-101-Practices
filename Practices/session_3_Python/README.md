@@ -396,6 +396,7 @@ How do I improve?
 * Article: [Your guide to pyenv][python_pyenv]
 * Discussion: [Why is virtualenv necessary?][python_why_pyenv]
 * Video: [10 Design Patterns Explained in 10 Minutes][design_patterns_video]
+* Article: [Dunder Methods][dunder_methods]
 
 [pre-setup]: pre-setup.md
 [python docs]: https://docs.python.org/3/tutorial/index.html
@@ -407,3 +408,4 @@ How do I improve?
 [python_pyenv]: https://learnpython.com/blog/change-python-versions/
 [design_patterns_video]: https://www.youtube.com/watch?v=tv-_1er1mWI
 [python_why_pyenv]: https://stackoverflow.com/questions/23948317/why-is-virtualenv-necessary
+[dunder_methods]: https://www.codecademy.com/resources/docs/python/dunder-methods

@@ -454,6 +454,10 @@ Sr II:
 * You understand most of the business rules
 * You know the stack in your area and stack on other areas (backend, frontend, networking, cloud, CI/CD...)
 
+## Links
+
+* [HackerRank][hackerrank]
+
 ### More resources
 
 * Check the still curious sections on previous lessons
@@ -468,18 +472,7 @@ Sr II:
 * [Leetcode Python][leetcode_py]
 * [Leetcode study cheatsheet python][python_cheatsheet]
 * [Software philosophies][sw_philosophies]
-
-## Links
-
-* [HackerRank][hackerrank]
-* [Exercism PL/SQL][exercism_sql]
-* [HackerRank SQL][hackerrank_sql]
-* [Leetcode Database][leetcode_sql]
-* [Exercism Python][exercism_py]
-* [HackerRank Python][hackerrank_py]
-* [Leetcode Python][leetcode_py]
-* [Leetcode study cheatsheet python][python_cheatsheet]
-* [Software philosophies][sw_philosophies]
+* [DDL, DQL, DML, DCL and TCL Commands][ddl_dql_and others]
 
 [hackerrank]: https://www.hackerrank.com/
 
@@ -493,3 +486,4 @@ Sr II:
 
 [python_cheatsheet]: https://leetcode.com/discuss/study-guide/2122306/python-cheat-sheet-for-leetcode
 [sw_philosophies]: https://en.wikipedia.org/wiki/List_of_software_development_philosophies
+[ddl_dql_and others]: https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/
