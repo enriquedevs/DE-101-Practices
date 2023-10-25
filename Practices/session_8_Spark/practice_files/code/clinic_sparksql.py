@@ -6,14 +6,14 @@ spark = utils.get_spark_session()
 
 # 1.1 Read CSV file into DataFrame
 # print("Reading from csv file.")
-print("Reading and loading a Temp View from csv file.")
+# print("Reading and loading a Temp View from csv file.")
 spark.read.csv("./clinic_3.csv", header=True, inferSchema=True).createOrReplaceTempView("clinic")
 
 # 2 TRANSFORM
 
 # 2.1 Create dataframes for each table
 # print("Initializing Dataframes.")
-print("Initializing Dataframes with SparkSQL.")
+# print("Initializing Dataframes with SparkSQL.")
 patient_df = spark.sql('select patient_name as name, patient_last_name as last_name, patient_address as address from clinic')
 clinical_specialization_df = spark.sql('select doctor_clinical_specialization as name from clinic')
 doctor_df = spark.sql('select doctor_name as name, doctor_last_name as last_name from clinic')

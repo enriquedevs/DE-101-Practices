@@ -10,9 +10,9 @@ spark = utils.get_spark_session()
 file_rdd = spark.sparkContext.textFile('./clinic_1.csv')
 
 # Info
-print(f'file has {file_rdd.count()} rows')
-print('CSV file content')
-file_rdd.foreach(lambda row: print(row))
+# print(f'file has {file_rdd.count()} rows')
+# print('CSV file content')
+# file_rdd.foreach(lambda row: print(row))
 
 # 2 TRANSFORM
 
@@ -23,15 +23,15 @@ header = file_rdd.first()
 rows_rdd = file_rdd.filter(lambda row: row != header)
 
 # Info
-print('CSV file content without header')
-rows_rdd.foreach(lambda row: print(row))
+# print('CSV file content without header')
+# rows_rdd.foreach(lambda row: print(row))
 
 # 2.3 Obtaining column values of the CSV by splitting by ','
 mapped_rdd = rows_rdd.map(lambda row: row.split(','))
 
 # Info
-print('CSV file content')
-mapped_rdd.foreach(lambda row: print(row))
+# print('CSV file content')
+# mapped_rdd.foreach(lambda row: print(row))
 
 # 2.4 Obtaining individual RDDs for each table
 patient_rdd = mapped_rdd.map(lambda row: [row[0], row[1], row[2]])
@@ -56,9 +56,9 @@ def save_to_postgres(rdd, columns, table_name, spark):
     utils.df_write(df, table_name)
 
 # 3.2 Call function for each table
-print('Saving to postgres...')
+# print('Saving to postgres...')
 save_to_postgres(patient_rdd, ['name', 'last_name', 'address'], 'patient', spark)
 save_to_postgres(clinical_specialization_rdd, ['name'], 'clinical_specialization', spark)
 save_to_postgres(doctor_rdd, ['name', 'last_name'], 'doctor', spark)
 save_to_postgres(appointment_rdd, ['date', 'time'], 'appointment', spark)
-print('Save to postgres completed!')
+# print('Save to postgres completed!')
