@@ -411,6 +411,9 @@ What alternatives exists to Numpy and Pandas? In which scenarios we want to use 
 * [NumPy and Pandas Tutorial – Data Analysis with Python][py_numpy_pandas]
 * [Python Pandas Tutorial][py_pandas]
 * [How to get started with scripting in Python][py_scripting]
+* [Guide to Arrays in Python][guide_arrays]
+* [How slicing in Python works][slicing]
+* [Python: Array Exercises, Practice, Solution][array_exercises]
 
 [pre-setup]: ./pre-setup.md
 
@@ -425,3 +428,6 @@ What alternatives exists to Numpy and Pandas? In which scenarios we want to use 
 [py_numpy]: https://www.tutorialspoint.com/numpy/index.htm
 [py_pandas]: https://www.tutorialspoint.com/python_pandas/index.htm
 [py_scripting]: https://www.redhat.com/sysadmin/python-scripting-intro
+[guide_arrays]: https://stackabuse.com/guide-to-arrays-in-python/
+[slicing]: https://stackoverflow.com/questions/509211/how-slicing-in-python-works
+[array_exercises]: https://www.w3resource.com/python-exercises/array/

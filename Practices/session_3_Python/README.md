@@ -161,17 +161,6 @@ now, to be easily imported, let's do a **init**.py file to import the classes, t
 vi __init__.py
 ```
 
-and add the following imports:
-
-```py
-from .animals import Animal
-from .animals import Mammal
-from .animals import Fish
-from .animals import Bird
-```
-
-These imports will facilitate the access of the classes by referring only the parent directory name, in this case "animals"
-
 ### Step 3
 
 Now let's use the created classes on main.py
@@ -179,7 +168,7 @@ Now let's use the created classes on main.py
 Let's go to our /app directory with:
 
 ```sh
-cd /app
+cd ..
 ```
 
 Now let's edit main.py with following command:
@@ -191,7 +180,7 @@ vi main.py
 And on it, let's use following code:
 
 ```py
-from animals import Animal, Mammal, Fish, Bird
+from animals.animals import Mammal, Fish, Bird
 
 print("let's create a Mammal")
 mammal = Mammal('monkey','banana',2)
@@ -272,7 +261,7 @@ To do so, let's re-edit main.py file with following content:
 ```py
 import psycopg2
 from typing import Type
-from animals import Animal, Mammal, Fish, Bird
+from animals.animals import Mammal, Fish, Bird
 
 # Define the connection parameters
 conn_params = {
