@@ -19,7 +19,7 @@ In this project we will use some Data Engineering libraries (numpy and pandas) t
 * `Community support` \
   Extensive support, resources, and documentation
 
-![img](img/python-de.jpg)
+    ![img](img/python-de.jpg)
 
 ### Pre-setup concepts
 
@@ -57,7 +57,7 @@ Let's review some concepts and technologies we used during the pre-setup:
 
 Examine the contents on csv file then:
 
-#### 1. Numpy array operations
+#### 1 Numpy array operations
 
 Create a script that meet the following criteria named `numpy_example.py`
 
@@ -68,7 +68,7 @@ Create a script that meet the following criteria named `numpy_example.py`
 * Print the maximum value of the second array
 * Print the sum of the values in arr2
 
-#### 2. Numpy with files
+#### 2 Numpy with files
 
 Create a script that meet the following criteria named `numpy_census.py`
 
@@ -79,7 +79,7 @@ Create a script that meet the following criteria named `numpy_census.py`
 * Find the maximum, minimum and average `age`
 * Print the results
 
-#### 3. Pandas Dataframe
+#### 3 Pandas Dataframe
 
 Create a script that meet the following criteria named `pandas_example.py`
 
@@ -109,7 +109,7 @@ Create a script that meet the following criteria named `pandas_example.py`
 
 * Print the results
 
-#### 4. Pandas with files
+#### 4 Pandas with files
 
 Create a script that meet the following criteria named `pandas_census.py`
 
