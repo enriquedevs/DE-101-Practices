@@ -317,10 +317,15 @@ S3 is behind scenes probably the most used service for everyone, on the backend 
 
 * [S3 architecture][aws_s3]
 * [How S3 buckets work][s3_bucket]
+* [Connections & Hooks][connections_n_hooks]
 
 ### Session reinforment and homework help
 
-* [Connections & Hooks][connections_n_hooks]
+* [Data Ingestion with PipelineWise and Airflow][data_ingestion]
+* [Cloud Computing Concepts You Should Know][cloud_concepts]
+* [Get started with GitLab CI/CD][gitlab_cicd]
+* [How to operate Apache Airflow with GitLab CI/CD][airflow_cicd]
+* [Install or update the latest version of the AWS CLI][aws_cli]
 
 [pre-setup]: ./pre-setup.md
 
@@ -328,3 +333,8 @@ S3 is behind scenes probably the most used service for everyone, on the backend 
 [s3_bucket]: https://www.whatsupgold.com/blog/understanding-how-aws-s3-buckets-work
 
 [connections_n_hooks]: https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/connections.html
+[data_ingestion]: https://blog.devgenius.io/data-ingestion-with-pipelinewise-and-airflow-cdc69f72148f
+[cloud_concepts]: https://digitalcloud.training/cloud-computing-concepts-you-should-know/
+[gitlab_cicd]: https://docs.gitlab.com/ee/ci/index.html
+[airflow_cicd]: https://www.nextlytics.com/blog/how-to-operate-apache-airflow-with-gitlab-ci/cd
+[aws_cli]: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
