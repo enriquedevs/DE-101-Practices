@@ -34,6 +34,12 @@
         - app-tier
       command:
         tail -f /dev/null
+      environment:
+        POSTGRE_HOST: postgres_db
+        POSTGRE_PORT: 5432
+        POSTGRE_DB: animaldb
+        POSTGRE_USER: myuser
+        POSTGRE_PASSWORD: mypassword
 
   networks:
     app-tier:
