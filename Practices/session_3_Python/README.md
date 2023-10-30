@@ -33,308 +33,290 @@ Let's review some concepts we used during the pre-setup:
 
 ## Practice
 
-You are working on a Zoo, and the Zoo is asking you to create a software that classifies the animals of the Zoo.
-
-This Zoo only passed you a list of the classification of the animals, and you will write a software that classifies them.
-
-Once classification is done, store them into a database.
+Given a list of the classification of the animals, create a software that classifies the animals of the Zoo.
 
 ![img](img/zoo.png)
 
 ### Requirements
 
-* Develop and setup a docker compose to use python on a container
-* Develop classes for the following animal classification:
-  * **Mammal:** lions, elephants, monkeys, bears, giraffes
-  * **Bird:** parrots, eagles, flamingos, penguins, owls
-  * **Fish:** sharks, rays, piranhas, clownfish, salmon
+Using the infrastructure from setup from the [pre-setup][pre-setup]:
+
+* On the python container, develop classes for the following animal classification:
+  * `Mammal:` lions, elephants, monkeys, bears, giraffes
+  * `Bird:` parrots, eagles, flamingos, penguins, owls
+  * `Fish:` sharks, rays, piranhas, clownfish, salmon
 * Use Python's data to deposit on a PostgreSQL Database
 
-### Step 1
+### Step 0 - Python test
 
-Now let's create an initial python script to run a "hello world" program.
+Create a hello world program
 
-First let's connect to python_app service container:
+* Open shell inside the Python container
 
-```sh
-docker-compose exec python_app bash
-```
+    ```sh
+    docker-compose exec python_app bash
+    ```
 
-This command will start a bash session on the container of the python_app service.
+* Use vi to create main.py
+  * Start `vi`
 
-Now let's create a hello world python application.
+    ```sh
+    vi main.py
+    ```
 
-To do so, first, let's do following command to edit a python file:
+  * Copy & paste content
 
-```sh
-vi main.py
-```
+    ```py
+    print('HELLO WORLD!!')
+    ```
 
-Within **vi**, let's add following code:
+  * Use `:wq` to exit vi saving the file
 
-```sh
-print('HELLO WORLD!!')
-```
+* Run `main.py` program
 
-Now let's exit from **vi** and run following command with:
+    ```sh
+    python main.py
+    ```
 
-```sh
-python main.py
-```
+And there you go! You should see `HELLO WORLD!!` message on the command prompt
 
-And there you go! You should see HELLO WORLD!! message on the command prompt
+### Step 1 - Classes
 
-### Step 2
+* In order to store the data in python let's create some classes:
 
-Now lets create our first python classes, in this case let's create the following classes:
+  ![img](img/animal-diagram.png)
 
-![img](img/animal-diagram.png)
+* Create `zoo` folder and navigate to it
 
-To do so, lets create a directory to have all the classes on it.
+  ```sh
+  mkdir zoo
+  cd zoo
+  ```
 
-First create a directory called 'animals' and move to it:
+* Create animal to store the classes
 
-```sh
-mkdir animals
-cd animals
-```
+  ```sh
+  vi animal.py
+  ```
 
-Once on animals directory let's create and edit animal.py classes
+* Add content to the file
 
-```sh
-vi animals.py
-```
+  ```py
+  from typing import Type
 
-On it let's add the following classes definitions:
-
-```py
-from typing import Type
-
-class Animal:
+  class Animal:
     def __init__(self, name: str, most_liked_food: str) -> None:
-        self.name = name
-        self.most_liked_food = most_liked_food
+      self.name = name
+      self.most_liked_food = most_liked_food
 
     def __str__(self) -> str:
-        return f'{self.name} likes {self.most_liked_food}'
+      return f'{self.name} likes {self.most_liked_food}'
 
     def make_sound(self) -> None:
-        pass
+      pass
 
-class Mammal(Animal):
+  class Mammal(Animal):
     def __init__(self, name: str, most_liked_food: str, number_of_paws: int) -> None:
-        super().__init__(name, most_liked_food)
-        self.number_of_paws = number_of_paws
+      super().__init__(name, most_liked_food)
+      self.number_of_paws = number_of_paws
 
     def walk(self) -> None:
-        print(f'{self.name} walks with {self.number_of_paws} paws')
+      print(f'{self.name} walks with {self.number_of_paws} paws')
 
     def make_sound(self) -> None:
-        print("Mammal's sound depends the animal")
+      print("Mammal's sound depends the animal")
 
-class Fish(Animal):
+  class Fish(Animal):
     def __init__(self, name: str, most_liked_food: str, number_of_fins: int) -> None:
-        super().__init__(name, most_liked_food)
-        self.number_of_fins = number_of_fins
+      super().__init__(name, most_liked_food)
+      self.number_of_fins = number_of_fins
 
     def swim(self) -> None:
-        print(f"{self.name} swims and has {self.number_of_fins} fins")
- 
-    def make_sound(self) -> None:
-        print("Glu Glu")
+      print(f"{self.name} swims and has {self.number_of_fins} fins")
 
-class Bird(Animal):
+    def make_sound(self) -> None:
+      print("Glu Glu")
+
+  class Bird(Animal):
     def __init__(self, name: str, most_liked_food: str, number_of_wings: int) -> None:
-        super().__init__(name, most_liked_food)
-        self.number_of_wings = number_of_wings
+      super().__init__(name, most_liked_food)
+      self.number_of_wings = number_of_wings
 
     def fly(self) -> None:
-        print(f"{self.name} flies and has {self.number_of_wings} wings")
- 
+      print(f"{self.name} flies and has {self.number_of_wings} wings")
+
     def make_sound(self) -> None:
-        print("Chirp chirp")
-```
+      print("Chirp chirp")
+  ```
 
-now, to be easily imported, let's do a **init**.py file to import the classes, to do, let's edit with following command:
+* Create `__init__.py` to state this folder will be a module
 
-```sh
-vi __init__.py
-```
+  ```sh
+  touch __init__.py
+  ```
 
-and add the following imports:
+### Step 2 - Module usage
 
-```py
-from .animals import Animal
-from .animals import Mammal
-from .animals import Fish
-from .animals import Bird
-```
+* Navigate to `/app` directory
 
-These imports will facilitate the access of the classes by referring only the parent directory name, in this case "animals"
+  ```sh
+  cd ..
+  ```
 
-### Step 3
+* Edit `main.py` (Replace the `helloworld` with the classes usage)
 
-Now let's use the created classes on main.py
+  ```sh
+  vi main.py
+  ```
 
-Let's go to our /app directory with:
+  ```py
+  from zoo.animal import Mammal, Fish, Bird
 
-```sh
-cd /app
-```
+  print("let's create a Mammal")
+  mammal = Mammal('monkey','banana',2)
+  print(mammal)
+  mammal.walk()
+  mammal.make_sound()
 
-Now let's edit main.py with following command:
+  print("let's create a Fish")
+  fish = Fish('shark','fish',1)
+  print(fish)
+  fish.swim()
+  fish.make_sound()
 
-```sh
-vi main.py
-```
+  print("let's create a bird")
+  bird = Bird('parrot','seeds',2)
+  print(bird)
+  bird.fly()
+  bird.make_sound()
+  ```
 
-And on it, let's use following code:
+* Exit editor
+  * Type `:wq` to exit and save
+* Run `main.py`
 
-```py
-from animals import Animal, Mammal, Fish, Bird
+  ```sh
+  python main.py
+  ```
 
-print("let's create a Mammal")
-mammal = Mammal('monkey','banana',2)
-print(mammal)
-mammal.walk()
-mammal.make_sound()
+### Step 3 - Database
 
-print("let's create a Fish")
-fish = Fish('shark','fish',1)
-print(fish)
-fish.swim()
-fish.make_sound()
+* Open DBeaver IDE
+  * Click on the New Database Connection Icon that is on the upper left of the IDE
 
-print("let's create a bird")
-bird = Bird('parrot','seeds',2)
-print(bird)
-bird.fly()
-bird.make_sound()
-```
+    ![img](img/dbeaver-1.png)
 
-On this code, you are able to instantiate a mammal (monkey), a fish (dolphin), and a bird (parrot).
+* A pop up window will open
+  * Here selects `PostgreSQL` option
+  * Click on `Next`
 
-Now let's exit from editor and run following command to run the application:
+    ![img](img/dbeaver-2.png)
 
-```sh
-python main.py
-```
+* Then on connection parameters use the following
 
-### Step 4
+  * `Server Host`: `localhost`
+  * `Port`: `5433`
+  * `Database`: `animaldb`
+  * `Username`: `myuser`
+  * `Password`: `mypassword`
 
-Now let's connect to PostgreSQL using DBeaver to create animal table
+    ![img](img/dbeaver-3.png)
 
-First let's open [DBeaver](https://dbeaver.io/download/) IDE and click on the New Database Connection Icon that is on the upper left of the IDE:
+* Click on `Test connection`
+  * Should appear as `Connected`
 
-![img](img/dbeaver-1.png)
+    ![img](img/dbeaver-4.png)
 
-Then a pop up window will open and here selects **´PostgreSQL´** option and click on **Next**
+* Open a sql script by using this connection by clicking `SQL` button
+  * That is on the upper left part of the menu
 
-![img](img/dbeaver-2.png)
+    ![img](img/dbeaver-5.png)
 
-Then on connection parameters use the following:
+* Create the `animal` table
+  * Executing the following via SQL script editor
 
-* Server Host: **localhost**
-* Port: **5433**
-* Database: **animaldb**
-* Username: **myuser**
-* Password: **mypassword**
+    ```sql
+    CREATE TABLE animal(
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(50),
+      most_liked_food VARCHAR(50),
+      animal_classification VARCHAR(50)
+    );
+    ```
 
-![img](img/dbeaver-3.png)
+    ![img](img/dbeaver-6.png)
 
-Now click on Test connection and should appear as **´Connected´**
+### Step 4 - Fill data
 
-![img](img/dbeaver-4.png)
+* Re-edit the file to insert animal data into database
+  * Use `rm main.py && vi main.py` to remove the file and get an empty main.py to edit
 
-Once done, now let's open a sql script by using this connection by clicking **´SQL´** button that is on the upper left part of the menu
+    ```py
+    import psycopg2
+    from typing import Type
+    from zoo.animal import Mammal, Fish, Bird
 
-![img](img/dbeaver-5.png)
+    # Define the connection parameters
+    conn_params = {
+        "host": "postgres_db",
+        "port": 5432,
+        "database": "animaldb",
+        "user": "myuser",
+        "password": "mypassword"
+    }
 
-Now, let's create the animal table by writing and executing the following create table on the SQL script editor:
+    # Connect to the database
+    conn = psycopg2.connect(**conn_params)
+    cur = conn.cursor()
 
-```sql
-create table animal(
- id serial primary key,
- name varchar(50),
- most_liked_food varchar(50),
- animal_classification varchar(50)
-);
-```
+    # Define the SQL insert statement
+    sql = "INSERT INTO animal (name, most_liked_food, animal_classification) VALUES (%s, %s, %s)"
 
-![img](img/dbeaver-6.png)
+    # Define a list of animals to insert
+    animals = [Mammal('monkey', 'banana', 4),
+              Fish('shark', 'fish', 2),
+              Bird('parrot', 'seeds', 2)]
 
-### Step 5
+    # Loop through the animals and insert them into the database
+    for animal in animals:
+        # Get the animal's classification based on its type
+        classification = animal.__class__.__name__
+        # Execute the SQL insert statement
+        cur.execute(sql, (animal.name, animal.most_liked_food, classification))
 
-Now we are going to Re-edit the file to insert animal data into database.
+    # Commit the changes and close the connection
+    conn.commit()
+    cur.close()
+    conn.close()
 
-To do so, let's re-edit main.py file with following content:
+    print("Animals were inserted into Database")
+    ```
+  
+* Execute the file
 
-```py
-import psycopg2
-from typing import Type
-from animals import Animal, Mammal, Fish, Bird
+### Step 5 - Query
 
-# Define the connection parameters
-conn_params = {
-    "host": "postgres_db",
-    "port": 5432,
-    "database": "animaldb",
-    "user": "myuser",
-    "password": "mypassword"
-}
+* Using the Script editor execute the following query
 
-# Connect to the database
-conn = psycopg2.connect(**conn_params)
-cur = conn.cursor()
+  ```sql
+  SELECT * FROM animal;
+  ```
 
-# Define the SQL insert statement
-sql = "INSERT INTO animal (name, most_liked_food, animal_classification) VALUES (%s, %s, %s)"
+  ![img](img/dbeaver-7.png)
 
-# Define a list of animals to insert
-animals = [Mammal('monkey', 'banana', 4),
-           Fish('shark', 'fish', 2),
-           Bird('parrot', 'seeds', 2)]
+## Homework
 
-# Loop through the animals and insert them into the database
-for animal in animals:
-    # Get the animal's classification based on its type
-    classification = animal.__class__.__name__
-    # Execute the SQL insert statement
-    cur.execute(sql, (animal.name, animal.most_liked_food, classification))
+>Writting hardcoded values is most of the time a bad practice, on the previous script we wrote `postgres_db` connection parameters on the code.
 
-# Commit the changes and close the connection
-conn.commit()
-cur.close()
-conn.close()
+* Update `main.py` to grab the connection parameter values from `ENV` variables
 
-print("Animals were inserted into Database")
-```
+  * `POSTGRE_HOST`: `postgres_db`
+  * `POSTGRE_PORT`: `5432`
+  * `POSTGRE_DB`: `animaldb`
+  * `POSTGRE_USER`: `myuser`
+  * `POSTGRE_PASSWORD`: `mypassword`
 
-### Step 6
-
-Check Animal table on DB on dbeaver by running following query:
-
-```sql
-select * from animal;
-```
-
-![img](img/dbeaver-7.png)
-
-## HOMEWORK TIME
-
-On past main.py script we declared on conn_params variable the postgredb connection parameters on the code. But this is a BAD PRACTICE.
-
-For Homework, let's do the following:
-
-UPDATE main.py to grab the connection parameter values from ENV VARIABLES, let's say you are setting on the python_app container the following ENV VARIABLES:
-
-* POSTGRE_HOST: **postgres_db**
-* POSTGRE_PORT: **5432**
-* POSTGRE_DB: **animaldb**
-* POSTGRE_USER: **myuser**
-* POSTGRE_PASSWORD: **mypassword**
-
-Assume you set above ENV VARIABLES, and UPDATE main.py to use them while connecting to DB rather than the hard coded values that are on conn_params
+The above environment variables are already set into the `python_app`
 
 ## Conclusion
 
