@@ -159,7 +159,7 @@ The DAG on file `1_extract`, does the following
 * Convert to parquet format
 * Save it to `./output/sample.parquet`
 
-#### What is airflow doing behind the hood?
+#### What is airflow doing under the hood?
 
 * Read the file (on `dags` folder) and check if there are no syntax errors to show the DAG in the list
   * If some error appear, the DAG will not be listed, instead you will get a banner with the error
@@ -392,6 +392,7 @@ In this practice, you learned how to configure Apache Airflow using Docker Compo
 * Article: [AVRO VS Parquet][avro_vs_parquet]
 * Article: [OPKwArgs and other Task parameters][op_kwargs]
 * Article: [*args & **kwargs][args_kwargs]
+* Pre-setup explanation: [Running Airflow in Docker][airflow_docker]
 
 [pre-setup]: ./pre-setup.md
 [install_docker]: https://docs.docker.com/engine/install/
@@ -404,3 +405,4 @@ In this practice, you learned how to configure Apache Airflow using Docker Compo
 [avro_vs_parquet]: https://www.snowflake.com/trending/avro-vs-parquet/
 [op_kwargs]: https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/python/index.html#airflow.operators.python.task
 [args_kwargs]: https://realpython.com/python-kwargs-and-args/
+[airflow_docker]: https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
