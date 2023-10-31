@@ -16,3 +16,4 @@ Practices/session_10_sql_cdc/myenv
 Practices/session_11_Data_load_techinques (to be reformed)/generator/data
 Practices/session_11_Data_load_techinques (to be reformed)/generator/data/*
 Practices/session_12_SQL_Reporting/generator/data
+Practices/session_5_etl_and_airflow/practice_files/dags/output
