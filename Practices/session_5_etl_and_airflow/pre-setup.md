@@ -27,7 +27,7 @@ Once docker-compose runs all the Airflow Celery component containers
   * username: `airflow`
   * password: `airflow`
 
-  ![img](img/airflow-3.png)
+    ![img](img/airflow-3.png)
 
 * Example DAG's
 
