@@ -20,13 +20,14 @@ Once docker-compose runs all the Airflow Celery component containers
 
 * Open a web browser and open following URL to access to Airflow Web UI:
   * <http://localhost:8080>
-  ![img](img/airflow-2.png)
+
+    ![img](img/airflow-2.png)
 
 * Login
   * username: `airflow`
   * password: `airflow`
 
-  ![img](img/airflow-3.png)
+    ![img](img/airflow-3.png)
 
 * Example DAG's
 
