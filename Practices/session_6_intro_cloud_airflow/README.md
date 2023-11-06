@@ -288,13 +288,16 @@ Modify the code, to have 3 tasks instead of 1 task, the tasks will be the follow
   * Return `csv_local`
 * `load_data`
   * Parameters
-    * `json_local` from `extract_data`
     * `csv_local` from `transform_data`
     * `bucket`: S3 bucket name to write
     * `bucket_file`: File path from the bucket to write
   * Save the csv to S3 storage (`your-name-output.csv`)
 
 And the DAG flow should be: `extract_data >> transform_data >> load_data`
+
+## Extra mile (Optional)
+
+Modify `load_data` to clean the temporary files resulting from `extract_data` and `transform_data` after they are inserted to S3
 
 ## Conclusion
 
