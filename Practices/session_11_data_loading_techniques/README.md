@@ -46,7 +46,7 @@ Saving costs is one of the main purpouses for and external table, but is not the
 
 ## Practice
 
-Placeholder
+Practice the Truncate & reload, Delta & append based on the previous practice
 
 ### Requirements
 
