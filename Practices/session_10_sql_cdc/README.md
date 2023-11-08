@@ -319,16 +319,16 @@ Use the backup files in the [data][data_folder] to restore the database.
 * Create the table
   >Use the same worksheet
 
-  ```sql
-  CREATE TABLE products (
-    name varchar(500),
-    description varchar(500),
-    price FLOAT,
-    stock FLOAT,
-    /*Additional fields*/
-    valid_for_year INTEGER
-  )
-  ```
+    ```sql
+    CREATE TABLE products (
+      name varchar(500),
+      description varchar(500),
+      price FLOAT,
+      stock FLOAT,
+      /*Additional fields*/
+      valid_for_year INTEGER
+    )
+    ```
 
 ### Step 5 - Python-Snowflake connector
 
@@ -344,15 +344,15 @@ Use the backup files in the [data][data_folder] to restore the database.
   from snowflake.connector import connect
 
   with connect(
-      account="<SNOWFLAKE_LOCATOR>",
-      user="<SNOWFLAKE_USERNAME>",
-      password="<SNOWFLAKE_PASSWORD>",
-      database="<SNOWFLAKE_DB>",
-      schema="<SNOWFLAKE_DB_SCHEMA>",
-      warehouse="<SNOWFLAKE_WAREHOUSE>",
-      region="<SNOWFLAKE_AWS_REGION>"
+    account="<SNOWFLAKE_LOCATOR>",
+    user="<SNOWFLAKE_USERNAME>",
+    password="<SNOWFLAKE_PASSWORD>",
+    database="<SNOWFLAKE_DB>",
+    schema="<SNOWFLAKE_DB_SCHEMA>",
+    warehouse="<SNOWFLAKE_WAREHOUSE>",
+    region="<SNOWFLAKE_AWS_REGION>"
   ) as connection:
-      ...
+    ...
   ```
 
   |Parameter|Notes|-|
@@ -363,7 +363,15 @@ Use the backup files in the [data][data_folder] to restore the database.
   |`SNOWFLAKE_DB`|The database that you want to connect and make queries to.|-|
   |`SNOWFLAKE_DB_SCHEMA`|The schema in which you want to operate|Optional|
   |`SNOWFLAKE_WAREHOUSE`|Warehouse that you want to use to compute your queries.|-|
-  |`SNOWFLAKE_AWS_REGION`|In this case for AWS you will need to put the AWS Region in which our snowflake server is located.|This information can be found in the same panel as the `SNOWFLAKE_LOCATOR` under the column "REGION.|
+  |`SNOWFLAKE_AWS_REGION`|In this case for AWS you will need to put the AWS Region Id in which our snowflake server is located.|This information can be found in the same panel as the `SNOWFLAKE_LOCATOR` under the column "REGION. Check note below for more information|
+
+>Note: You should use the region id instead of the region name.
+>
+>Ex. For `US East (N. Virginia)` use `us-east-1`
+>
+>Follow the guideline on: [Non-VPS Account Locator Formats by Cloud Platform and Region][snow_regions_aws]
+>
+>Ex. `US West (Oregon)` note reads `No additional segments required.` meaning the parameter is not required for string connection builder AKA `connect` function
 
 ### Step 6 - Dump to snowflake
 
@@ -386,11 +394,11 @@ Use the backup files in the [data][data_folder] to restore the database.
 
 * Call the function with the df and the connection to snowflake
 
-```py
-for current_file in csv_files:
-  ...
-  upload_to_snowflake(connection, df, "products")
-```
+  ```py
+  for current_file in csv_files:
+    ...
+    upload_to_snowflake(connection, df, "products")
+  ```
 
 ### Step 7 - Results
 
@@ -458,14 +466,13 @@ In this session we took a look into CDC, SCD and Data modeling. Then we built a 
 * [Star Schema vs Snowflake Schema: 6 Key differences][star_vs_snowflake]
 * [Implementing Slowly Changing Dimensions (SCDs) in Data Warehouses][scd]
 
-[data_folder]: ./data
+[data_folder]: ./practice_files
 
 [pre_setup]: pre-setup%20README.md
 [py_env]: ../session_4_python_for_data/pre-setup.md#step-1---virtual-environment
 
 [what_is_cdc]: https://www.redhat.com/en/topics/integration/what-is-change-data-capture
 [cdc_sql_server]: https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver16
-[star_vs_snowflake]: https://www.thoughtspot.com/data-trends/data-modeling/star-schema-vs-snowflake-schema
 [modeling_tecniques]: https://www.vertabelo.com/blog/data-modeling-techniques/
 [modeling_bi]: https://www.klipfolio.com/blog/6-data-modeling-techniques
 [cdc_how_it_works]: https://dbconvert.com/blog/change-data-capture-cdc-what-it-is-and-how-it-works/
@@ -475,5 +482,7 @@ In this session we took a look into CDC, SCD and Data modeling. Then we built a 
 [scd_numbers]: https://www.kimballgroup.com/2013/02/design-tip-152-slowly-changing-dimension-types-0-4-5-6-7/
 [dimensional_modeling]: https://gchandra.gitbook.io/data-warehousing/data-warehousing-concepts/dimensional-modelling
 [dimension_types]: https://gchandra.gitbook.io/data-warehousing/data-warehousing-concepts/types-of-dimensions/
+[snow_regions_aws]: https://docs.snowflake.com/en/user-guide/admin-account-identifier#non-vps-account-locator-formats-by-cloud-platform-and-region
 
+[star_vs_snowflake]: https://www.thoughtspot.com/data-trends/data-modeling/star-schema-vs-snowflake-schema
 [scd]: https://www.sqlshack.com/implementing-slowly-changing-dimensions-scds-in-data-warehouses/
