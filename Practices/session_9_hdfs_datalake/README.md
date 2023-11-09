@@ -171,7 +171,7 @@ Consider the samples `products_1.csv` and `products_1a.csv` are from `Jan 01 202
   * Copy the folder `raw_files` in the [namenode][namenode] container
 
     ```sh
-    docker cp ./raw_files session_9_datalake-namenode-1:/tmp
+    docker cp ./raw_files practice_files-namenode-1:/tmp
     ```
 
 ### Step 3 - HDFS folder structure
