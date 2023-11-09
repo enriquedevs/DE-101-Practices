@@ -399,7 +399,8 @@ python clinic_sparksql.py
 ## Homework
 
 * Create a new python script that:
-  * Read all the csv files
+  * Read all the csv files in the folder
+    * Don't use the individual file names, just the folder name
   * Read the data from the postgre clinic_db tables
     * Do necessary comparisons/transformations/joins to obtain and load the missing ids
       * `doctor_id` and `patient_id` on **appointment** table

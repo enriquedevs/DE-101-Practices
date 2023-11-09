@@ -1,18 +1,13 @@
 # MACOS files
 .DS_Store
 
-# Pycache files
+# python files
 *__pycache__
+*myenv
 
 # Sessions practice files
-Practices/*/practice_files/logs
-Practices/*/practice_files/plugins
-Practices/*/practice_files/dags/output/*
-
-# pyenv
-Practices/session_10_sql_cdc/myenv
-
-
-Practices/session_11_Data_load_techinques (to be reformed)/generator/data
-Practices/session_11_Data_load_techinques (to be reformed)/generator/data/*
-Practices/session_12_SQL_Reporting/generator/data
+Practices/**/logs
+Practices/**/plugins
+Practices/**/dags/output/*
+Practices/**/generated_data
+Practices/**/create_views.sql

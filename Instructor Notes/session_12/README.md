@@ -10,7 +10,9 @@
 
 ## User Policies
 
-Policy for `student user` (de-101-rw-s3)
+* Add permissions to handle bucket to students
+
+>Policy for role `de-101-external-s3-db` (de-101-rw-s3)
 
 ```json
 {
@@ -28,12 +30,12 @@ Policy for `student user` (de-101-rw-s3)
       "Sid": "ReadS3",
       "Effect": "Allow",
       "Action": [
-        "s3:GetObjectAcl",
         "s3:GetObject",
         "s3:ListBucket",
-        "s3:GetBucketLocation"
+        "s3:GetBucketLocation",
+        "s3:GetObjectAcl"
       ],
-      "Resource": "arn:aws:s3:::de-101-session-6*"
+      "Resource": ["arn:aws:s3:::de-101-session-6*", "arn:aws:s3:::de-101-session-12*"]
     },
     {
       "Sid": "WriteS3",
@@ -42,7 +44,7 @@ Policy for `student user` (de-101-rw-s3)
         "s3:PutObject",
         "s3:DeleteObject"
       ],
-      "Resource": "arn:aws:s3:::de-101-session-6/*"
+      "Resource": ["arn:aws:s3:::de-101-session-6/*", "arn:aws:s3:::de-101-session-12/*"]
     }
   ]
 }
@@ -50,5 +52,8 @@ Policy for `student user` (de-101-rw-s3)
 
 ## Additional Notes
 
-- Empty and Delete bucket after practice
-- Deactivate user
+* Bucket must be public
+* Run generator beforehand \
+  `python3 generator.py --hdfs -y 2019 -r 3 -c toyota yamaha ferrari mazda`
+* Upload folder \
+  `aws s3 sync generated_data s3://de-101-session-12/generated_data/ --profile enroute-jesus_gaona`
