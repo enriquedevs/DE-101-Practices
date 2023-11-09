@@ -59,7 +59,7 @@ Use the generator data to:
 
 * Configure keys
 
-  ```aws configure --profile de-101-student```
+  `aws configure --profile de-101-student` or `aws configure --profile de-101-student-ext`
 
   * Fill the information as requiered
     * `AWS Access Key ID [None]`: \<Given by the instructor>
@@ -94,6 +94,8 @@ aws s3 sync generated_data s3://de-101-session-12/generated_data/ --profile de-1
 |de-101-student|Profile name|
 
 ### Step 3 - AWS Role
+
+>Follow these steps in instructor screen
 
 In the AWS Console
 
@@ -133,6 +135,8 @@ Go to snowflake, then:
 
 ### Step 5 - AWS Role Tuning
 
+>Follow these steps in instructor screen
+
 * Get information from snowflake
   
   ```sql
@@ -169,6 +173,12 @@ Go to snowflake, then:
     ```
 
 * Save policy
+
+>In order to include your credentials too send `STORAGE_AWS_IAM_USER_ARN` and `STORAGE_AWS_EXTERNAL_ID` to Teacher Assistant via Keybase, the message sgould explode in 7 days
+>
+>Message template:
+>`STORAGE_AWS_IAM_USER_ARN`: <STORAGE_AWS_IAM_USER_ARN>
+>`STORAGE_AWS_EXTERNAL_ID`: <STORAGE_AWS_EXTERNAL_ID>
 
 ### Step 6 - External table
 
