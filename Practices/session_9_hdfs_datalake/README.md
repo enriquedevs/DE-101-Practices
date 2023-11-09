@@ -99,7 +99,7 @@ LOCATION '/path/to/csv/file';
 ___
 At this step the Data Lake is already mounted, but usually there is an extra step
 
-* `Using the Data Lake` \
+* `Using the Data Lake`
   >Using HiveQL you can query the Data Lake.
 * `Iterate and refine` \
   Hive allows you to easily modify the schema as needed, without having to manually modify the data stored in HDFS.
