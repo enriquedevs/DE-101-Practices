@@ -1,6 +1,14 @@
 # Interview Readiness
 
-In this lesson we will prepare for a real life interview, and we will see some exercises that could be sent to you as code challenges.
+In this session we will prepare for a real life interview, and we will see some exercises that could be sent to you as code challenges.
+
+## What You Will Learn
+
+* Recruiter/Interviewer POV
+* Common topics
+* Interview Schema
+* General Tips
+* Code challenges
 
 Remember we are aiming to a Top-Mid/Senior position, so it's ok if you are not an expert on all these subjects, but you should be able to describe with ease and be involved with most of them.
 
@@ -8,70 +16,97 @@ Remember we are aiming to a Top-Mid/Senior position, so it's ok if you are not a
 >
 > In other words, so far all concepts you saw can be applied almost at 100% to any other technology/stack but starting from next lesson we will review specific setups and features from distinct clouds or providers
 
-## What is the recruiter searching
+## Recruiter/Interviewer POV
 
-1. **Focus on problem-solving skills**:
-    >Coming up with the correct solution is good, \
-    >coming up with the correct solution for the correct reason is great, \
-    >coming up with the correct solution for the correct reason and be able to communicate it with ease is amazing.
-2. **Ask about their experience with data storage and processing technologies**:
-    >Tell me about yourself? / Can you tell me about your experience? \
-    >This is probably the most common question to open an interview, be prepared for it
+### 1 - Problem-solving skills
 
-    Try to highlight
+* Coming up with the correct solution is good
+* Coming up with the correct solution for the correct reason is great
+* Coming up with the correct solution for the correct reason and be able to communicate it with ease is amazing.
 
-    * Years of experience
-    * What technologies you have used previously
-    * What is the area you feel more comfortable
-    * Any relevant experience that can help with required stack
-  
-    Remember this course is also experience
+### 2 - Data engineer experience
 
-    Come with your own introduction: Ex. You are a Senior Software Developer with 5+ years of experience on .Net, you took this course and finished the final project.
+* Tell me about yourself? / Can you tell me about your experience?
+* This is probably the most common question to open an interview, be prepared for it
 
-    >\- Can you tell me about your experience? \
-    >\- Over the last 6 years I've been working with .Net platform as a developer, using SQL Server with Azure, Crystal reports, coaching and being the team leader of N people usin Agile/SCRUM, also managing the CI/CD part, also designing Databases from scratch and doing maintenance. Over the last 3 month's I've been focusing on the Data Engineer area, using Docker/Composer, scrappers, multithread airflow with python and AWS CLI, HDFS on S3, Snowflake and Tableau.
-3. **Assess their knowledge of data modeling and database design**
-    * Focus on when you should use OLTP vs OLAP design
-    * Clarify as much as needed.
-    * Describe the schema while you are writting it so the interviewer understand why are you selecting:
-      * PK/FK
-      * Relations
-      * Fields you are missing
-      * ...
-4. **Check their familiarity with data security and compliance** \
-  This is an area that most of the time we don't think about, because it's not part of our role or because the cloud already manage that for us.
-      * How do I protect from intruders?
-      * How do I restrict in the organization?
-      * How do I restrict the applications?
-      * What happen when somebody gets the information from my users?
-      * How do I know who is using their access to check what?
-      * How do I make aware my co-workers and partners about all the previous questions?
-5. **Assess their ability to communicate technical concepts**
-    * How easily is for me to explain to a non-technical person technical concepts?
-6. **Look for candidates with experience in data pipeline development and deployment**
-    * You should be able to understand, explain and create data pipelines and deployments from scratch
-      >It's okay if you don't have the knowledge on all the CI/CD concepts, but you should have at least knowledge for 1 stack of pipeline
-    * Choose your flavor, here are some examples:
-      * Data ex. EC2/Docker -> Python/Airflow/ETL -> S3/HDFS -> Snowflake -> Tableau
-      * Deployment ex. Commit -> Github Actions/Flow -> Github Docker -> ECR -> ECS/Blue-Green
-7. **Assess their familiarity with cloud platforms**
-      >As we review on previous lessons cloud is the new standard for Data pipelines
-    * In general you are expected to mount and describe a pipelines in any of:
-      * AWS
-      * GCP
-      * Azure
-8. **Look for candidates with a passion for learning** \
-  Technology is constantly evolving, data engineering is evolving too, also is very unlikely that you will be a perfect fit for the stack customer is using, and even if you are the perfect fit for the stack, still need to learn business rules.
+Try to highlight:
 
-    * How often do you search for tendencies?
-    * When was the last time I took a course or certification?
+* Years of experience
+* What technologies you have used previously
+* What is the area you feel more comfortable
+* Any relevant experience that can help with required stack
 
-## Commonly Asked Questions
+#### 2.1 - Final Project Experience
 
-### Database
+Come with your own introduction: Ex. You are a Senior Software Developer with 5+ years of experience on .Net, you took this course and finished the final project.
 
-#### Design
+>\- Can you tell me about your experience? \
+>\- Over the last 6 years I've been working with .Net platform as a developer, using SQL Server with Azure, Crystal reports, coaching and being the team leader of N people usin Agile/SCRUM, also managing the CI/CD part, also designing Databases from scratch and doing maintenance. Over the last 3 month's I've been focusing on the Data Engineer area, using Docker/Composer, scrappers, multithread airflow with python and AWS CLI, HDFS on S3, Snowflake and Tableau.
+
+Note: *Remember every thing you mention you may be asked, if you are not comfortable going deep don't mention it, try to mention all the things you've used during your final project as a priority instead of the topics of this course, it will be easier to give examples that way*
+
+### 3 - Data modeling
+
+* Focus on when you should use OLTP vs OLAP design
+* Clarify as much as needed.
+* Describe the schema while you are writting it so the interviewer understand why are you selecting:
+  * PK/FK
+  * Relations
+  * Fields you are missing
+  * ...
+
+### 4 - Familiarity with data security and compliance
+
+This is an area that most of the time we don't think about, because it's not "part of our role" or because the cloud already manage that for us.
+
+* How do I protect from intruders?
+* How do I restrict in the organization?
+* How do I restrict the applications?
+* What happen when somebody gets the information from my users?
+* How do I know who is using their access to check what?
+* How do I make aware my co-workers and partners about all the previous questions?
+
+>Most of these questions are common sense, what data is higher priority than other... but be aware that some clients have this as a priority since information is their business priority
+
+Note: *You are not expected to be an expert on this but be comfortable working with sensible data at various levels*
+
+### 5 - Communication
+
+* How easily is for me to explain to a non-technical person technical concepts?
+
+>Came up with your own simple definitions beforehand also some analogies if required to explain complex concepts
+
+Have you ever heard about the [Rubber Duck Debugging][rubber_ducking]?
+
+![img](img/rubber-ducking.jpeg)
+
+### 6 - Data pipelines and deployments
+
+* You should be able to understand, explain and create data pipelines and deployments from scratch
+  >It's okay if you don't have the knowledge on all the CI/CD concepts, but you should have at least knowledge for 1 stack of pipeline
+* Choose your flavor, here are some examples:
+  * Data ex. EC2/Docker -> Python/Airflow/ETL -> S3/HDFS -> Snowflake -> Tableau
+  * Deployment ex. Commit -> Github Actions/Flow -> Github Docker -> ECR -> ECS/Blue-Green
+
+### 7 - Cloud platforms
+
+>As we review on previous lessons cloud is the new standard for Data pipelines
+
+* In general you are expected to mount and describe a pipelines in any of:
+  * AWS
+  * GCP
+  * Azure
+
+### 8 - Passion for learning
+
+Technology is constantly evolving, data engineering is evolving too, also is very unlikely that you will be a perfect fit for the stack customer is using, and even if you are the perfect fit for the stack, still need to learn business rules.
+
+* How often do you search for tendencies?
+* When was the last time I took a course or certification?
+
+## Common topics
+
+### Database Design
 
 * OLTP VS OLAP
   * Designing an OLTP Database
@@ -81,7 +116,7 @@ Remember we are aiming to a Top-Mid/Senior position, so it's ok if you are not a
 * Datalake partitions
 * Star and Snoflake schemas
 
-#### SQL
+### SQL
 
 * DDL VS DML
 * Transaction
@@ -107,24 +142,28 @@ Remember we are aiming to a Top-Mid/Senior position, so it's ok if you are not a
   * Append
 * Data troubleshooting
 
-* Algorithm problem solving, common used algorithms are:
-  1. Binary Search
-  2. Bubble Sort
-  3. Merge Sort
-  4. Quick Sort
-  5. Selection Sort
-  6. Insertion Sort
-  7. Depth-First Search (DFS)
-  8. Breadth-First Search (BFS)
-  9. Dijkstra's Algorithm
-  10. Dynamic Programming (DP)
-  11. Recursion
-  12. Binary Tree Traversal (Pre-order, In-order, Post-order)
-  13. Hash Tables and Hashing Algorithms
+### Algorythms
 
-Here is a resource to know the implementation of the algorithms: <https://www.youtube.com/watch?v=shs0KM3wKv8&list=PLOuZYwbmgZWXvkghUyMLdI90IwxbNCiWK>
+>These algorythms are something to expected to know, but not from memory, instead always try to search for new optimized ways to perform a task
 
-## Big O notation
+* Common used algorithms are:
+  * Binary Search
+  * Bubble Sort
+  * Merge Sort
+  * Quick Sort
+  * Selection Sort
+  * Insertion Sort
+  * Depth-First Search (DFS)
+  * Breadth-First Search (BFS)
+  * Dijkstra's Algorithm
+  * Dynamic Programming (DP)
+  * Recursion
+  * Binary Tree Traversal (Pre-order, In-order, Post-order)
+  * Hash Tables and Hashing Algorithms
+
+Here is a resource to know the implementation of the algorithms: [Algorythms][video_algorythms]
+
+### Big O notation
 
 >Big O notation is a mathematical way to describe how the performance of an algorithm or a piece of code changes as the amount of input space (memory) and time gets larger.
 
@@ -140,35 +179,38 @@ O(\<Expression>)
 
 ### Examples
 
-Before entering the examples, let's asume the minimum unit we are using here is a byte (integer) reading it or doing a sum operation with it.
+>Before entering the examples, let's asume the minimum unit we are using here is a byte (integer) reading it or doing a sum operation with it.
 
-* **O(1)**: Constant. The algorithm uses a constant amount of memory and time regardless of the input size.
-* **O(log n)**: Logarithmic space. The amount of memory and time used by the algorithm increases logarithmically as the input size grows larger.
-* **O(n)**: Linear space. The amount of memory and time used by the algorithm increases linearly as the input size grows larger.
-* **O(n^2)**: Quadratic space. The amount of memory and time used by the algorithm increases quadratically as the input size grows larger.
+* **O(1)**: `Constant`. The algorithm uses a constant amount of memory and time regardless of the input size.
+* **O(log n)**: `Logarithmic`. The amount of memory and time used by the algorithm increases logarithmically as the input size grows larger.
+* **O(n)**: `Linear`. The amount of memory and time used by the algorithm increases linearly as the input size grows larger.
+* **O(n^2)**: `Quadratic`. The amount of memory and time used by the algorithm increases quadratically as the input size grows larger.
 
 >Take in consideration O(n) + O(n) is still O(n), since we are only taking the highest operation possible, not the sum of all the operations. \
 >Same way O(n^2) + O(n^3) is O(n^3)
 
 Another way to visualize is to see how many cycles do we need to do to all the information to solve the problem.
->Ex. Calculate if n is a prime number:
+
+#### Example: Prime number
+
+Calculate if n is a prime number:
 
 ```py
 def is_prime(number):
-    if number <= 1:
-        return False  # Numbers less than or equal to 1 are not prime
-    elif number <= 3:
-        return True   # 2 and 3 are prime numbers
-    elif number % 2 == 0 or number % 3 == 0:
-        return False  # Numbers divisible by 2 or 3 are not prime
-    
-    i = 5
-    while i * i <= number:
-        if number % i == 0 or number % (i + 2) == 0:
-            return False  # Numbers divisible by i or i + 2 are not prime
-        i += 6
-    
-    return True  # If no divisors are found, the number is prime
+  if number <= 1:
+    return False  # Numbers less than or equal to 1 are not prime
+  elif number <= 3:
+    return True   # 2 and 3 are prime numbers
+  elif number % 2 == 0 or number % 3 == 0:
+    return False  # Numbers divisible by 2 or 3 are not prime
+  
+  i = 5
+  while i * i <= number:
+    if number % i == 0 or number % (i + 2) == 0:
+      return False  # Numbers divisible by i or i + 2 are not prime
+    i += 6
+  
+  return True  # If no divisors are found, the number is prime
 ```
 
 Giving the above code:
@@ -179,14 +221,12 @@ Giving the above code:
 * We do jumps on 6 (assuming 5 is the last fixed prime)
 * We iterate based on i^2
 
-From the above steps the largest consuming of time is the iteration based on i^2, so this gives us a steps number of *sqrt(n) - 3*
-
-We discard the first 3 steps as we always take the highest complexity step resulting in
+>From the above steps the largest consuming of time is the iteration based on i^2, so this gives us a steps number of *sqrt(n) - 3* \
+>We discard the first 3 steps as we always take the highest complexity step resulting in
 
 Complexity: **O(sqrt(n))**
 
->What does this means in simple terms?
->
+>What does this means in simple terms? \
 >If we give a number 100, the maximum number of steps we are iterating are sqrt(100) or 10 steps
 
 ### Exercise
@@ -204,11 +244,11 @@ SELECT COUNT(*) FROM customers;
 ```py
 """2. Given an array, find the biggest number"""
 def find_max_value(my_list):
-    max_value = my_list[0]
-    for num in my_list:
-        if num > max_value:
-            max_value = num
-    return max_value
+  max_value = my_list[0]
+  for num in my_list:
+    if num > max_value:
+      max_value = num
+  return max_value
 ```
 
 ```py
@@ -223,11 +263,11 @@ def get_first_element(my_list):
 ```py
 """4. Order an array, via bubble sort"""
 def bubble_sort(my_list):
-    n = len(my_list)
-    for i in range(n):
-        for j in range(0, n - i - 1):
-            if my_list[j] > my_list[j + 1]:
-                my_list[j], my_list[j + 1] = my_list[j + 1], my_list[j]
+  n = len(my_list)
+  for i in range(n):
+    for j in range(0, n - i - 1):
+      if my_list[j] > my_list[j + 1]:
+        my_list[j], my_list[j + 1] = my_list[j + 1], my_list[j]
 ```
 
 ```sql
@@ -238,21 +278,21 @@ SELECT * FROM customers WHERE postal_code = '12345';
 ```py
 """6. Give the position in an array of a target using binary search"""
 def binary_search(sorted_list, target):
-    low = 0
-    high = len(sorted_list) - 1
+  low = 0
+  high = len(sorted_list) - 1
+  
+  while low <= high:
+    mid = (low + high) // 2
+    mid_value = sorted_list[mid]
     
-    while low <= high:
-        mid = (low + high) // 2
-        mid_value = sorted_list[mid]
-        
-        if mid_value == target:
-            return mid  # Target found
-        elif mid_value < target:
-            low = mid + 1
-        else:
-            high = mid - 1
-    
-    return -1  # Target not found
+    if mid_value == target:
+      return mid  # Target found
+    elif mid_value < target:
+      low = mid + 1
+    else:
+      high = mid - 1
+
+  return -1  # Target not found
 ```
 
 ```sql
@@ -270,15 +310,15 @@ SELECT * FROM employees WHERE employee_id = 1005;
 ```py
 """9. Based on an array, generate all permutations"""
 def generate_permutations(my_list):
-    if len(my_list) <= 1:
-        return [my_list]
-    else:
-        permutations = []
-        for i in range(len(my_list)):
-            without_i = my_list[:i] + my_list[i+1:]
-            for perm in generate_permutations(without_i):
-                permutations.append([my_list[i]] + perm)
-        return permutations
+  if len(my_list) <= 1:
+    return [my_list]
+  else:
+    permutations = []
+    for i in range(len(my_list)):
+      without_i = my_list[:i] + my_list[i+1:]
+      for perm in generate_permutations(without_i):
+        permutations.append([my_list[i]] + perm)
+    return permutations
 ```
 
 ### Answers
@@ -311,7 +351,7 @@ def generate_permutations(my_list):
     * O(n^n)
     * A permutations is a combination where order matters, it recursively explores all possible arrangements of elements, resulting in a complexity of O(n^n) where "n" is the number of elements in the list. As the size of the input list increases, the number of permutations grows exponentially.
 
-## What to expect from an interview
+## Interview Schema
 
 The most common scenario you can expect is divided into 3 or 4 sections:
 
@@ -360,6 +400,164 @@ The priority to prepare topics for a Data Engineer are in the following order:
     * Similar stack, that does the same function. Ex. AWS S3->GCP Store or AWS Lambdas -> GCP Cloud Functions...
 
 Soft skills expected depend on your role, if you are doing an interview for a mid the soft skills expected are less than the skills required for a Senior/Tech Lead position.
+
+## Code challenges
+
+```py
+# 1 Print the first 3 elements
+arr = list('abcedfghijklmnopqrstuvwxyz')
+
+# Expected: ['a', 'b', 'c']
+```
+
+```py
+# 2 Print the last 5 elements
+arr = list('abcedfghijklmnopqrstuvwxyz')
+
+# Expected: ['v', 'w', 'x', 'y', 'z']
+```
+
+```py
+# 3 Print the repeated elements between arr_a and arr_b
+arr_a = list('abcedfghijklmnopqrstuvwxyz')
+arr_b = list('abc')
+
+# Expected: {'a', 'c', 'b'}
+```
+
+```py
+# 4 Format the number to print 5 digits
+num = 123
+
+# Expected: "00123"
+```
+
+```py
+# 5 Find the difference between strings
+string_a = "eueiieo"
+string_b = "iieoedue"
+
+# Expected: ['d']
+```
+
+```py
+# 6 Check if the string contains repeated characters
+string_a = "eueiieo"
+string_b = "abcdefg"
+
+# Expected: True False
+```
+
+```py
+# 7 Give the count of repeated elements
+set_a = {"a", "b", "c"}
+set_b = {"a", "f", "c"}
+
+# Expected: 2
+```
+
+### Code Challenge Answers
+
+```py
+# 1 Print the first 3 elements
+arr = list('abcedfghijklmnopqrstuvwxyz')
+print(
+  arr[:3]
+)
+```
+
+```py
+# 2 Print the last 5 elements
+arr = list('abcedfghijklmnopqrstuvwxyz')
+print(
+  arr[-5:]
+)
+```
+
+```py
+# 3 Print the repeated elements betwee arr_a and arr_b
+arr_a = list('abcedfghijklmnopqrstuvwxyz')
+arr_b = list('abc')
+
+# lists does not support set operations
+set_a = set(arr_a)
+set_b = set(arr_b)
+
+print(
+  set_a.intersection(set_b)
+)
+```
+
+```py
+# 4 Format the number to print 5 digits
+num = 123
+
+print(
+  f"{num:05d}"
+)
+# You can also use str(num).zfill(5)
+```
+
+```py
+# 5 Find the difference between strings
+string_a = "eueiieo"
+string_b = "iieoedue"
+
+print([char for char in string_b if char not in string_a])
+```
+
+```py
+# 6 Check if the string contains repeated characters
+string_a = "eueiieo"
+string_b = "abcdefg"
+
+def repeated(string: str):
+  seen = set()
+  for char in string:
+    if char in seen:
+      return True
+    seen.add(char)
+  return False
+
+print(repeated(string_a), repeated(string_b))
+```
+
+```py
+# 7 Give the count of repeated elements
+set_a = {"a", "b", "c"}
+set_b = {"a", "f", "c"}
+
+print(
+  len(
+    set_a.intersection(set_b)
+  )
+)
+```
+
+## Homework (Optional)
+
+Solve the following code challenges
+
+* Strings
+  * Find Duplicates: Write a function to find and return all the duplicate characters in a string.
+  * Anagrams Check: Create a function that checks if two strings are anagrams of each other (contain the same characters with the same frequency).
+  * String Reversal: Implement a function that reverses a string without using built-in reverse functions.
+* Lists
+  * Remove Duplicates: Write a function that removes duplicates from a list while preserving the order of elements.
+  * List Intersection: Create a function that finds and returns the intersection of two lists (common elements).
+  * List Sorting: Implement a function that sorts a list of strings based on the length of the strings.
+* Sets
+  * Set Union: Write a function that returns the union of two sets.
+  * Set Symmetric Difference: Create a function that finds the symmetric difference between two sets.
+  * Set Operations: Implement a function that checks if one set is a subset of another set.
+* Numbers
+  * Prime Numbers: Write a function to generate a list of prime numbers up to a specified limit.
+  * Fibonacci Series: Implement a function to generate the Fibonacci series up to a given number of terms.
+  * Factorial Calculation: Create a function to calculate the factorial of a number using recursion.
+* General
+  * Palindrome Check: Write a function that checks if a given string or number is a palindrome.
+  * Unique Characters: Implement a function that determines if a string has all unique characters.
+  * Word Frequency: Create a function that takes a sentence and returns a dictionary with word frequencies.
 
 ## Still curious
 
@@ -457,6 +655,13 @@ Sr II:
 ## Links
 
 * [HackerRank][hackerrank]
+* [Top 50 Array Coding Problems for Interviews][array_code_challenge]
+* [Rubber Duck Debugging][rubber_ducking]
+* Rubber duck debugging
+  * [Rubber Duck Debugging][rubber_ducking]
+  * [Rubber Duck Debugging 2][rubber_ducking2]
+  * Interactive Duck: [Duckie][talk_duck]
+  * Interactive Duck 2: [cyberduck][talk_duck2]
 
 ### More resources
 
@@ -473,6 +678,7 @@ Sr II:
 * [Leetcode study cheatsheet python][python_cheatsheet]
 * [Software philosophies][sw_philosophies]
 * [DDL, DQL, DML, DCL and TCL Commands][ddl_dql_and others]
+* [Algorythms][video_algorythms]
 
 [hackerrank]: https://www.hackerrank.com/
 
@@ -487,3 +693,10 @@ Sr II:
 [python_cheatsheet]: https://leetcode.com/discuss/study-guide/2122306/python-cheat-sheet-for-leetcode
 [sw_philosophies]: https://en.wikipedia.org/wiki/List_of_software_development_philosophies
 [ddl_dql_and others]: https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/
+
+[array_code_challenge]: https://www.geeksforgeeks.org/top-50-array-coding-problems-for-interviews/
+[talk_duck]: http://duckie.me/
+[talk_duck2]: https://rubberduckdebugging.com/cyberduck/
+[rubber_ducking]: http://rubber-duck-debugging.org/
+[rubber_ducking2]: https://rubberduckdebugging.com/
+[video_algorythms]: https://www.youtube.com/watch?v=shs0KM3wKv8&list=PLOuZYwbmgZWXvkghUyMLdI90IwxbNCiWK
