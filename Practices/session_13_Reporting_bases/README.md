@@ -2,7 +2,7 @@
 
 >Reporting Bases: Base data (Usually raw) or datasources used for generating reports in BI and Data Analytics.
 
-In this lesson we will explore a BI or visualization tool (such as Tableau or the one of your preference)
+In this session we will explore a BI or visualization tool (such as Tableau or the one of your preference)
 
 ## Prerequisites
 

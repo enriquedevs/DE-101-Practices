@@ -48,8 +48,8 @@ Use the generator data to:
 
 >The bucket already contains some data, but let's generate some additional data
 
-* Run `python3 practice_files/generator.py -y 2023 -r 1 -c amazon` \
-  This will create data for year 2023, for the amazon company
+* Run `python3 practice_files/generator.py -y 2023 -r 1 -c amazon --hdfs` \
+  This will create data for year 2023, for the amazon company, but you use instead your own name (ex. enrique-garcia, jesus-gaona)
 
 > You can check more options with the `-h` flag
 
@@ -174,7 +174,7 @@ Go to snowflake, then:
 
 * Save policy
 
->In order to include your credentials too send `STORAGE_AWS_IAM_USER_ARN` and `STORAGE_AWS_EXTERNAL_ID` to Teacher Assistant via Keybase, the message sgould explode in 7 days
+>In order to include your credentials too send `STORAGE_AWS_IAM_USER_ARN` and `STORAGE_AWS_EXTERNAL_ID` to Teacher Assistant via Keybase, the message should explode in 7 days
 >
 >Message template:
 >`STORAGE_AWS_IAM_USER_ARN`: <STORAGE_AWS_IAM_USER_ARN>

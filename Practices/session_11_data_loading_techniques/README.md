@@ -108,7 +108,7 @@ On cdc.py you will find the function `upload_to_snowflake`, however this functio
   del data_frame['id']
   ```
 
-* Add the new generic column handler nefore the cursor
+* Add the new generic column handler before the cursor
 
   ```py
   column_secrets = ['%s'] * len(data_frame.columns)
