@@ -1,4 +1,7 @@
 # syntax=docker/dockerfile:1
+
+# for Apple silicon use:
+# FROM arm64v8/python:latest
 FROM python:3.9-bullseye
 
 RUN apt-get update && \

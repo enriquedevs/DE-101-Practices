@@ -9,7 +9,7 @@ We will be using the Azure account created in the previous [lesson][prev_lesson]
 >Create 4 tables in your azure database: AAPL_landing, AAPL, FRED_GDP_landing, FRED_GDP
 
 * Go to SSMS or Azure Data Studio
-* Select the database you created before ("data101-db")
+* Select the database you created before ("sqldb-de101")
 * Open a new query and run:
 
   ```sql
@@ -46,7 +46,7 @@ We will be using the Azure account created in the previous [lesson][prev_lesson]
 
 ### Azure Datawarehouse Table
 
->Create the "AAPL_landing" table also in your data warehouse ("AdventureWorksDW").
+>Create the "AAPL_landing" table also in your data warehouse ("sqldw-adventureWorksdw").
 
 * Go to Data Studio
 * Under your connection: drop down the database list
