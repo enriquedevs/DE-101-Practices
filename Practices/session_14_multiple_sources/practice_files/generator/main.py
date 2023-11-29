@@ -55,6 +55,6 @@ for month in range(12):
       if (format.value == Format.CSV.value):
         df.to_csv(file_name, index=False)
       else: # JSON
-        df.to_json(file_name, index=False)
+        df.to_json(file_name, orient="records")
 
 sys.stdout.write('\rDone!       \n')
