@@ -16,26 +16,27 @@
 ## Notes
 
 * Azure Account
-  * Azure account will not charge unless you hit the `pay as yu go` option, ensure don't click other place than free and you will be fine
+  * Azure account will not charge unless you hit the `pay as you go` option, ensure don't click other place than free and you will be fine
   * If you already registered previously with Azure you will not be able to create a new account if that's the case
     * Create a new outlook account
   * Mandatory fields for azure register \
-    >Elements with * can be slightly different if you previously registered but ensure all information is consistent, non marked fields use your real information
+    >Elements with * should be slightly different if you previously registered but ensure all information is consistent, non marked fields use your real information
     * Profile
       * Country
       * First name*
       * Last name*
-      * Email address
-      * Phone \
-        *Use your real phone then click **Text me** or **Call me***
+      * Email address*
+      * Phone* \
+        *The number must exists then click **Text me** or **Call me***
       * Address*
       * City
       * State
       * Postal Code (Ensure it matches with your address)
       * Tick: `I agree to the customer agreement.`
       * Untick the other 2 options
-    * Credit Card
-      * Use real information here
+    * Credit Card*
+      * Use real information here \
+        *If you have a mobile bank app try generate a new virtual card*
   * We will be using english as reference but youcan use other language or return to english anytime, follow instructions here: [Azure Preferences][azure_preferences]
 
 ## Links

@@ -90,7 +90,7 @@ If you have problems running docker/composer check this [document][docker_note]
 If you are a maintainer of this repo, follow the guideline in this [document][maintainer_guideline]
 
 [maintainer_guideline]: ./maintainer_guideline.md
-[docker_note]: ./docker-note.md
+[docker_note]: ./docker-note/README.md
 
 [session_1]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EXc9as6OIdRJj0e64wrPAzMBRjwis40WzWOdaVL9o7ohCQ?e=zYChbp
 [session_2]: https://enrouted.sharepoint.com/:p:/s/DataEngineering/EeYUIr-pP9ZFgJePZ_2fnccB3RepOHcmY-lypQ6InmrfLA?e=BT3vrq

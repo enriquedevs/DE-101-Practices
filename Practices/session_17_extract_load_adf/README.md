@@ -2,22 +2,19 @@
 
 In previous practice we provisioned our environment with all resources required for ELT, in this practice we will be doing the EL part from the ELT.
 
->Azure calls this part (Load) *"Copy"*
->
+>Azure calls this part (Load) *"Copy"* \
 >We will be using different sources to copy to a database or datawarehouse
+
+## Prerequisites
+
+* Follow the [pre-setup guideline][pre-setup]
 
 ## What you will learn
 
-* Azure Data Factory workspace
-* How to LOAD data from a datalake into database
-* How to LOAD data from a HTTP source into a DB
-* How to LOAD data from a DB into a DW
-* How to TRANSFORM data types with Data Flow activities in ADF
-* How to LOAD data from a datalake into Snowflake (Optional)
+* ADF
+* Load from different sources to database or data warehouse
 
 ## Practice
-
-### Requirements
 
 You are a data engineer working for a credit rating agency. You need to:
 
@@ -26,204 +23,295 @@ You are a data engineer working for a credit rating agency. You need to:
 
 >You work in the team responsible of getting Nasdaq data from different resources or formats.
 
-### Step 0 - Launch ADF Studio
+### Requirements
 
-On your azure portal
+Use the previous infrastructure to:
 
-* Go to **All Resources**
-* Select the data factory you created in the past session
-* Click on **Launch Studio**
+* Load data from a datalake into database
+* Load data from a HTTP source into a DB
+* Load data from a DB into a DW
+* Transform data types with Data Flow activities in ADF
 
-![img](documentation_images/ADF_launch_studio.png)
+>* Use the create_tables.sql script to create the required structures on your database \
+>  *Use the `_landing` tables when doing direct pass loads and the other tables when doing transformations*
+>* Follow the naming convention used in the last session
 
-Remember that for each **Copy** activity, we will create a source dataset and a sink dataset.
+### Step 0 - Launch
 
-### Step 1 - ADF Copy Activities
+#### Step 0.1 - SSMS/Azure Data Studio
 
-#### Copy from datalake to database
+>Additional to open our tool, we need to create the required structure to load the data for another steps
 
-* Once in the Data Factory Studio, on your most left panel, select **Author**
+* Open SSMS/ADS
+* On the top left you will see the connections icon
 
-  ![img](documentation_images/ADF_left_panel.png)
-* Click ... con **Pipelines** and create a new pipeline
-* Under the **Activities** panel, select and drag **Copy data**
+  ![img](./img/ads/connections.png)
+  * Click the connection we create on the previous session \
+    *If you swapped network/ip from the last time you openened ADS you may need to refresh credentials*
 
-  ![img](documentation_images/New_activity_adf.png)
-* On the most right panel, select a name for your pipeline, similar to "csv_to_db_pl" or any name
-* Under the workspace area you will find all the configurations for your activity. You can set any name for your activity
+    ![img](./img/ads/connections2.png)
 
-  ![img](documentation_images/ADF_activity_config.png)
-* Go to Source in the activity configurations and create a new source dataset
-* Search for **Azure Blob Storage**, then select **DelimitedText**
-* Select a name for your dataset, could be "AAPL_csv_ds" (you can also rename datasets later)
-* Select the **Linked service** for Blob Storage created in the past session, similar to "blobdata101_ls"
-* Browse for the file called "AAPL.csv" in the "data" folder
-* Check the box for **First row as header**
-* On **Import schema** you can import from connection/store or select none (later you can import the schema as well)
-* Click **OK**
-* On the activity configurations, go to **Sink** and create a new dataset
-* Search for **Azure SQL Database**
-* Set a name for your dataset ("AzureSQLTable_AAPL_landing_ds"), select the linked service for the azure db you created in the past session
-* Select "dbo.AAPL_landing" table
-* You can import the schema or import it later
-* Under your activit configurations go to **Mapping** and **Import schemas** (so you can view mapping/transformation options)
+    Once you are done, the connection will change to a green icon and you will be able to see some folders on it
 
-  ![img](documentation_images/ADF_mapping_schemas.png)
-* For fixed or known schemas it is usefull to import the schemas and review or modify your mappings. Here you can also preview the data (not all sources allow data preview).
-* In this case, **Clear** the schema (at this moment we will not make any transformation since we are building ELT pipelines)
-* If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
+    ![img](./img/ads/connections3.png)
+* Right click `Databases` > `sqldb-de101` > `New Query`
+* Paste the contents of `create_tables.sql`
+* Click run, the output should be something similar to this
 
-#### Copy from http to database
-
-* Create a new pipeline, set a propper name
-* Drag a new **Copy data** activity
-* Go to Source in the activity configurations and create a new source dataset
-* Search for **HTTP**, then select **DelimitedText**
-* Select a name for your dataset, could be "http_fredGDP_csv_ds" (you can also rename datasets later)
-* Select the **Linked service** for http created in the past session, similar to "nasdaq_http_ls"
-* Enter the following relative url: \
-  `api/v3/datasets/FRED/GDP.csv?collapse=annual&order=asc&column_index=1`
-* Check the box for **First row as header**
-* On **Import schema** you can import from connection/store or select none (later you can import the schema)
-* Click **OK**
-* On the activity configurations, go to **Sink** and create a new dataset
-* Search for **Azure SQL Database**
-* Set a name for your dataset ("AzureSQLTable_FREDGDP_landing_ds"), select the linked service for the azure db you created in the past session
-* Select "dbo.FRED_GDP_landing" table
-* You can import the schema or import it later
-* Under your activit configurations go to **Mapping**
-* If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
-* Nasdaq Data Link API: [info](https://docs.data.nasdaq.com/docs/time-series), [rate/limits](https://docs.data.nasdaq.com/docs/rate-limits)
-
-#### Copy from database to data warehouse
-
-* Create a new pipeline, set a propper name
-* Drag a new **Copy data** activity
-* Go to Source in the activity configurations and select the dataset you created as sink for Azure DB ("AzureSQLTable_AAPL_landing_ds") in the previews steps
-* Leave the defaults
-* Go to **Sink** tab and create a new dataset
-* Search for **Azure Synapse Analytics**
-* Set a name for your dataset, could be "AAPL_dw_ds" (you can also rename datasets later)
-* Select the linked service for the DW you created in the past session ("adventureworks_dw_ls")
-* Select "AAPL_landing" table
-* Do not import schema and click **OK**
-* Click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
-* Go to Data Studio or SMSS, create a new query for your "AdventureWorksDW" and run:
-
-  ```sql
-  SELECT TOP 100 * FROM dbo.AAPL_landing;
+  ```log
+  5:38:41 PMStarted executing query at Line 1
+          Commands completed successfully.
+          Total execution time: 00:00:00.052
   ```
 
-* DELETE: Once you can view the data in your DW, on your Azure portal, go to **All resources** select and delete "AdventureWorksDW" resource to keep the cost at the minimum.
+  * You can query the tables to verify they exists or explore the folders to verify it \
+    ![img](./img/ads/tables.png)
 
-### Step 2 - ADF Transformations
+* Run `create_tables_dw.sql` on `sqldw-de101`
 
-We will do some simple transformations using data flow activity in ADF. This transformations will convert the data types from the landing tables to the precise types in the final table.
+#### Step 0.2 - Azure Data Factory Studio
 
-This could also be achieved with a sql script, but for this session we will use the Azure Data Factory GUI.
+* Go to [Azure Portal][azure_portal]
+* Then login
+* Go to `Data factories` and click on your azure data factory (`adf-de101`)
+  ![img](./img/adf/resource.png)
+* On the main panel click on `Launch Studio`
+  ![img](./img/adf/launch.png)
+
+### Step 1 - Load
+
+#### 1.1 - datalake2db
+
+>In this step we will use the csv file we upload on the last session to parse it into a database table (sql-de101.sqldb-de101.AAPL_Landing)
+
+* Click `Author`
+
+  ![img](./img/adf/author.png)
+* Click `Pipelines` > `...` > `New Pipeline`
+* On `Activities`
+  * Click `Move and transform`
+  * Drag `Copy data` to the center panel
+    ![img](./img/adf/copy-data.png)
+
+* On `Properties` panel
+  * Change the name to `pl-datalake2db`
+* Select your `Copy data` element and a bottom panel will appear
+  * Rename to `pl-datalake2db-copy`
+  * Go to `Source`
+    * Create a new `Source dataset`
+      * Search `Azure Blob Storage`
+
+        ![img](./img/adf/blob.png)
+      * Select `Delimited Text`
+
+        ![img](./img/adf/csv.png)
+
+        * Name: `ds_csv_AAPLLanding`
+        * Linked Service: `ls_blobl_de101`
+        * File paht: Browse to `aapl.csv`
+        * First row as header: `Checked` \
+          *This indicate if the first row is a header and should be skipped*
+      * Use all other defaults
+  * Go to `Sink`
+    * Create a new `Sink Dataset`
+      * Search `Azure SQL Database`
+
+        ![img](./img/adf/sql.png)
+
+        * Name: `ds_asqlt_AAPLLanding`
+        * Linked Service: `ls_sqldb_de101`
+        * Table name: `dbo.AAPL_landing`
+      * Use all other defaults
+  * Since we are building an ELT we will not make transformations during this step, however if you want to know how it's done:
+    * Go to `Mapping` > `Import schemas` \
+      *This will generate an auto mapping from the Source to the Sink (Output), then we can fix any inconsistence*
+    * Click `Clear` to undo the Mapping changes
+* On the top of the screen click `Validate all`
+* On the top of the screen click `Publish all`
+* On the top of the center panel click `Debug` \
+  *This will queue your activity and after some seconds will Succeeded it*
+
+  ![img](./img/adf/activity-success.png)
+
+Use your SSMS/ADS to verify the results
+
+![img](./img/ads/fred_gdp_landing-select.png)
+
+#### 1.2 - http2db
+
+>In this step we will use the http resource (web csv) registered on the last session to parse it into a database table (sql-de101.sqldb-de101.FRED_GDP_landing)
+
+* Create a new pipeline
+  * Name: `pl-http2db`
+  * `Copy data` activity
+    * Name: `pl-http2db-copy`
+    * `Source`
+      * `HTTP`
+        * Type: `DelimitedText`
+        * Name: `ds_http_FREDGDP`
+        * Linked service: `ls_http_nasdaq`
+        * Relative URL: `api/v3/datasets/FRED/GDP.csv?collapse=annual&order=asc&column_index=1`
+        * First row as header: `Checked`
+      * Use all other defaults
+    * `Sink`
+      * `Azure SQL Database`
+        * Name: `ds_asqlt_FREDGDPLanding`
+        * Linked Service: `ls_sqldb_de101`
+        * Table name: `FRED_GDP_landing`
+      * Use all other defaults
+* On the top of the screen click `Validate all`
+* On the top of the screen click `Publish all`
+* On the top of the center panel click `Debug` \
+
+Use your SSMS/ADS to verify the results
+
+![img](./img/ads/fred_gdp_landing-select.png)
+
+#### 1.3 - db2dw
+
+>In this step we will use the AAPL_landing table from step 1 (sql-de101.sqldb-de101.AAPL_landing) then parse it into a datawarehouse table (sql-de101.sqldw-de101.AAPL_landing)
+
+* Create a new pipeline
+  * Name: `pl-db2dw`
+  * `Copy data` activity
+    * Name: `pl-db2dw-copy`
+    * Source: `ds_asqlt_AAPLLanding` \
+      *This is the sink datasource we created for the [datalake2db](#11---datalake2db) step*
+      * Use all other defaults
+    * `Sink`
+      * `Azure Synapse Analytics`
+        * Name: `ds_synapse_dw`
+        * Linked Service: `ls_synapse_de101`
+        * Table name: `dbo.AAPL_landing`
+      * Use all other defaults
+    * `Settings`
+      * Enable staging: `Checked`
+      * Staging account linked service: `ls_datalake_de101`
+      * Storage Path: Browse to `c-de101datalake-data/staging`
+      * Use all other defaults
+* On the top of the screen click `Validate all`
+* On the top of the screen click `Publish all`
+* On the top of the center panel click `Debug`
+
+Use your SSMS/ADS to verify the results
+
+![img](./img/ads/aapldw_landing-select.png)
+
+### Step 2 - Transform
+
+On the EL part of the ELT we sometimes can do small transformations that can help during the transform step, in this case we will change the datatypes using Data flow
+
+* We will be using the output of the [Step 1 - Load](#step-1---load) (`Copy data`) as input for this step
 
 >Keep in mind that there is not just one way to build a pipeline. It will depend on your business needs and resources available.
 
-#### Data Flow (AAPL)
+#### 2.1 - aapl
 
-In your ADF workspace:
+* Click Pipeline `datalake2db`
+* On `Activities`
+  * Click `Move and transform`
+  * Drag `Data flow` to the center panel
+    ![img](./img/adf/data-flow.png)
 
-* Create a new pipeline and drag a **Data Flow** activity.
-  >You could also add the activity in the "copy_from_csv_to_db_pl" pipeline so it would run the transformation inmediatly after the LOAD process. If you choose the second option it should look like this:
+    * Name `pl-datalake2db-flow`
+    * Link pl-datalake2db-copy to `pl-datalake2db-flow` \
+      *Drag and drop the `success` ![img](./img/adf/pl-success.png) from the copy to the flow*
 
-  ![img](documentation_images/Load_transform_pipeline.png)
-* Click on the Data flow activity
-  * In the tabs that appear below
-  * Select **Settings**
-  * Click **New**
+      ![img](./img/adf/pl-success-link.gif)
 
-  ![img](documentation_images/New_dataflow_transform_1.png)
-* Select **Add Source**
+    * Settings
+      * Create a new `Data flow`
+        * Name: `df_asqlt_AAPLLanding` \
+          *On the top of right panel*
+        * On the top of the center panel click `Add source`
+          * `Source Settings`
+            * Name: `AAPLlanding`
+            * Dataset: `ds_asqlt_AAPLLanding`
+        * On the top of the center panel click `+` > `Cast` \
+          *Next to the Source you just added*
+          * `Cast Settings`
+            * Name: `AAPLlanding2AAPL`
+            * Columns
 
-  ![img](documentation_images/Add_source_dataflow.png"  width=25% height=25%>
-* On **Source settings**
-  * Select the dataset "AzureSqlTable_AAPL_ds"
-  * Leave the defaults
+              |Column name|Type|Format|
+              |-|-|-|
+              |Date|date|dd-MM-yyyy|
+              |Low|float|`none`|
+              |Open|float|`none`|
+              |Volume|float|`none`|
+              |High|float|`none`|
+              |Close|float|`none`|
+              |Adjusted Close|float|`none`|
+        * On the top of the center panel click `+` > `Sink` \
+          *Next to the Cast you just added*
+          * `Sink Settings`
+            * Name: `AAPL`
+            * Incoming `AAPLlanding2AAPL`
+            * Sink type: `Dataset`
+            * `Dataset`
+              * Create a new `Sink Dataset`
+                * Search `Azure SQL Database`
+                  * Name: `ds_asqlt_AAPL`
+                  * Linked Service: `ls_sqldb_de101`
+                  * Table name: `dbo.AAPL`
+                * Use all other defaults
+      * Your data flow should look like this
+        ![img](./img/adf/df-aapl.png)
+* On the top of the screen click `Validate all`
+* On the top of the screen click `Publish all`
+* Go back to the pipeline `datalake2db`
+* On the top of the center panel click the arrow down next to `Debug` > `Use activity runtime`
+* Use your SSMS/ADS to verify the results
 
-  ![img](documentation_images/Source_settings_dataflow.png)
-* On the **Projection** tab you can preview the schema and data types
+#### 2.2 - fred_gdp
 
-  ![img](documentation_images/Source_projection_transform1_adf.png)
-* Click on the + icon beside the source image
-  * Select **Cast**:
+* Click Pipeline `http2db`
+* On `Activities`
+  * Click `Move and transform`
+  * Drag `Data flow` to the center panel
+    * Name `pl-http2db-flow`
+    * Link pl-http2db-copy to `pl-http2db-flow` \
+      *Drag and drop the `success` ![img](./img/adf/pl-success.png) from the copy to the flow*
+    * Settings
+      * Create a new `Data flow`
+        * Name: `df_asqlt_FREDGDPLanding` \
+          *On the top of right panel*
+        * On the top of the center panel click `Add source`
+          * `Source Settings`
+            * Name: `FREDGDPLanding`
+            * Dataset: `ds_asqlt_FREDGDPLanding`
+        * On the top of the center panel click `+` > `Cast` \
+          *Next to the Source you just added*
+          * `Cast Settings`
+            * Name: `FREDGDPLanding2FREDGDP`
+            * Columns
 
-  ![img](documentation_images/+_cast.png)
-* On the **Cast settings** tab make sure to set everything as the image below
+              |Column name|Type|Format|
+              |-|-|-|
+              |Date|date|dd-MM-yyyy|
+              |Value|float|`none`|
+        * On the top of the center panel click `+` > `Sink` \
+          *Next to the Cast you just added*
+          * `Sink Settings`
+            * Name: `FREDGDP`
+            * Incoming `FREDGDPlanding2FREDGDP`
+            * Sink type: `Dataset`
+            * `Dataset`
+              * Create a new `Sink Dataset`
+                * Search `Azure SQL Database`
+                  * Name: `ds_asqlt_FREDGDP`
+                  * Linked Service: `ls_sqldb_de101`
+                  * Table name: `dbo.FRED_GDP`
+                * Use all other defaults
+* On the top of the screen click `Validate all`
+* On the top of the screen click `Publish all`
+* Go back to the pipeline `http2db`
+* On the top of the center panel click the arrow down next to `Debug` > `Use activity runtime`
+* Use your SSMS/ADS to verify the results
 
-  ![img](documentation_images/Transform_1_adf.png)
-* Now click the **+** and select **Sink**
-* Under the **Sink settings** set the corresponding values:
-  ![img](documentation_images/New_sink_dataset_transform_1.png)
-  * You will need to create a New dataset using the SQL Database linked service and selecting "AAPL" table.
+### Step 3 - Drop (Optional)
 
-#### Data Flow (FRED_GDP)
-
-We will add another flow in the same activity. It will be the same as the above but for FRED_GDP data. This could be done in separate activities, but it is important to aknowledge the capacities of this tool. In fact, in ELT processes and datawarehousing many transformations involve more than one source, like when creating a Fact or a Dim table in a DW, or you just need a Join or a Lookup or other functions in your transformation pipeline and more than one source is required.
-
-* Add another source:
-  
-  ![img](documentation_images/Add_source_transform2.png)
-
-* Now select the FredGdp dataset
-* Add a **Cast** step
-  >**Important**: Under **Cast settings**, make sure that you select the correct date format for casting. \
-  >Check your FRED_GDP dataset or the csv file in the Blob Storage for the adequate date format.
-* Create a sink dataset selecting "FRED_GDP" table
-* Now you can go to the pipeline and **Trigger now**
-* You can go to SSMS or Data Studio and run
-
-  ```sql
-  SELECT TOP 100 * FROM dbo.AAPL;
-  ```
-
-  And then
-
-  ```sql
-  SELECT TOP 100 * FROM dbo.FRED_GDP;
-  ```
-
-  You have succesfully completed this transformations!
-
->**Data flow** activities in ADF are very useful and efficient for low complexity transformations. However, for high complexity transformations, it is recomended to use Spark on Synapse or Spark on Databricks or other specialized tool for transformations.
-
-### Step 3 - Load to Snowflake (Optional)
-
-#### Copy from datalake to snowflake
-
-* Make sure you have in your snowflake database the following table:
-
-  ```sql
-  CREATE TABLE products_adf (
-      id int,
-      name varchar(500),
-      description varchar(500),
-      price varchar(50),
-      stock varchar(50)
-  )
-  ```
-
-* Create a new pipeline, set a propper name
-* Drag a new **Copy data** activity
-* Go to Source in the activity configurations and create a new source dataset
-* Search for **Azure Blob Storage**, then select **DelimitedText**
-* Select a name for your dataset, could be "snowflake_data_csv_ds" (you can also rename datasets later)
-* Select the **Linked service** for Blob Storage created in the past session, similar to "blobdata101_ls"
-* Browse for the file called "products_2015.csv" in the "data" folder
-* Check the box for **First row as header**
-* On **Import schema** you can import from connection/store or select none (later you can import the schema)
-* Click **OK**
-* On the activity configurations, go to **Sink** and create a new dataset
-* Search for **Snowflake**
-* Set a name for your dataset ("Snowflake_data__sink_ds"), select the linked service for snowflake you created before
-* Fill in the correct values
-* Under your activit configurations go to **Mapping** and mapp the id to integer in your destination schema, the rest should be strings
-* If everything looks like expected, on the upper tabs of your workspace, click **Validate** and if there are no errors, click on **Publish** (saves the pipeline in your Data Factory workspace) and then **Debug** or **Trigger now**
-* You can go to your Snowflake account and you will find your data there!
+You can drop `sqldw-de101` resource to keep the cost at the minimum
 
 ## Still curious
 
@@ -266,10 +354,19 @@ We will add another flow in the same activity. It will be the same as the above 
 
 ## Links
 
+### Used during this session
+
+* [Pre-Setup][pre-setup]
+
+### Session reinforment and homework help
+
 * [Compare AWS Glue vs. Azure Data Factory][glue_vs_adf]
 * [Comparing Major Cloud Service Providers][comparing]
 * [Official Azure guide for ETL][azure_etl]
 
+[pre-setup]: ./pre-setup.md
+
+[azure_portal]: https://portal.azure.com/
 [glue_vs_adf]: https://www.techtarget.com/searchcloudcomputing/tip/Compare-AWS-Glue-vs-Azure-Data-Factory
 [comparing]: https://datatechinsights.hashnode.dev/comparing-major-cloud-service-providers-aws-vs-azure-vs-google-cloud
 [azure_etl]: https://learn.microsoft.com/en-us/azure/architecture/data-guide/relational-data/etl

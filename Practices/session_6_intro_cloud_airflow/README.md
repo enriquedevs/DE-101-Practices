@@ -279,7 +279,7 @@ Modify the code, to have 3 tasks instead of 1 task, the tasks will be the follow
   * Parameters
     * `bucket`: S3 bucket name
     * `bucket_file`: File path from the bucket
-  * Read json file from S3 hook and save the file to docker storage
+  * Read json file from S3 hook and save the file to docker mapped storage
   * Return `json_local` as the path from extracted json from s3
 * `transform_data`
   * Parameters: `json_local` from `extract_data`

@@ -8,7 +8,6 @@ In this practice we will setup the environment, tools and resources necesary for
 * How to create resources on Azure Portal
 * How to connect to a Database in Azure with Data Studio or SSMS
 * Azure Data Factory (ADF) linked services
-* Linked service: Snowflake
 
 ## ETL VS ELT
 
@@ -51,7 +50,6 @@ A credit rating agency needs daily stock market data in a queryable structure. P
   * to both Storage account
   * to customer API `https://data.nasdaq.com`
   * to Azure SQL database
-  * to Snowflake
 
 Follow the naming convention and abbreviations suggested by microsoft:
 
@@ -181,7 +179,8 @@ The file should now be listed in the container
   * Use all other defaults
   ![img](./img/create/container2.png)
 * Click your container
-* Create directories `raw` and `processed`
+* Create directories `raw`, `processed` and `staging` \
+  *Some pipelines required temporary objects (staging area) to work properly*
   * Click Add Directory
     ![img](./img/container/adddirectory.png)
   * Write the folder name
@@ -192,7 +191,7 @@ The file should now be listed in the container
 
 >SQL Server is the Microsoft approach for RDBMS
 
-* Go to `Storage accounts`
+* Go to `SQL servers`
   ![img](./img/azure-portal/sqlservers.png)
 * Click `+ Create`
   * Basics
@@ -267,26 +266,21 @@ The file should now be listed in the container
 
 >Azure Dedicated SQL Pool, formerly known as SQL Data Warehouse is the datawarehouse solution provided my microsoft
 
-* Go to SQL Server
+* Go to `SQL Servers`
   ![img](./img/azure-portal/sqlservers.png)
 * Click your database `sql-de101`
   ![img](./img/create/sqlservers2.png)
 * Click + New dedicated SQL pool (formerly SQL DW)
   ![img](./img/sql-servers/sqldw.png)
   * Basics
-    * SQL pool name: `sqldw-adventureworksdw` \
-      *We will be using sample data, this is the name of the default dw*
+    * SQL pool name: `sqldw-de101`
     * Performance level: `DW100c`
       ![img](./img/sqldw/performance.png)
-  * Additional settings
-    * Use existent data: `Sample`
-      ![img](./img/sqldw/additionalsettings.png)
 * Use all other defaults \
   Once the provider is done, you should be able to see a screen like this
   ![img](./img/create/sqldw.png)
 
 Refresh the connection in SSMS or Data Studio and you should see this DW listed
-![img](./img/ads/refresh.gif)
 
 #### Step 1.8 - Azure Data Factory (Workspace)
 
@@ -298,6 +292,7 @@ Refresh the connection in SSMS or Data Studio and you should see this DW listed
   ![img](./img/azure-portal/datafactories.png)
 * Click `+ Create`
   * Basics
+    * Name: `adf-de101`
     * Subscription: Default
       * Resource Group: `rg-de101`
     * Region: `Central US`
@@ -306,7 +301,7 @@ Refresh the connection in SSMS or Data Studio and you should see this DW listed
   ![img](./img/create/adf.png)
 * Click `Go to resource`
   ![img](./img/create/storage-goto.png)
-  *Alternatively you can go to `SQL Databases` and click on the created resource*
+  *Alternatively you can go to `Data factories` and click on the created resource*
   ![img](./img/create/adf2.png)
 * On the main panel click on `Launch Studio`
   ![img](./img/adf/launch.png)
@@ -344,54 +339,42 @@ This will be the result:
 
 * On your ADF (Studio) Workspace
 * Click Manage
-  ![img](./img/adf/manage.png)
 * Click Linked services
-  ![img](./img/adf/linkedservices.png)
 * Click `Create linked service`
 * Scroll/Search `Azure Blob Storage`
   ![img](./img/linked-services/blob.png)
   * Name: `ls_blob_de101` \
-    *We can't use `-` so we are using `_` instead*
   * Subscription: `<Select default subscription>`
   * Storage account name: `stde101` \
     *This is the storage where we upload the csv file*
 * Use all other defaults
 * Test connection
-  ![img](./img/linked-services/test.gif)
 * Create
 
 #### 2.3 - Azure Data Lake Storage Gen2
 
 * On your ADF (Studio) Workspace
 * Click Manage
-  ![img](./img/adf/manage.png)
 * Click Linked services
-  ![img](./img/adf/linkedservices.png)
 * Click `Create linked service`
 * Scroll/Search `Azure Data Lake Storage Gen2`
   ![img](./img/linked-services/blob.png)
   * Name: `ls_datalake_de101` \
-    *We can't use `-` so we are using `_` instead*
   * Subscription: `<Select default subscription>`
-  * Storage account name: `stde101datalake` \
-    *This is the storage where we upload the csv file*
+  * Storage account name: `stde101datalake`
 * Use all other defaults
 * Test connection
-  ![img](./img/linked-services/test.gif)
 * Create
 
 #### 2.4 - Azure SQL Database
 
 * On your ADF (Studio) Workspace
 * Click Manage
-  ![img](./img/adf/manage.png)
 * Click Linked services
-  ![img](./img/adf/linkedservices.png)
 * Click `Create linked service`
 * Scroll/Search `Azure SQL Database`
   ![img](./img/linked-services/sql.png)
   * Name: `ls_sqldb_de101` \
-    *We can't use `-` so we are using `_` instead*
   * Subscription: `<Select default subscription>`
   * Server name: `sql-de101`
   * Database name: `sqldb-de101`
@@ -399,30 +382,25 @@ This will be the result:
   * Password: `<password>`
 * Use all other defaults
 * Test connection
-  ![img](./img/linked-services/test.gif)
 * Create
 
-#### 2.5 - Snowflake (Optional)
+#### 2.5 - Azure Synapse Analytics
 
 * On your ADF (Studio) Workspace
 * Click Manage
-  ![img](./img/adf/manage.png)
 * Click Linked services
-  ![img](./img/adf/linkedservices.png)
 * Click `Create linked service`
-* Scroll/Search `Snowflake`
-  ![img](./img/linked-services/snow.png)
-  * Name: `ls_snow_de101` \
-    *We can't use `-` so we are using `_` instead*
-  * Account name: `<account>`*
-  * User name: `<username>`*
-  * Password: `<password>`*
-  * Database: `fundamentals_db`*
-  * Warehouse: `compute_wh`*
-  >The values marked with * can be obtained from your previous practices scripts
+* Scroll/Search `Azure Synapse Analytics`
+  ![img](./img/linked-services/synapse.png)
+  * Name: `ls_synapse_de101`
+  * Subscription: `<Select default subscription>`
+  * Server name: `sql-de101`
+  * Database name: `sqldw-de101`
+  * Authentication type: `SQL Authentication`
+  * Username: `<username>`
+  * Password: `<password>`
 * Use all other defaults
 * Test connection
-  ![img](./img/linked-services/test.gif)
 * Create
 
 ## Still curious
