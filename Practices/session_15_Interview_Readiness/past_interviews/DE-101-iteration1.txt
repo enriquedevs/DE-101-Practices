@@ -1,0 +1,53 @@
+/*
+Scenario: Design a database for a McDonald's system to track food sold to customers and the associated stores
+
+Background: McDonald's operates a chain of fast food restaurants, 
+offering a variety of menu items such as burgers, fries, and beverages to its customers. 
+The company wants to keep track of food sales and the stores where the food is sold. 
+Your task is to design a database that captures and organizes this information for further analysis. 
+
+Requirements: 
+
+1. Track the menu items (food) offered by McDonald's, 
+including their names, descriptions, categories (e.g., burger, fries, beverage), and prices. 
+2. Record customer transactions, including the date and time of the transaction, the store where the transaction took place
+3. Capture the details of each item sold in a transaction, including the menu item and quantity. 
+4. Store information about each McDonald's location, including the store's unique identifier, address and contact information. 
+
+With this scenario in mind, you are expected to design the database schema, 
+including the necessary tables, attributes, primary keys, foreign keys, and relationships between entities.
+
+*/
+
+
+
+/*
+From the solution, write the SQL statements to do the following queries:
+1. The menu items (foods) of each category
+2. The total sales (quantity * price) of all the menu items sold from '2023-04-10' to '2023-04-17'
+3. Retrieve the 3 stores with most item sales
+4. Retrieve the stores with sales above of $2000 from '2023-04-10' to '2023-04-17'
+*/
+
+
+
+/*
+McDonald's decided to centralize all the information for all the countries by storing the data on a data warehouse, 
+
+design the datawarehouse solution of same scenario, 
+but in this case the datawarehouse is considering the country of the menu items sold each date on every sale
+*/
+
+
+
+
+/*
+Explain how would you be designing a Data Pipeline,
+to consume daily all the databases from McDonald's of each country, to centralize it on the Data Warehouse?
+*/
+
+
+
+/*
+You detect only two records have duplicates through all the pipeline, how would you troubleshoot it?
+*/

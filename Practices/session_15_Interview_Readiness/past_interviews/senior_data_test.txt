@@ -1,0 +1,39 @@
+/*
+Scenario:
+
+Suppose you are working on a e-commerce company that has multiple stores around the world, 
+they want to have a dashboard to know what are the most selling products by country, 
+the company has different files on CSV and JSON every day about the product's data such as the product name, cost,
+and how many has been sold on each country. Tell me how would you design an end to end ETL or ELT pipeline for that scenario. 
+*/
+
+
+
+/*
+Following questions:
+
+- The company decides to store data regarding the state location of the clients that buy the product,
+this data is stored on MongoDB and DynamoDB depending the country, 
+how would you introduce that data on the pipeline to be considered on the dashboards such as, 
+from the most selling product what are the top 3 client's states that buy the product by country.
+
+
+
+- While loading the data from the products and the state location of the clients that buy the product, 
+you encounter there are products that the client bought but were not listed on the original products, how would you troubleshoot that?
+
+
+
+- How can you implement the scenario on cloud?
+
+
+
+- Design the datawarehouse tables of your solution
+
+
+
+- From your solution query the 5 products with most sells for all the world
+
+
+
+- From your solution query the 5 products with most sells by country

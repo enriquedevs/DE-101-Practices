@@ -1,0 +1,35 @@
+/*
+Scenario: You've been hired by SkyHigh Airlines, a major airline company, to simplify their data processing for flight bookings and customer feedback.
+
+Background: SkyHigh Airlines operates in different countries, offering classes like Economy and Business. Customers book flights via the company's website, mobile app, or third-party vendors. After the flight, customers provide feedback via a survey.
+
+Requirements:
+
+- Design a system to capture basic flight booking details: flight number, customer name, date of journey, and class booked.
+- Record customer feedback from the surveys, focusing on ratings for food, entertainment, and overall experience.
+
+Given the brief, outline a simplified database structure mentioning tables, attributes, and relationships.
+*/
+
+
+
+
+/*
+From your design, make following SQL statements:
+
+- Retrieve all customer feedback for the flight number 707.
+- Compute the average overall experience rating for all the flights at '2023-08-24'.
+- Identify the top 2 flights with the best average overall experience rating at '2023-08-24'.
+*/
+
+
+
+/*
+Further Questions:
+
+- SkyHigh Airlines plans to have a pipeline on which they want to create a dashboard to know the general sales for all the flights around the world, suppose the data is been consumed from different relational databases according the country departure, how can you implement it?
+
+- Name how can you implement the solution on cloud?
+
+- Design the Datawarehouse of your solution
+*/
