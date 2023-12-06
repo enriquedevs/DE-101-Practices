@@ -6,6 +6,20 @@ In this practice we will focus on the T (Transform) of ELT using Azure as Cloud 
 
 ![img](documentation_images/synapse_key_capabilities.png)
 
+## Prerequisites
+
+* Follow the [pre-setup guideline][pre-setup]
+
+## Before start
+
+Let's review some concepts we used during the pre-setup:
+
+* Created a Synapse Workspace, similar to Azure Data Studio, this is a virtual environment to perform operations (transformations)
+* Created a Spark pool, this is a regular instance of Spark but on Azure.
+* Customize the spark pool with a package (dependencies):
+  * To interact with the API: `requests`
+  * Dataframe processing: `pandas`
+
 ## What you will learn
 
 * Synapse ELT pipeline
@@ -16,108 +30,110 @@ In this practice we will focus on the T (Transform) of ELT using Azure as Cloud 
 
 ## Practice
 
-This practice is composed of two parts:
-
-1. EXTRACT and STAGE data from the OpenWeather API with a python script and Spark engine into a csv file
-2. LOAD and TRANSFORM the raw data using SQL in the DW
+Use the OpenWeather API and the pre-setup infrastructure to `Extract` (and stage the data), then `Load` to the SQL instance and `Transform` after inserted
 
 >There are many ways to achieve the same result. For example, the transformation could be done entirely with python and the Spark pool. But for the purpose of this module (ELT) we will execute it as stated above.
-
-Because of time limitations, we will trigger this pipeline manually from Synapse. We could use ADF as orchestrator and make a call to the Synapse pipeline. But, as the scope of the module is ELT, not Azure Cloud, we will focus on the main concepts learned. As optional/advanced feature, you will learn how to connect Synapse and ADF so they can communicate with each other. From that point on, it is for you to explore at your personal convenience. Synapse also has integration capabilities, letting you create and execute pipelines within synapse. It will depend on your business needs what to use and when.
+>
+>We will be triggering manually, but on a productive environment; these would be triggered by an orchestrator (ex. ADF)
 
 ### Step 1 - Dedicated SQL pool
 
-* On your Synapse workspace, go to **Manage** on the left panel, then select **SQL pools** and create a new pool
-* Set a name for your DW, select the minimum **Performance level** (DW100C) and **Create**
-* Under **Manage > SQL pools** you will see your new pool
-  
- ![img](documentation_images/sql_dedicated_and_serverless.png)
+* Go to `Synapse Studio` > `Manage` > `SQL pools`
+* Click `+ New`
+  * Dedicated SQL pool name: `syndpde101`
+  * Performance level: `DW100c` \
+    ![img](img/syndp/performance-level.png) \
+    *The deployment of this resource can take from 5-8 minutes*
+* Under **Manage > SQL pools** you will see your new pool \
+ ![img](img/syndp/pools.png)
 
->Your dedicated sql pool will generate cost, even if no transactions are going on. If you select your dedicated pool, there is an option to **Pause** it so you keep cost at minimum while not using it. For the duration of this session, you can leave it running and it will cost you just a few dollars, but if you prefer, you can pause it until we arrive to the execution of the SQL script below.
+### Step 2 - SMSS/Data Studio
 
-### Step 2- SQL pool in SMSS or Data Studio
-
-* On your Synapse workspace, go to **Manage --> SQL pools** on the left panel, then select your pool
-* Copy your workspace endpoint
-  
-  ![img](documentation_images/sql_pool_endpoint.png)
-* Go to SMSS or Data Studio and create a new connection
-* In **Server**, paste the workspace endpoint
-* Use the username and password you set up while creating the Azure workspace resource
-* Right click this connection and create a new query. You will need this statements further down
-
-  ```sql
-  SELECT * FROM Weather_london_landing;
-  SELECT * FROM Weather_london;
-
-  -- Troubleshooting
-  DROP TABLE Weather_london_landing;
-  DROP TABLE Weather_london;
-  ```
+* Click your SQL pool
+* Copy the Workspace SQL endpoint \
+  *Should be in the shape of `synw-de101.sql.azuresynapse.net`*
+* Go to `SMSS` or `Azure Data Studio`
+* Create a new connection \
+  *Use the credentials from the pre-setup*
 
 ### Step 3 - Python notebook
 
-* On Synapse Studio, on the left panel go to **Develop** tab and **... --> Import** the notebook from this repo
-  
-  ![img](documentation_images/synapse_import_notebook.png)
-* You will need to customize the code with your API key and the path to your datalake container
-* API key:
-  
-  ![img](documentation_images/notebook_api_key.png)
-* Datalake path:
-  
- ![img](documentation_images/notebook_dl_url.png)
-  
->At the bottom of your notebook you will find commented SQL code. Synapse lets you execute different language code using the magic command %%*language*. If we executed this sql code, it will run on the Synapse built-in serverless sql pool and it has some limitations and would throw errors. This is just an overview of the synapse capabilities and of the principles of ELT, in this case, loading data into a landing table in your destination resource, execute your transformation in the DW with SQL and inserting the processed data in a final table.
+On your Synapse workspace
 
-* Once your code is customized, you need to attach your python notebook with the spark pool you created
-  
-  ![img](documentation_images/notebook_attatch_spark.png)
-* Run cells one by one. For the first one, it may take a few minutes to initialize the spark session.
-* Your pd_forecast.csv file in your datalake container should look similar to this
-  
-  ![img](documentation_images/pd_forecast_preview.png)
-* Now you can go on creating your SQL script
+* Open Synapse Studio \
+  *By clicking on the card in the center panel* \
+  ![img](./img/synw/synapse-studio.png)
+* Go to `Develop` \
+  ![img](./img/syns/develop.png)
+* Click `+` > `Import` \
+  ![img](./img/synw/import.png)
+* Select `weather_transform.ipynb`
+* Change the `<api-key>` value inside the notebook
+
+  ```py
+  # params = {"q": "London,uk", "appid": "<api-key>"}
+  params = {"q": "London,uk", "appid": "12abasdf123f3443f45tw45b24545v52"}
+  ```
+
+* Change the `<container-name>` and `<datalake-name>` value inside the notebook \
+  *These resources were created in the previous session*
+
+  ```py
+  # dlpath = 'abfs://<container-name>@<datalake-name>.dfs.core.windows.net'
+  dlpath = 'abfs://c-de101datalake-data@stde101datalake.dfs.core.windows.net'
+  ```
+
+* Attach to workspace \
+  *Before you can run anything, you need to attach a Spark pool as our processor, when not attached you will see a warning* \
+  ![img](./img/synw/warning.png)
+  * Click `Attach to` and select the pool you just created \
+    ![img](./img/synw/attach-to.png)
+
+* Run your cells 1 by 1 \
+  *The first cell will start the spark pool, once it's done you will see a Check mark* \
+  ![img](./img/synw/success-execute.png)
+
+* Verify the json/csv output exists \
+  ![img](./img/synw/verify.png)
+
+>At the bottom of your notebook you will find commented SQL code. Synapse lets you execute different language code using the magic command %%*language*.
+>
+>If we executed this sql code, it will run on the Synapse built-in serverless sql pool and it has some limitations and would throw errors. This is just an overview of the synapse capabilities and of the principles of ELT, in this case, loading data into a landing table in your destination resource, execute your transformation in the DW with SQL and inserting the processed data in a final table.
+>
+>You will need to use the `Convert to code cell` ![img](./img/synw/convert.png) in order to execute the SQL code \
+>![img](./img/synw/convert2.gif)
 
 ### Step 4 - SQL script
 
-* On Synapse Studio, on the left panel go to **Develop** tab and **... --> Import** the sql script from this repo
-* You will need to customize the code with url to your datalake container
-* Datalake URL:
+Now that we have the data in our container we can create a query to transform the data (`synapse_transform.sql`)
 
-  ![img](documentation_images/sql_dl_url.png)
-* Connect your script to your dedicated sql pool
-  
-  ![img](documentation_images/sql_script_connect_to_pool.png)
+On your Synapse Studio
+
+* Go to `Develop` \
+  ![img](./img/syns/develop.png)
+* Click `+` > `Import` \
+  ![img](./img/synw/import.png)
+* Select `synapse_transform.sql`
+* Change the `<datalake_name>` \
+  *You will may need to adjust the csv file name too*
+
+  ```py
+  # FROM 'https://<datalake-name>.blob.core.windows.net/<container-name>/raw/pd_forecast.csv'
+  FROM 'https://storagede101datalake.blob.core.windows.net/c-de101datalake-data/raw/pd_forecast.csv'
+  ```
+
+* Change the connect to `Dedicated SQL pool` \
+  ![img](img/synw/connect-to.png) \
+  ![img](img/synw/connect-to2.png)
+
 * Run each segment separately for better troubleshooting
-* If you can view your processed data in "Weather_london" table...
+* You should be able to see the results \
+  ![img](img/ads/query.png)
 
-CONGRATULATIONS! You have successfully run a complete ELT pipeline!
+### Optional - Pause resources
 
-### Optional: ADF - Synapse pipeline
-
-#### Access Control: Role for ADF
-
-* As a general rule, each service that wants to interact with other services should be asigned a role for that purpose.
-* On your Synapse workspace, go to **Manage** on the left panel
-* Select **Access control** and click **+ Add**
-  
-  ![img](documentation_images/Synapse_access_control_ADF.png)
-* Select the role **Synapse Contributor**
-* User: type and select the resource name of your ADF workspace ("data101-abc-df")
-
-#### ADF - Synapse pipeline
-
-* You can go now to ADF, create a pipeline, drag a Notebook activity
-* Activity configurations: Synapse artifacts > create new as linked service. Select your synapse notebook, set the spark configurations (ADF, as orchestrator, can launch your spark pool with the same or different configurations)
-* Trigger your pipeline. This will only run the python part of this session.
-* For running the sql transformations as well to complete the ELT pipeline, you can concatenate two Script activities. One should be for the DDL statements, and the other for the transformations
-  
- ![img](documentation_images/ADF_Synapse_pipeline.png)
-
-## Note
-
-Azure Synapse pools have a higher cost, and since you are working on a free account with 200USD, it is recommended that you create the following resources execute the transformations of this practice, and then delete the SQL pool and Spark pool, so you keep the cost at the minimum. Your published scripts or pipelines and the synapse workspace alone will not generate any cost.
+* Pause SQL pool instance
+* Apache Spark pool will pause automatically, however the SQL pool instance need to be paused
 
 ## Still curious
 
@@ -140,6 +156,19 @@ We need to be careful, consider:
 * Customer Service and Tecnical Support
 
 ## Links
+
+### Used during this session
+
+* [Pre-Setup][pre-setup]
+
+### Session reinforment and homework help
+
+* [Breaking the bank on Azure: what Apache Spark tool is the most cost-effective?][azure_costs]
+* [Cloud Pricing Comparison: AWS vs. Azure vs. Google Cloud Platform in 2023][comparison_1]
+* [Cloud Pricing Comparison 2023: AWS vs Azure vs Google Cloud][comparison_2]
+* [AWS, Azure and GCP Service Comparison for Data Science & AI][comparison_data]
+
+[pre-setup]: ./pre-setup.md
 
 [azure_costs]: https://intercept.cloud/en/news/data-costs-en/
 [comparison_1]: https://cast.ai/blog/cloud-pricing-comparison-aws-vs-azure-vs-google-cloud-platform/
