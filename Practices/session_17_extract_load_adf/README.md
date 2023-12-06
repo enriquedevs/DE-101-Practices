@@ -5,10 +5,6 @@ In previous practice we provisioned our environment with all resources required 
 >Azure calls this part (Load) *"Copy"* \
 >We will be using different sources to copy to a database or datawarehouse
 
-## Prerequisites
-
-* Follow the [pre-setup guideline][pre-setup]
-
 ## What you will learn
 
 * ADF
