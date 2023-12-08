@@ -307,7 +307,7 @@ On the EL part of the ELT we sometimes can do small transformations that can hel
 
 ### Step 3 - Drop (Optional)
 
-You can drop `sqldw-de101` resource to keep the cost at the minimum
+You can drop `sqldw-de101` and ``sqldb-de101`` resources to keep the cost at the minimum
 
 ## Still curious
 
