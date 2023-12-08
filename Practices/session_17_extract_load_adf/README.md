@@ -284,7 +284,7 @@ On the EL part of the ELT we sometimes can do small transformations that can hel
 
               |Column name|Type|Format|
               |-|-|-|
-              |Date|date|dd-MM-yyyy|
+              |Date|date|yyyy-MM-dd|
               |Value|float|`none`|
         * On the top of the center panel click `+` > `Sink` \
           *Next to the Cast you just added*
