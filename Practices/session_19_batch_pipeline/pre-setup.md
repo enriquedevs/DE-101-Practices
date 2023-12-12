@@ -1,24 +1,42 @@
-# Pre-Setup
+# Pre-setup
 
-## Pre-requisites
+## Prerequisites
 
-- Install Docker
-- Install Docker Compose
+* [Docker][install_docker]
+* [Slack][slack]
 
-## Build and start the environment
+## Steps
 
-Start up the docker containers by running the following command in the current directory.
+>The first time you run the commands can take up to 30 minutes to download and build the images.
 
-```sh
-./start.sh
-```
+### Step 1 - Images
 
->If you cannot run the shell script, you can run the commands in the script manually, one by one. Notice that the first time you run this command it will take up to 30 minutes to download and build the images.
-
-Now, run the following command to check that the containers are running. Make sure that all the containers are in the `healthy` state.
+Run the commands 1 by 1
 
 ```sh
-docker ps
+docker build -t hadoop-base docker/hadoop/hadoop-base
+docker build -t hive-base docker/hive/hive-base
+docker build -t spark-base docker/spark/spark-base
 ```
 
->If that is not the case, run the `stop.sh` script and and then the `start.sh` script again.
+### Step 2 - Composer
+
+```sh
+docker-compose up -d --build
+```
+
+### Step 3 - Slack
+
+* Login to slack, use the credentials given by your instructor
+* Add the `enroute-de101` workspace
+
+![img](./img/slack-de101.png)
+
+You can use the Web App/Mobile App/Desktop App
+
+## Links
+
+* [Install Docker][install_docker]
+
+[install_docker]: https://docs.docker.com/engine/install/
+[slack]: https://slack.com
