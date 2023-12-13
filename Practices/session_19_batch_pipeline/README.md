@@ -2,33 +2,15 @@
 
 In this practice you will implement a data pipeline using a batch architecture.
 
->Notice that the arquitecture used here is not a lambda architecture, because we will leave the streaming part for another –more advanced– course.
+## Prerequisites
 
-## What you will do
+* Follow the [pre-setup guideline][pre-setup]
 
-* Use HDFS as a data lake
-* Use Hive to query data in HDFS
-* Issue processing jobs in Spark
-* Use Hive as a data warehouse
-* Configure connections to external services in Airflow
-* Use Airflow to orchestrate the data pipeline
+## Before start
 
-## Practice
+Batch architecture refers to trigger a data pipeline based on a metric (time/records...), once triggered it will process all the data gathered since the last time the pipeline was triggered.
 
-While the code of the DAG is already available under `mnt/airflow/dags/forex_data_pipeline.py`, in this practice we will focus on creating and testing the connections and resources that support the data pipeline, in order to highlight the infrastructure of this batch job, that will use a data lake, a data warehouse, a processing engine and an orchestrator to coordinate the ELT and ETL processes involved in the data pipeline.
-
-As an overview of the data pipeline, we will:
-
-1. Verify that the URL that points to the JSON data that holds the forex rates is reachable.
-2. Verify that the local file where we will store the data is available.
-3. Download the data from the URL and store it in the local file.
-4. Load the data from the local file into HDFS.
-5. Submit a Spark job, process the data from HDFS and store the results in a Hive table.
-6. Send a notification via Slack.
-
-### Architecture
-
-The software architecture that underlies the data pipeline is the following:
+Let's review the architecture we created during the pre-setup:
 
 * [HDFS][hdfs] is the data lake where we will store the data.
 * [Hive][hive] will make the data in HDFS available for querying.
@@ -37,235 +19,486 @@ The software architecture that underlies the data pipeline is the following:
 * [PostgreSQL][postgresql] is a relational database management system that will work as Hive's metastore.
 * [Adminer][adminer] is a web interface for Postgres and other databases that we don't need to use in this practice.
 
-  ![architecture](docs/architecture.png)
+![architecture](./img/architecture.png)
+
+## What You Will Learn
+
+* Airflow Spark tasks
+* Airflow common operators
+* Airflow paralell tasks
+* Airflow services as configurations
+
+## Practice
+
+Create a concept demo to:
+Save the `daily` currencies relations required on `Currencies CSV` for further analysis, pull the currencies using the [exchange documents][exchange_docs]
+
+### Requirements
+
+Using the infrastructure from setup from the [pre-setup][pre-setup] and the pre-existent files to:
+
+* Verify that the URL that points to the JSON data that holds the forex rates is reachable
+* Download the requied currencies (listed in CSV) and save as json
+* Upload to HDFS
+* If this is the first time running the pipeline, create the Hive table `forex_rates`
+* Use the HDFS file to launch a Spark job to save the data
+* Send a slack notification once the flow is complete
+* Optimize pipeline
+* Check every step can run individually
+
+Do not store credentials in your code
 
-### Step 0 - Start the environment
+>This demo will only list 2 currencies, but pipeline should be prepare to escale to **n** currencies when received daily \
+>Since the demo will run daily, any temporary files must be cleaned
 
-Start up the docker containers by running the following command in the current directory.
+### Step 0a - Pre-existent files
 
-```sh
-./start.sh
-```
+>The `dags` directory will be mapped to the airflow `dags` directory, so any changes performed here will be performed on the docker too.
 
-Now, run the following command to check that the containers are running. Make sure that all the containers are in the `healthy` state.
+* `dags/data` \
+  *This can be used to save any temporary files and the input for the pipeline*
+  * `forex_currencies.csv` \
+    This file contains the required currencies, if not listed here we will ignore the currencies if given. \
+    *On a productive environment this file will change daily*
+* `forex_common`
+  * `api.py` \
+    Constants for the API, we will explore how this values are generated on a further step
+  * `path.py` \
+    Constants for Docker directory (csv file) and temporary files we will create
+  * `utils.py` \
+    Extra functions
+  * `constants.py` \
+    General values and names that does not have children
+* `forex_scripts`
+  * `download_rates.py` (`save2local` function) \
+    Based on the `forex_currencies.csv`, searches for the pairs and saves the required currencies in json formart
+  * `upload_hive.py` (spark job) \
+    Based on the `json` of `download_rates`, uploads the file to hive as the latest version of the records
+* `forex.py` \
+  DAG entrypoint (template for the practice)
 
-```sh
-docker ps
-```
+### Step 0b - Explore the API
 
-If all the containers are in the `healthy` state, open the Airflow UI by going to <http://localhost:8080>. The default username and password are `airflow`.
+* Open the [api][exchange_docs] (URL <https://gist.github.com/marclamberti/f45f872dea4dfd3eaa015a4a1af4b39b>)
+* We can split this url in 2
+  * Host: `https://gist.github.com`
+  * Base path: `/marclamberti/f45f872dea4dfd3eaa015a4a1af4b39b`
+* We will be using these 2 files
 
-### Step 1 - Check if the URL is reachable (HttpSensor)
+  ![img](./img/api-preview.png)
+* If you click on the `raw` button next to any file you will get an url
+* This url can be splitted \
+  Using the values we previously we can add
+  * Path : `/raw/556b22b51b75866e853cf9a949df80a70ea541ce`
+  * File: `/api_forex_exchange_usd.json` / `/api_forex_exchange_eur.json`
 
-The first task in the DAG is an [HttpSensor][http_sensor] that will check if the URL that points to the JSON data that holds the forex rates is reachable.
+### Step 1 - Resources are reachable
 
-For this task to work we will need to create a connection to the URL that we specify in the `HttpSensor` operator. To do so, go to the Airflow UI and click on the `Admin` tab. Then, click on the `Connections` link. Click on the `+` button to add a new record and fill the form with the following values:
+Before we start using the resources to avoid any interruption in the pipeline is good to perform a health check on every resource we will be using, in this case we need to verify the input `csv` exist on the local system and the API URL is reachable, for this purpouse we will be using `HttpSensor` and `FileSensor`
 
-* Conn Id: `forex_api`
-* Conn Type: `HTTP`
-* Host: <https://gist.github.com>
+#### 1.1 - Forex API
 
-Click on the `Save` button to save the connection.
+* On airflow: go to `Admin` > `Connections`
+  * `+`
+    * Conn Id: `forex_api`
+    * Conn Type: `HTTP`
+    * Host: `https://gist.github.com`
 
-In order to test that the task works, first run the following command to open a shell in the Airflow container:
+* Import the libraries
 
-```sh
-docker exec -it airflow /bin/bash
-```
+  ```py
+  from airflow.providers.http.sensors.http import HttpSensor
+  ```
 
-Now, run the following command to run the task. The last argument is an execution date in the past. This is required by Airflow to determine if the task should be executed.
+* Health check
 
-```sh
-airflow tasks test forex_data_pipeline is_forex_rates_available 2023-02-12
-```
+  ```py
+  is_forex_rates_available = HttpSensor(
+    task_id="is_forex_rates_available",
+    http_conn_id="forex_api",
+    endpoint="marclamberti/f45f872dea4dfd3eaa015a4a1af4b39b",
+    response_check=lambda response: "rates" in response.text,
+    poke_interval=5,
+    timeout=20
+  )
 
-If everything is correct, then we should get a message like the following right before the end of the logs:
+  is_forex_rates_available
+  ```
 
-```log
-[2023-02-14 02:20:03,835] {base.py:248} INFO - Success criteria met. Exiting.
-```
+#### 1.2 - Testing step
 
-### Step 2 - Check if the currency file is available (FileSensor)
+* Open airflwo container terminal
 
-The following task is a [FileSensor][file_sensor] that will check if the local file where we will store the data exists.
+  ```sh
+  docker exec -it airflow /bin/bash
+  ```
 
-For this task we will create a connection to the local file system. To do so, go to the Airflow UI and click on the `Admin` tab. Then, click on the `Connections` link. Click on the `+` button to add a new record and fill the form with the following values:
+* Test function
 
-* Conn Id: `forex_path`
-* Conn Type: `File (path)`
-* Extra: `{"path": "/opt/airflow/dags/files"}`
+  ```sh
+  # airflow tasks test <dag_id> <task_id> <execution_date>
+  airflow tasks test forex is_forex_rates_available 2023-12-12
+  ```
 
-Click on the `Save` button to save the connection.
+* You will get a log like this
 
-Just like in the previous task, we will test the task by running the following command in the Airflow container:
+  ```log
+  INFO - Marking task as SUCCESS. dag_id=forex, task_id=is_forex_rates_available...
+  ```
 
-```bash
-airflow tasks test forex_data_pipeline is_forex_currencies_file_available 2023-02-12
-```
+#### 1.3 - Good practices
 
-### Step 3 - Download the data from the URL (PythonOperator)
+From the preexistent files we already have some constants
 
-The next task is a [PythonOperator][python_operator] that will download the data from the `BASE_URL` inside the `download_rates` function and store it in the local file.
+* Import constants
 
-Although the details of the `download_rates` function are not important for this practice, we will briefly explain what it does. The function will download every possible pair of currencies present in the `forex_currencies.csv` file and store the data in the `forex_rates.json` file. The data will be stored in the following format:
+  ```py
+  import forex_common.api as f_api
+  ```
 
-```json
-[
-    {
-        "base": "EUR", 
-        "rates": {
-            "USD": 1.13, "NZD": 1.41, "JPY": 101.89, "GBP": 0.36, "CAD": 1.21
-        }, 
-        "last_update": "2021-01-01"
-    }
-]
-```
+* Use constants
 
-In order to test the task, we will run the following command in the Airflow container:
+  ```py
+  ...
+  http_conn_id=f_api.CONN_ID,
+  endpoint=f_api.BASE_PATH,
+  ...
+  ```
 
-```sh
-airflow tasks test forex_data_pipeline download_rates 2023-02-12
-```
+#### 1.4 - File Sensor
 
-### Step 4 - Save forex rates into HDFS (BashOperator)
+* On airflow: go to `Admin` > `Connections`
+  * `+`
+    * Conn Id: `forex_path`
+    * Conn Type: `File (path)`
+    * Host: `{"path": "/opt/airflow/dags/data"}`
+* Import the libraries and constants
 
-The next task is a [BashOperator][bash_operator] that will load the data from the local file into HDFS.
+  ```py
+  from airflow.sensors.filesystem import FileSensor
+  import forex_common.path as f_path
+  ```
 
-The `BashOperator` executes a couple of bash commands. The first one is a `hdfs dfs` command that will create the directory where we will store the data. The second one is a `hdfs dfs` command that will copy the data from the local file to HDFS.
+* Health check
 
-Before testing the operator, go to the Hue UI by accessing the following URL: <http://localhost:32762>. The username we will use is `root` and the password is `root`. Click on `Create Account`, then after waiting close the tutorial. Afterwards, click on the hamburger menu on the top left corner and click on `Files`. You will land by default in `/user/root`. You can click on `/` to go to the root directory of HDFS. This is a view of the HDFS file system and here we will see any updates to HDFS.
+  ```py
+  is_forex_currencies_file_available = FileSensor(
+    task_id="is_forex_currencies_file_available",
+    fs_conn_id=f_path.CONN_ID,
+    filepath=f_path.CSV,
+    poke_interval=5,
+    timeout=20
+  )
 
-Now, in order to test the task, we will run the following command in the Airflow container:
+  is_forex_rates_available >> is_forex_currencies_file_available
+  ```
 
-```sh
-airflow tasks test forex_data_pipeline save_rates_to_hdfs 2023-02-12
-```
+* Test the function
 
-By refreshing the Hue UI, we should see the directory `/forex_rates` in the root directory of HDFS.
+### Step 2 - Download rates
 
-### Step 5 - Create a Hive table (HiveOperator)
+* We will be using the `save2local` \
+  On `forex_scripts/download_rates.py`
+* Import operator and function
 
-For the following task we will use the [HiveOperator][hive_operator]. We will use this operator to create a Hive table that will store the data from HDFS.
+  ```py
+  from airflow.operators.python import PythonOperator
+  import forex_scripts.download_rates as download_rates
+  ```
 
-In order for this connection to work we first need to create the connection (`hive_conn`) that we have specified in the `hive_cli_conn_id` parameter. To do so, go to the Airflow UI and click on the `Admin` tab. Then, click on the `Connections` link. Click on the `+` button to add a new record and fill the form with the following values:
+* Call function as task
 
-* Conn Id: `hive_conn`
-* Conn Type: `Hive Server 2 Thrift`
-* Host: `hive-server`
-* Login: `hive`
-* Password: `hive`
-* Port: `10000`
+  ```py
+  download_rates = PythonOperator(
+    task_id="download_rates",
+    python_callable=download_rates.save2local
+  )
+  ```
 
-Now, before testing the operator, go back to the Hue UI and click on the `Tables` menu on the left. The UI should show that there are no tables in the `default` database. This is because we have not created any tables yet.
+* Add to queue on DAG
 
-Now, run the following command in the Airflow container to test the task:
+  ```py
+  is_forex_rates_available >> is_forex_currencies_file_available >> download_rates
+  ```
 
-```sh
-airflow tasks test forex_data_pipeline creating_forex_rates_table 2023-02-12
-```
+* Test the task
 
-If you go back to the Hue UI and click on the `Refresh` button on the upper right corner, you should now see that the `forex_rates` table has been created.
+You should now see a json file in the `/dags/data/forex_rates.json` folder
 
-One thing that you can do to test the table is to click in the `forex_rates` table entry and then click on the `▶️ Query` button, which will automatically execute the following query:
+### Step 3 - Upload to HDFS
 
-```sql
-SELECT * FROM `default`.`forex_rates` LIMIT 100;
-```
+* Create a folder on HDFS
 
-This query will return no results because we have not loaded any data into the table yet. We will do that in the next task.
+  ```sh
+  hdfs dfs -mkdir -p /forex
+  ```
 
-### Step 6 - Process the forex rates with Spark (SparkSubmitOperator)
+* We can upload the file into this directory by using this command \
+  *Don't execute it*
 
-The next task is a [SparkSubmitOperator][spark_submit_operator] that will process the data from HDFS and store the results in a new table.
+  ```sh
+  # hdfs dfs -put -f <local_file> <target_folder>
+  hdfs dfs -put -f $AIRFLOW_HOME/dags/data/forex_rates.json /forex
+  ```
 
-The `SparkSubmitOperator` will execute the `mnt/airflow/dags/scripts/forex_processing.py` script. The script will read the data from the `forex_rates` table and process it. You don't really need to understand the details of the Spark job, but in order to give you a correct mental model of what is happening in this task, the processing consists of the following steps:
+* Import operator
 
-1. The Spark job will create a SparkSession. This object is the entry point to Spark and contains the information about the Spark application.
-2. We will use the SparkSession to read the data from HDFS at <hdfs://namenode:9000/forex/forex_rates.json>. The resulting object is a Spark DataFrame –pretty similar in concept to a Pandas DataFrame, although the Spark DataFrames are distributed in nature and every operation performed on them is lazy–.
-3. We will select several variables from the resulting DataFrame, drop duplicates and fill missing values with '0'. These operations do not ocur in place, so we are virtually creating a new DataFrame.
-4. Finally we will append the resulting DataFrame to the `forex_rates` Hive table.
+  ```py
+  from airflow.operators.bash import BashOperator
+  ```
 
-As before, for this task to work we need to create the connection (`spark_conn`) that we have specified in the `conn_id` parameter. To do so, go to the Airflow UI and click on the `Admin` tab. Then, click on the `Connections` link. Click on the `+` button to add a new record and fill the form with the following values:
+* Create the task
 
-* Conn Id: `spark_conn`
-* Conn Type: `Spark`
-* Host: `spark://spark-master`
-* Port: `7077`
+  ```py
+  save2hdfs = BashOperator(
+    task_id="save2hdfs",
+    bash_command="""
+      hdfs dfs -put -f $AIRFLOW_HOME/dags/data/forex_rates.json /forex
+    """
+  )
+  ```
 
-With this, we are ready to test the task, so run the following command in the Airflow container:
+* Add to queue on DAG
 
-```sh
-airflow tasks test forex_data_pipeline forex_processing 2023-02-12
-```
+  ```py
+  is_forex_rates_available >> is_forex_currencies_file_available >> download_rates
+  download_rates >> save2hdfs
+  ```
 
-If you go back to the Hue UI and run the same query as before, you should now see that the table has been updated with the processed data as expected.
+* Test the task
 
-Furthermore, if you want to see how the data is stored in Hive, you can click on the `Files` menu on the left and go to the `/user/hive/warehouse/forex_rates` directory. You will see that the data is stored in raw format.
+### Step 4 - Hive Table
 
-### Step 7 - Send a notification via Slack (SlackWebhookOperator)
+* On airflow: go to `Admin` > `Connections`
+  * `+`
+    * Conn Id: `forex_hive_conn`
+    * Conn Type: `Hive Server 2 Thrift`
+    * Host: `hive-server`
+    * Login: `hive`
+    * Password: `hive`
+    * Port: `10000`
+* Import operator
 
-If time allows, we will also add a task that will send a notification to a Slack channel. This task will use the [SlackWebhookOperator][slack_webhook_operator].
+  ```py
+  from airflow.providers.apache.hive.operators.hive import HiveOperator
+  ```
 
-In order for this task to work, we need to create first a Slak workspace. To do so, follow these steps:
+* Create the task
 
-1. Go to <http://www.slack.com>.
-2. Click on "Create a new workspace".
-3. Enter your work email address and click on "Continue".
-4. You will receive an email with a code to verify your email address. Enter the code and click on "Continue".
-5. Click on "Create a new workspace".
-6. Enter the name of the workspace and click on "Next".
-7. If you wish, you can add your course partners as collaborators. If that's not the case, you can omit this step.
-8. When you're asked "What's your team working on right now?" you can enter the name of the channel you want to create. For example, you can enter "airflow-notifications".
+  ```py
+  create_forex_rates_table = HiveOperator(
+    task_id="creating_forex_rates_table",
+    hive_cli_conn_id=constants.CONN_ID_HIVE,
+    hql="""
+      CREATE EXTERNAL TABLE IF NOT EXISTS forex_rates(
+        base STRING,
+        last_update DATE,
+        eur DOUBLE,
+        usd DOUBLE,
+        nzd DOUBLE,
+        gbp DOUBLE,
+        jpy DOUBLE,
+        cad DOUBLE
+        )
+      ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ','
+      STORED AS TEXTFILE
+    """
+  )
+  ```
 
-Now that we have created the channel to send the notifications to, we need to create a Slack app. To do so, follow these steps:
+* Test the task
 
-1. Go to <https://api.slack.com/apps>.
-2. Click on "Create New App".
-3. Click on "From scratch".
-4. Create a name for the app (like `airflow-notifier`) and select the workspace you created in the previous step.
-5. Click on "Create App".
-6. Go to the "Add features and functionality" section and click on "Incoming Webhooks".
-7. Right besides the "Activate Incoming Webhooks" legend toggle the switch to "On" in order to activate the feature.
-8. Scroll to the bottom of the page and click on "Add New Webhook to Workspace".
-9. Select the channel you created before (`airflow-notifications`) in the previous step and click on "Allow".
-10. Copy the webhook URL that appears in the "Webhook URL for your workspace" section.
+We can create the table connecting to Hive server but once we run the task the table is created, so we don't need the task anymore. \
+Proceed to delete the `create_forex_rates_table` and remove the import
 
-Notice that the webhook URL looks like this:
+>Airflow can also be useful when you want to run tasks but you don't have credentials on the database...
 
-```txt
-https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-```
+If you go to [Hue](http://localhost:32762) and create an account, you should see the table now
 
-Now, we need to create the connection (`slack_conn`) that we have specified in the `http_conn_id` parameter. To do so, once again go to the Airflow UI and click on the `Admin` tab. Then, click on the `Connections` link. Click on the `+` button to add a new record and fill the form with the following values:
+### Step 5 - Spark Job
 
-* Conn Id: `slack_conn`
-* Conn Type: `HTTP`
-* Host: <https://hooks.slack.com/services/>
-* Password: `T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX` (the part of the webhook URL that contains the token)
+* On airflow: go to `Admin` > `Connections`
+  * `+`
+    * Conn Id: `forex_spark_conn`
+    * Conn Type: `Spark`
+    * Host: `spark://spark-master`
+    * Port: `7077`
+* Import operator
 
-In order test the task, please run the following command in the Airflow container:
+  ```py
+  from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+  ```
 
-```sh
-airflow tasks test forex_data_pipeline send_slack_notification 2023-02-12
-```
+* Create the task
 
-If everything went well, you should see a notification in the Slack channel you created before.
+  ```py
+  forex_processing = SparkSubmitOperator(
+    task_id="forex_processing",
+    application=constants.PYSPARK_SCRIPT,
+    conn_id=constants.CONN_ID_SPARK,
+    verbose=False
+  )
+  ```
 
-### Step 8 - Run the DAG
+* Add to the DAG queue
 
-Go back to the Airflow UI and enable the DAG by clicking on the toggle button on the left. After refreshing a couple of times, you should see the DAG run in the UI.
+  ```py
+  download_rates >> save2hdfs >> forex_processing
+  ```
 
-You can also click on the DAG name to see the details of the run and also click on the "Graph View" tab to see the DAG visualized as a graph.
+* Test the task
+* Check the rows are inserted by doing a `SELECT *...` on hue
 
-If everything went well, then congratulations! You have successfully configured and executed a complete data pipeline with Airflow.
+### Step 6 - Slack
 
-### Cleanup
+We will be using the function `slack_message` on `forex_common/utils.py` and the slack account given by your instructor
 
-To stop the Spark cluster, run the following command:
+* Go to [api slack apps][slack_apps]
+* Click `Forex App`
 
-```bash
-./stop.sh
-```
+  ![img](./img/slackapps-forex.png)
+
+* Click `Incoming Webhooks` \
+  *On the left panel*
+* Click `Copy` \
+  *On the center panel*
+
+  ![img](./img/slackapps-webhook.png)
+
+* On airflow: go to `Admin` > `Connections`
+  * `+`
+    * Conn Id: `forex_slack_conn`
+    * Conn Type: `HTTP`
+    * Host: <https://hooks.slack.com/services/>
+    * Password: `T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX` (the part of the webhook URL that contains the token)
+  *You can use the full URL in the Host field, however as a good practice you want to hide your endpoint hook unless is protected by a login*
+* Import operator
+
+  ```py
+  from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
+  from forex_common.utils import slack_message
+  ```
+
+* Create the task \
+  *Change `<Your name>` value*
+
+  ```py
+  send_slack_notification = SlackWebhookOperator(
+    task_id="slack_notification",
+    http_conn_id=constants.CONN_ID_SLACK,
+    message=slack_message('<Your name>')
+  )
+  ```
+
+* Add to the DAG queue
+
+  ```py
+  download_rates >> save2hdfs >> forex_processing >> send_slack_notification
+  ```
+
+* Test the task
+
+A message/notification should pop on your slack app
+
+![img](./img/slack-message.gif)
+
+### Step 7 - Temporary files
+
+Since we don't use the json file generated on Step 2, we can delete it
+
+* Create the task
+
+  ```py
+  remove_temp = BashOperator(
+      task_id='remove_temp_files',
+      bash_command="""
+        rm $AIRFLOW_HOME/dags/data/forex_rates.json
+      """
+  )
+  ```
+
+* Add to the DAG queue
+
+  ```py
+  download_rates >> save2hdfs >> forex_processing >> send_slack_notification >> remove_temp
+  ```
+
+* Test the task
+
+### Step 8 - Optimize
+
+At this point you may have the flow like this
+
+![img](./img/airflow-flow-initial.png)
+
+* Identify group tasks \
+  *These tasks work for the same purpouse, in this case health checks*
+  * Group with task group
+
+  ```py
+  from airflow.utils.task_group import TaskGroup
+  
+  ...
+
+  with TaskGroup("health_check", tooltip="Initial Check") as health_check:
+    is_forex_rates_available = HttpSensor(
+      task_id="is_forex_rates_available",
+      http_conn_id=f_api.CONN_ID,
+      endpoint=f_api.BASE_PATH,
+      response_check=lambda response: "rates" in response.text,
+      poke_interval=5,
+      timeout=20
+    )
+
+    is_forex_currencies_file_available = FileSensor(
+      task_id="is_forex_currencies_file_available",
+      fs_conn_id=f_path.CONN_ID,
+      filepath=f_path.CSV,
+      poke_interval=5,
+      timeout=20
+    )
+    is_forex_rates_available >> is_forex_currencies_file_available
+  ```
+
+  * Change the queue
+
+    ```py
+    health_check >> download_rates
+    download_rates >> save2hdfs >> forex_processing >> send_slack_notification >> remove_temp
+    ```
+
+    ![img](./img/airflow-flow-taskgroup.png)
+
+    *If you click `health_check` it will expand showing the substeps*
+* Identify paralell tasks
+  * `is_forex_rates_available` and `is_forex_currencies_file_available` can run at the same time
+    * Change the queue
+
+      ```py
+      # is_forex_rates_available >> is_forex_currencies_file_available
+      is_forex_rates_available
+      is_forex_currencies_file_available
+      # Removing the declarations will also work since they are not dependant tasks in the taskgroup
+      ```
+
+  * `remove_temp` can run after `save2hdfs`
+    * Change the queue
+
+      ```py
+      health_check >> download_rates >> save2hdfs
+      save2hdfs >> [remove_temp, forex_processing] >> send_slack_notification
+      ```
+
+    ![img](./img/airflow-flow-final.png)
+
+### Step 9 - Re-run
+
+This full flow will be running daily, run it again and verify it works with the specified requirements
+
+## Conclusion
+
+By following this practice, you should now have a solid understanding of how to use Docker to run and manage a container.
 
 ## Still curious
 
@@ -317,7 +550,17 @@ To stop the Spark cluster, run the following command:
 
   Article: [Airflow Best Practices][airflow_best_practices]
 
+* Want to tlearn how to create a hook?
+
+Article: [Slack hooks message][slack_hook]
+
 ## Links
+
+### Used during this session
+
+* [Pre-Setup][pre-setup]
+
+### Session reinforment and homework help
 
 * [HDFS][hdfs]
 * [Hive][hive]
@@ -334,6 +577,12 @@ To stop the Spark cluster, run the following command:
 * [SlackWebhookOperator][slack_webhook_operator]
 * [Airflow — Writing your own Operators and Hooks][custom_hook_and_operator]
 * [Airflow Best Practices][airflow_best_practices]
+* [Slack hooks message][slack_hook]
+
+[pre-setup]: ./pre-setup.md
+
+[exchange_docs]: https://gist.github.com/marclamberti/f45f872dea4dfd3eaa015a4a1af4b39b
+[slack_apps]: https://api.slack.com/apps
 
 [hdfs]: https://aws.amazon.com/es/emr/details/hadoop/what-is-hadoop/
 [hive]: https://aws.amazon.com/es/big-data/what-is-hive/
@@ -348,6 +597,7 @@ To stop the Spark cluster, run the following command:
 [hive_operator]: https://airflow.apache.org/docs/apache-airflow/1.10.10/_api/airflow/operators/hive_operator/index.html#airflow.operators.hive_operator.HiveOperator
 [spark_submit_operator]: https://airflow.apache.org/docs/apache-airflow/1.10.12/_api/airflow/contrib/operators/spark_submit_operator/index.html#airflow.contrib.operators.spark_submit_operator.SparkSubmitOperator
 [slack_webhook_operator]: https://airflow.apache.org/docs/apache-airflow/1.10.12/_api/airflow/contrib/operators/slack_webhook_operator/index.html#airflow.contrib.operators.slack_webhook_operator.SlackWebhookOperator
+[slack_hook]: https://api.slack.com/messaging/webhooks
 
 [provider]: https://airflow.apache.org/docs/apache-airflow-providers/
 [core_ext]: https://airflow.apache.org/docs/apache-airflow-providers/core-extensions/index.html
