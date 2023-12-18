@@ -2,6 +2,29 @@
 
 In this practice you will learn how to use Iceberg and PySpark to create a lakehouse architecture.
 
+## Pre-requisites
+
+* Follow the [pre-setup guideline][pre-setup]
+
+## Before start
+
+Let's review some tecnologies we used during the pre-setup:
+
+* `Icerberg` \
+  Iceberg is a high-performance format for huge analytic tables. Iceberg brings the reliability and simplicity of SQL tables to big data, while making it possible for engines like Spark, Trino, Flink, Presto, Hive and Impala to safely work with the same tables, at the same time.
+
+  [Official documentation][iceberg]
+
+* `MinIO` \
+  MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It is software-defined and runs on any cloud or on-premises infrastructure. MinIO is dual-licensed under open source GNU AGPL v3 and a commercial enterprise license.
+
+  [Official documentation][minio]
+
+* `PySpark`
+  PySpark is the Python API for Apache Spark. It enables you to perform real-time, large-scale data processing in a distributed environment using Python. It also provides a PySpark shell for interactively analyzing your data.
+
+  [Official documentation][pyspark]
+
 ## What you will learn
 
 * Use MinIO as a local replacement for S3
@@ -11,43 +34,29 @@ In this practice you will learn how to use Iceberg and PySpark to create a lakeh
 * Iceberg's schema evolution capabilities
 * Iceberg's time travel capabilities
 
-## Pre-requisites
-
-* Install Docker
-* Install Docker Compose
-
-## Before start
-
-* What is Icerberg?
-
-  >Iceberg is a high-performance format for huge analytic tables. Iceberg brings the reliability and simplicity of SQL tables to big data, while making it possible for engines like Spark, Trino, Flink, Presto, Hive and Impala to safely work with the same tables, at the same time.
-
-  [Official documentation][iceberg]
-
-* What is MinIO?
-
-  >MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It is software-defined and runs on any cloud or on-premises infrastructure. MinIO is dual-licensed under open source GNU AGPL v3 and a commercial enterprise license.
-
-  [Official documentation][minio]
-
-* What is PySpark?
-
-  >PySpark is the Python API for Apache Spark. It enables you to perform real-time, large-scale data processing in a distributed environment using Python. It also provides a PySpark shell for interactively analyzing your data.
-
-  [Official documentation][pyspark]
-
 ## Practice
+
+Explore the infrastructure of MinIO, Iceberg with PySpark
+
+>Use the New York City Taxi and Limousine Commision Trip Record Data that's available on the AWS Open Data Registry. \
+>The data is already stored in the `/home/iceberg/data` directory in the `spark-iceberg` image.
+
+### Requirements
 
 Use the data stored in `/home/iceberg/data` directory from the `spark-iceberg` image to:
 
-* Create Icerberg catalog
+* Create Icerberg catalog (`nyc.taxis`)
+  * Use one of the pre-existent parquet files as table structure
   * Verify the count after linkin the data
 * Do the following DDL operations
   * Rename `fare_amount` to `fare`
   * Rename `trip_distance` to `distance`
-  * Add a float column `fare_per_distance_unit` immediately after `distance`.
+  * Add a comment for documentation on `distance` column
+  * Change `fare` type to double and move it after `distance`
+  * Add a float column `fare_per_distance_unit` immediately after `distance` \
+    *Set value of new column as `fare/distance`*
     * Verify your columns with a SELECT
-* Perform a row-level delete for all rows that have a `fare_per_distance_unit` greater than 4 or a `distance` greater than 2
+* Delete rows where `fare_per_distance_unit` greater than 4 or a `distance` greater than 2
   * Verify the count and compare with full catalog (first query after loading the catalog)
 * Partition the table by `VendorID` field
 * Query metadata tables
@@ -59,159 +68,171 @@ Use the data stored in `/home/iceberg/data` directory from the `spark-iceberg` i
   * Rollback to a previous snapshot
   * Query all elements from the table
 
-### Create a table
+### Step 0 - Explore infrastructure
 
-We will use the New York City Taxi and Limousine Commision Trip Record Data that's available on the AWS Open Data Registry.
+`MinIO` \
+Login to webUI for MinIO on <http://localhost:9000> use the following credentials `admin`/`password` \
+This will be your S3 replacement
 
-This contains data of trips taken by taxis and for-hire vehicles in New York City. We'll save this into an iceberg table called taxis. The data is already stored in the `/home/iceberg/data` directory in the `spark-iceberg` image.
+`PySpark` shell \
+As with previous practices we will be executing python instructions from spark image, in order to do this start the shell attached to docker:
 
-Run the following command to create a table called `nyc.taxis` in the Iceberg catalog.
-
-```py
-df = spark.read.parquet("/home/iceberg/data/yellow_tripdata_2021-04.parquet")
-df.write.saveAsTable("nyc.taxis")
+```sh
+docker exec -it spark-iceberg pyspark
 ```
 
-Now run the following command to get a description of the table.
+### Step 1 - Iceberg Table
 
-```py
-spark.sql("DESCRIBE EXTENDED nyc.taxis").show(n=100, truncate=False)
-```
+* Create `nyc.taxis` on Iceberg Catalog
 
-Now run the following command to get the count of records in the table.
+  ```py
+  df = spark.read.parquet("/home/iceberg/data/yellow_tripdata_2021-04.parquet")
+  df.write.saveAsTable("nyc.taxis")
+  ```
 
-```py
-spark.sql("SELECT COUNT(*) FROM nyc.taxis").show()
-```
+* Verify table structure
 
-### Schema evolution
+  ```py
+  spark.sql("DESCRIBE EXTENDED nyc.taxis").show(n=100, truncate=False)
+  ```
 
-We can perform a wide range of DDL operations on Iceberg tables. Please refer to [Iceberg's documentation](https://iceberg.apache.org/docs/latest/spark-ddl/) for more information.
+* Verify data exists on table
 
-In this example, we'll rename `fare_amount` to `fare` and `trip_distance` to `distance`. We'll also add a float column `fare_per_distance_unit` immediately after `distance`.
+  ```py
+  spark.sql("SELECT COUNT(*) FROM nyc.taxis").show()
+  ```
 
-```py
-spark.sql("ALTER TABLE nyc.taxis RENAME COLUMN fare_amount TO fare")
-spark.sql("ALTER TABLE nyc.taxis RENAME COLUMN trip_distance TO distance")
-```
+### Step 2 - Schema evolution
 
-Now let's make a comment on the `distance` column.
+* Rename `fare_amount` to `fare` and `trip_distance` to `distance`
 
-```py
-spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance COMMENT 'The elapsed trip distance in miles reported by the taximeter.'")
-```
+  ```py
+  spark.sql("ALTER TABLE nyc.taxis RENAME COLUMN fare_amount TO fare")
+  spark.sql("ALTER TABLE nyc.taxis RENAME COLUMN trip_distance TO distance")
+  ```
 
-We can perform safe data type conversions using the following command.
+* Make a comment on the `distance` column.
 
-```py
-spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance TYPE double;")
-spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance AFTER fare;")
-```
+  ```py
+  spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance COMMENT 'The elapsed trip distance in miles reported by the taximeter.'")
+  ```
 
-Now let's create a new column called `fare_per_distance_unit`.
+* Data type conversion
 
-```py
-spark.sql("ALTER TABLE nyc.taxis ADD COLUMN fare_per_distance_unit float AFTER distance")
-```
+  ```py
+  spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance TYPE double;")
+  spark.sql("ALTER TABLE nyc.taxis ALTER COLUMN distance AFTER fare;")
+  ```
 
-Let's update the new `fare_per_distance_unit` to equal `fare` divided by `distance`.
+* Create column `fare_per_distance_unit`.
 
-```py
-spark.sql("UPDATE nyc.taxis SET fare_per_distance_unit = fare/distance")
-```
+  ```py
+  spark.sql("ALTER TABLE nyc.taxis ADD COLUMN fare_per_distance_unit float AFTER distance")
+  ```
 
-Now query the table to see the new column.
+* Set value for new column
 
-```py
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
-```
+  ```py
+  spark.sql("UPDATE nyc.taxis SET fare_per_distance_unit = fare/distance")
+  ```
 
-### Expressive SQL for Row Level Changes
+* Query to see the new column
 
-With Iceberg tables, `DELETE` queries can be used to perform row-level deletes. This is as simple as providing the table name and a `WHERE` predicate. If the filter matches an entire partition of the table, Iceberg will intelligently perform a metadata-only operation where it simply deletes the metadata for that partition.
+  ```py
+  spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
+  ```
 
-Let's perform a row-level delete for all rows that have a `fare_per_distance_unit` greater than 4 or a `distance` greater than 2. This should leave us with relatively short trips that have a relatively high fare per distance traveled.
+### Step 3 - Row level changes
 
-```py
-spark.sql("DELETE FROM nyc.taxis WHERE fare_per_distance_unit > 4.0 OR distance > 2.0")
-```
+* Delete where `fare_per_distance_unit` greater than 4 or a `distance` greater than 2
 
-There are some fares that have a `null` for `fare_per_distance_unit` due to the distance being `0`. Let's remove those as well.
+  ```py
+  spark.sql("DELETE FROM nyc.taxis WHERE fare_per_distance_unit > 4.0 OR distance > 2.0")
+  ```
 
-```py
-spark.sql("DELETE FROM nyc.taxis WHERE fare_per_distance_unit IS NULL")
-```
+* Include Coalesce values into the delete
 
-```py
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
-```
+  ```py
+  spark.sql("DELETE FROM nyc.taxis WHERE fare_per_distance_unit > 4.0 OR distance > 2.0 OR fare_per_distance_unit IS NULL")
+  ```
 
-Finally, let's count the number of rows in the table.
+* Verify results
 
-```py
-spark.sql("SELECT COUNT(*) FROM nyc.taxis").show()
-```
+  ```py
+  spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
+  ```
 
-### Partitioning
+* Get the table count
 
-A table’s partitioning can be updated in place and applied only to newly written data. Query plans are then split, using the old partition scheme for data written before the partition scheme was changed, and using the new partition scheme for data written after. People querying the table don’t even have to be aware of this split. Simple predicates in WHERE clauses are automatically converted to partition filters that prune out files with no matches. This is what’s referred to in Iceberg as *Hidden Partitioning*.
+  ```py
+  spark.sql("SELECT COUNT(*) FROM nyc.taxis").show()
+  ```
 
-```py
-spark.sql("ALTER TABLE nyc.taxis ADD PARTITION FIELD VendorID")
-```
+### Step 4 - Partitioning
 
-### Metadata tables
+* Partition by `VendorID`
 
-Iceberg tables contain very rich metadata that can be easily queried. For example, you can retrieve the manifest list for any snapshot, simply by querying the table's `snapshots` table.
+  ```py
+  spark.sql("ALTER TABLE nyc.taxis ADD PARTITION FIELD VendorID")
+  ```
 
-```py
-spark.sql("SELECT snapshot_id, manifest_list FROM nyc.taxis.snapshots").show()
-```
+### Step 5 - Query metadata
 
-The `files` table contains loads of information on data files, including column level statistics such as null counts, lower bounds, and upper bounds.
+Iceberg contain metadata tables, some examples being `snapshots` or `files`, let's perform some querys on these
 
-```py
-spark.sql("SELECT file_path, file_format, record_count, null_value_counts, lower_bounds, upper_bounds FROM nyc.taxis.files").show(n=100, truncate=False)
-```
+* Query taxis `snapshots`
 
-### Time travel
+  ```py
+  spark.sql("SELECT snapshot_id, manifest_list FROM nyc.taxis.snapshots").show()
+  ```
 
-The history table lists all snapshots and which parent snapshot they derive from. The `is_current_ancestor` flag let's you know if a snapshot is part of the linear history of the current snapshot of the table.
+* Query `files`
 
-```py
-spark.sql("SELECT * FROM nyc.taxis.history").show()
-```
+  ```py
+  spark.sql("SELECT file_path, file_format, record_count, null_value_counts, lower_bounds, upper_bounds FROM nyc.taxis.files").show(n=100, truncate=False)
+  ```
 
-You can time-travel by altering the `current-snapshot-id` property of the table to reference any snapshot in the table's history. Let's revert the table to its original state by traveling to the very first snapshot ID.
+### Step 6 - Time travel
 
-Let's retrieve the first snapshot ID.
+Another useful metadata table is `history`, which allow you to view different versions of your table
 
-```py
-df = spark.sql("SELECT * FROM nyc.taxis.history")
-original_snapshot = df.head().snapshot_id
-print(original_snapshot)
-```
+* Query `history`
 
-Now let's travel to the first snapshot. Here, `demo` is the name of the default catalog, as specified in the `spark/spark-defaults.conf` file. If you're using a different catalog, you'll need to change this to the appropriate catalog name.
+  ```py
+  spark.sql("SELECT * FROM nyc.taxis.history").show()
+  ```
 
-For more details on Spark procedures, please refer to the [Iceberg's documentation](https://iceberg.apache.org/docs/latest/spark-procedures/).
+* Get current snapshot id
 
-```py
-spark.sql(f"CALL demo.system.rollback_to_snapshot('nyc.taxis', {original_snapshot})")
-```
+  ```py
+  df = spark.sql("SELECT * FROM nyc.taxis.history")
+  original_snapshot = df.head().snapshot_id
+  print(original_snapshot)
+  ```
 
-```py
-spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
-```
+* Query all elements from the table
+
+  ```py
+  spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
+  ```
+
+* Rollback to a previous snapshot
+
+  ```py
+  spark.sql(f"CALL demo.system.rollback_to_snapshot('nyc.taxis', {original_snapshot})")
+  ```
+
+* Query all elements from the table
+
+  ```py
+  spark.sql("SELECT VendorID, tpep_pickup_datetime, tpep_dropoff_datetime, fare, distance, fare_per_distance_unit FROM nyc.taxis").show()
+  ```
 
 Another look at the history table shows that the original state of the table has been added as a new entry
 with the original snapshot ID.
 
 ```py
 spark.sql("SELECT * FROM nyc.taxis.history").show()
-```
-
-```py
 spark.sql("SELECT COUNT(*) as cnt FROM nyc.taxis").show()
 ```
 
@@ -222,14 +243,6 @@ Iceberg tables are stored in a directory hierarchy. The root directory contains 
 Access the MinIO web console at <http://localhost:9000> and navigate to the `warehouse` bucket. Click in the `wh` and access the `nyc` and `taxis` directories. You should see the `data` and `metadata` directories.
 
 As you can see, most of the metadata is stored in JSON files. You can download a couple of these to see the structure of the metadata.
-
-### Cleanup
-
-To stop the Spark cluster, run the following command:
-
-```bash
-docker-compose down
-```
 
 ## Still curious
 
@@ -249,18 +262,28 @@ docker-compose down
 
 ## Links
 
+### Used during this session
+
+* [Pre-Setup][pre-setup]
 * [Icerberg][iceberg]
 * [MinIO][minio]
 * [PySpark][pyspark]
+
+### Session reinforment and homework help
+
+* [Iceberg's DDL documentation][iceberg_ddl]
 * Article: [5 Compelling Reasons to Choose Apache Iceberg][choose_iceberg]
 * Documentation: [AT|BEFORE Clause][snowflake_timetravel]
 * Practice: [Getting Started with Time Travel][snowflake_timetravel_practice]
 * [Amazon S3 vs. Google Cloud Storage vs. IBM Cloud Object Storage vs. MinIO][minio_alternatives]
 
+[pre-setup]: ./pre-setup.md
+
 [iceberg]: https://iceberg.apache.org/
 [minio]: https://min.io/
 [pyspark]: https://spark.apache.org/docs/latest/api/python/index.html
 
+[iceberg_ddl]: https://iceberg.apache.org/docs/latest/spark-ddl/
 [choose_iceberg]: https://www.snowflake.com/blog/5-reasons-apache-iceberg/
 [snowflake_timetravel]: https://docs.snowflake.com/en/sql-reference/constructs/at-before
 [snowflake_timetravel_practice]: https://quickstarts.snowflake.com/guide/getting_started_with_time_travel/index.html?index=..%2F..index#0

@@ -92,7 +92,6 @@ RUN mkdir -p /home/iceberg/data \
  && curl https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-04.parquet -o /home/iceberg/data/yellow_tripdata_2021-04.parquet
 
 RUN mkdir -p /home/iceberg/localwarehouse /home/iceberg/notebooks /home/iceberg/warehouse /home/iceberg/spark-events /home/iceberg
-COPY notebooks/* /home/iceberg/notebooks
 
 # Add a notebook command
 RUN echo '#! /bin/sh' >> /bin/notebook \
@@ -107,10 +106,6 @@ RUN echo '#! /bin/sh' >> /bin/pyspark-notebook \
  && echo "export PYSPARK_DRIVER_PYTHON_OPTS=\"--notebook-dir=/home/iceberg/notebooks --ip='*' --NotebookApp.token='' --NotebookApp.password='' --port=8888 --no-browser --allow-root\"" >> /bin/pyspark-notebook \
  && echo "pyspark" >> /bin/pyspark-notebook \
  && chmod u+x /bin/pyspark-notebook
-
-RUN mkdir -p /root/.ipython/profile_default/startup
-COPY ipython/startup/00-prettytables.py /root/.ipython/profile_default/startup
-COPY ipython/startup/README /root/.ipython/profile_default/startup
 
 COPY spark-defaults.conf /opt/spark/conf
 ENV PATH="/opt/spark/sbin:/opt/spark/bin:${PATH}"

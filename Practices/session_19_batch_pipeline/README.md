@@ -171,7 +171,7 @@ From the preexistent files we already have some constants
   * `+`
     * Conn Id: `forex_path`
     * Conn Type: `File (path)`
-    * Host: `{"path": "/opt/airflow/dags/data"}`
+    * Extra: `{"path": "/opt/airflow/dags/data"}`
 * Import the libraries and constants
 
   ```py
